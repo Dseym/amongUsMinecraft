@@ -17,9 +17,10 @@ New minecraft mini-game based on the canon of the game Among Us! Complete tasks,
 ## Game config
 In file AmongUs/gameConfig/example.yml
 ```
-imposters: 1
 map: The Skeld
+visual_task: true
 confirm_eject: true
+imposters: 1
 emergency_metting: 1
 timeout_metting: 10
 time_voting: 60
@@ -27,7 +28,6 @@ speed_player: 2
 timeout_kill: 15
 distance_kill: 2
 tasksNum: 16
-visual_task: true
 ```
 
 Video about the plugin (in Russian) - soon.
@@ -60,11 +60,12 @@ If you need to translate the plugin into English, then write to Issues.
 4. among.setlobby - установить лобби
 
 ## Игровой конфиг(gameConfig)
-In file AmongUs/gameConfig/example.yml
+В файле AmongUs/gameConfig/example.yml
 ```
-imposters: 1
 map: The Skeld
+visual_task: true
 confirm_eject: true
+imposters: 1
 emergency_metting: 1
 timeout_metting: 10
 time_voting: 60
@@ -72,7 +73,6 @@ speed_player: 2
 timeout_kill: 15
 distance_kill: 2
 tasksNum: 16
-visual_task: true
 ```
 
 Видео о плагине (на русском) - скоро.
