@@ -96,10 +96,13 @@ public class Lobby {
 	
 	public String startGame() {
 		
-		for(Player player: players)
-			player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+		String answ = game.start(players);
 		
-		return game.start(players);
+		if(answ.equalsIgnoreCase("true"))
+			for(Player player: players)
+				player.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
+		
+		return answ;
 		
 	}
 	
@@ -174,7 +177,7 @@ public class Lobby {
 		
 		player.sendMessage(Main.tagPlugin + "Вы вышли из лобби");
 		
-		player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+		player.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
 		
 		player.teleport(locPlayers.get(player));
 		player.setGameMode(GameMode.SURVIVAL);

@@ -24,6 +24,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
@@ -63,6 +64,7 @@ public class Game {
 	private Team teamPlayers;
 	public List<Integer> entityId = new ArrayList<Integer>();
 	private Lobby lobby;
+	private BukkitTask timerUpdate;
 	
 	private String impostersStr = "§4 ";
 
@@ -82,35 +84,35 @@ public class Game {
 	@SuppressWarnings("deprecation")
 	public String start(List<Player> players) {
 		
-		if(players == null || players.size() < 3)
-			return "Нужно больше 2х игроков";
-		
-		if(emergency_metting < 1)
-			return "emergency_metting - не может быть меньше 0";
-		
-		if(time_voting < 1)
-			return "time_voting - не может быть меньше 1";
-		
-		if(speed_player < 1)
-			return "speed_player - не может быть меньше 1";
-		
-		if(timeout_kill < 1)
-			return "timeout_kill - не может быть меньше 0";
-		
-		if(distance_kill < 1)
-			return "distance_kill - не может быть меньше 1";
-		
-		if(tasksNum < 1)
-			return "tasksNum - не может быть меньше 1";
-		
-		if(timeout_metting < 1)
-			return "timeout_metting - не может быть меньше 0";
-
-		if(imposters < 1)
-			return "Предателей не может быть меньше 1";
-	
-		if(imposters > players.size()-imposters-1)
-			return "Предателей должно быть меньше экипажа";
+//		if(players == null || players.size() < 3)
+//			return "Нужно больше 2х игроков";
+//		
+//		if(emergency_metting < 1)
+//			return "emergency_metting - не может быть меньше 0";
+//		
+//		if(time_voting < 1)
+//			return "time_voting - не может быть меньше 1";
+//		
+//		if(speed_player < 1)
+//			return "speed_player - не может быть меньше 1";
+//		
+//		if(timeout_kill < 1)
+//			return "timeout_kill - не может быть меньше 0";
+//		
+//		if(distance_kill < 1)
+//			return "distance_kill - не может быть меньше 1";
+//		
+//		if(tasksNum < 1)
+//			return "tasksNum - не может быть меньше 1";
+//		
+//		if(timeout_metting < 1)
+//			return "timeout_metting - не может быть меньше 0";
+//
+//		if(imposters < 1)
+//			return "Предателей не может быть меньше 1";
+//	
+//		if(imposters > players.size()-imposters-1)
+//			return "Предателей должно быть меньше экипажа";
 		
 		if(map.getSpawns().size() < players.size())
 			return "На карте недостаточно места для всех игроков";
@@ -225,7 +227,7 @@ public class Game {
 		}
 		
 		isStart = true;		
-		Bukkit.getScheduler().runTaskTimer(Main.plugin, new Runnable() {@Override public void run() {update();}}, 20, 20);
+		timerUpdate = Bukkit.getScheduler().runTaskTimer(Main.plugin, new Runnable() {@Override public void run() {update();}}, 20, 20);
 				
 		return "true";
 		
@@ -293,6 +295,8 @@ public class Game {
 		tpToSpawn();
 		
 		lobby.isGameStop();
+		if(timerUpdate != null)
+			timerUpdate.cancel();
 		
 		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "scoreboard teams option amongImposters color red");
 		
@@ -388,10 +392,10 @@ public class Game {
 			if(player.isLive() && !player.impostor)
 				membersNum++;
 		
-		if(impostersNum+1 > membersNum)
-			impostersWin();
-		if(impostersNum == 0)
-			membersWin();
+//		if(impostersNum+1 > membersNum)
+//			impostersWin();
+//		if(impostersNum == 0)
+//			membersWin();
 		
 		if(timeoutMeeting > 0)
 			timeoutMeeting--;
@@ -627,6 +631,16 @@ public class Game {
 		killedBodies.clear();
 		this.players.clear();
 		
+		Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
+		for(Team team: scoreboard.getTeams())
+			if(team.getName().equalsIgnoreCase("amongPlayers") || team.getName().equalsIgnoreCase("amongImposters") || team.getName().equalsIgnoreCase("amongTasks") || team.getName().equalsIgnoreCase("amongSabotage"))
+				team.unregister();
+		
+		teamPlayers = scoreboard.registerNewTeam("amongPlayers");
+		teamImposters = scoreboard.registerNewTeam("amongImposters");
+		scoreboard.registerNewTeam("amongSabotage");
+		scoreboard.registerNewTeam("amongTasks");
+		
 		String mapName = config.getString("map");
 		
 		map = MapManager.initMap(mapName, this);
@@ -640,16 +654,6 @@ public class Game {
 			return;
 			
 		}
-		
-		Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
-		for(Team team: scoreboard.getTeams())
-			if(team.getName().equalsIgnoreCase("amongPlayers") || team.getName().equalsIgnoreCase("amongImposters") || team.getName().equalsIgnoreCase("amongTasks") || team.getName().equalsIgnoreCase("amongSabotage"))
-				team.unregister();
-		
-		teamPlayers = scoreboard.registerNewTeam("amongPlayers");
-		teamImposters = scoreboard.registerNewTeam("amongImposters");
-		scoreboard.registerNewTeam("amongSabotage");
-		scoreboard.registerNewTeam("amongTasks");
 		
 		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "scoreboard teams option amongSabotage color red");
 		

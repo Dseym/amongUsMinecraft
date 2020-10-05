@@ -55,6 +55,8 @@ public class Main extends JavaPlugin {
 		
 		getLogger().info("Started!");
 		
+		Bukkit.getPluginManager().registerEvents(new Event(new Lobby(new Location(Bukkit.getWorld("world"), 0, 100, 0))), this);
+		
 	}
 	
 	public void onDisable() {
