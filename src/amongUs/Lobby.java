@@ -64,8 +64,12 @@ public class Lobby {
 	
 	public void isGameStop() {
 		
-		for(Player player: players)
+		for(Player player: players) {
+			
 			player.setScoreboard(board);
+			player.teleport(loc);
+			
+		}
 		
 		game = null;
 		

@@ -30,7 +30,7 @@ distance_kill: 2
 tasksNum: 16
 ```
 
-Video about the plugin (in Russian) - soon.
+Video about the plugin (in Russian) - https://youtu.be/lHh4xp_ziro.
 
 ## Compile
 1. Download the source code and upload it to Eclipse for example.
@@ -75,7 +75,7 @@ distance_kill: 2
 tasksNum: 16
 ```
 
-Видео о плагине (на русском) - скоро.
+Видео о плагине (на русском) - https://youtu.be/lHh4xp_ziro.
 
 ## Компиляция
 1. Скачайте исходный код и загрузите, к примеру, в Eclipse.
@@ -90,5 +90,3 @@ tasksNum: 16
 4. Веселись!
 
 Если нужен перевод на англиский, пишите в Issues.
-
-Для свободного использование.
