@@ -59,9 +59,9 @@ Video about the plugin (in Russian) - https://youtu.be/lHh4xp_ziro.
 4. Now you have the code that you can edit!
 
 ## Install for Server
-1. Download the compiled [AmongUs](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs/amongUs.jar) and upload it to your server.
+1. Download the compiled [AmongUs](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.1/amongUs.jar) and upload it to your server.
 2. Download [ProtocolLib](https://www.spigotmc.org/resources/protocollib.1997) and upload it to your server.
-3. Upload [world.tar](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs/world.tar) on server and unzip.
+3. Upload [world.tar](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.1/world.tar) on server and unzip.
 4. Have fun!
 
 If you need to translate the plugin into English, then write to Issues.
@@ -116,9 +116,9 @@ spawns:
 4. Теперь у Вас есть код для редактирования!
 
 ## Установка на сервер
-1. Скачайте скомпилированный [AmongUs](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs/amongUs.jar) и загрузите на сервер.
+1. Скачайте скомпилированный [AmongUs](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.1/amongUs.jar) и загрузите на сервер.
 2. Скачайте [ProtocolLib](https://www.spigotmc.org/resources/protocollib.1997) и загрузите на сервер.
-3. Загрузите [world.tar](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs/world.tar) на сервер и распакуйте.
+3. Загрузите [world.tar](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.1/world.tar) на сервер и распакуйте.
 4. Веселись!
 
 Если нужен перевод на англиский, пишите в Issues.
