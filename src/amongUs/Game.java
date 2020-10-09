@@ -86,35 +86,35 @@ public class Game {
 	@SuppressWarnings("deprecation")
 	public String start(List<Player> players) {
 		
-//		if(players == null || players.size() < 3)
-//			return "Нужно больше 2х игроков";
-//		
-//		if(emergency_metting < 1)
-//			return "emergency_metting - не может быть меньше 0";
-//		
-//		if(time_voting < 1)
-//			return "time_voting - не может быть меньше 1";
-//		
-//		if(speed_player < 1)
-//			return "speed_player - не может быть меньше 1";
-//		
-//		if(timeout_kill < 1)
-//			return "timeout_kill - не может быть меньше 0";
-//		
-//		if(distance_kill < 1)
-//			return "distance_kill - не может быть меньше 1";
-//		
-//		if(tasksNum < 1)
-//			return "tasksNum - не может быть меньше 1";
-//		
-//		if(timeout_metting < 1)
-//			return "timeout_metting - не может быть меньше 0";
-//
-//		if(imposters < 1)
-//			return "Предателей не может быть меньше 1";
-//	
-//		if(imposters > players.size()-imposters-1)
-//			return "Предателей должно быть меньше экипажа";
+		if(players == null || players.size() < 3)
+			return "Нужно больше 2х игроков";
+		
+		if(emergency_metting < 1)
+			return "emergency_metting - не может быть меньше 0";
+		
+		if(time_voting < 1)
+			return "time_voting - не может быть меньше 1";
+		
+		if(speed_player < 1)
+			return "speed_player - не может быть меньше 1";
+		
+		if(timeout_kill < 1)
+			return "timeout_kill - не может быть меньше 0";
+		
+		if(distance_kill < 1)
+			return "distance_kill - не может быть меньше 1";
+		
+		if(tasksNum < 1)
+			return "tasksNum - не может быть меньше 1";
+		
+		if(timeout_metting < 1)
+			return "timeout_metting - не может быть меньше 0";
+
+		if(imposters < 1)
+			return "Предателей не может быть меньше 1";
+	
+		if(imposters > players.size()-imposters-1)
+			return "Предателей должно быть меньше экипажа";
 		
 		if(map.getSpawns().size() < players.size())
 			return "На карте недостаточно места для всех игроков";
@@ -399,10 +399,10 @@ public class Game {
 			if(player.isLive() && !player.impostor)
 				membersNum++;
 		
-//		if(impostersNum+1 > membersNum)
-//			impostersWin();
-//		if(impostersNum == 0)
-//			membersWin();
+		if(impostersNum+1 > membersNum)
+			impostersWin();
+		if(impostersNum == 0)
+			membersWin();
 		
 		if(timeoutMeeting > 0)
 			timeoutMeeting--;
