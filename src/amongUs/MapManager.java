@@ -6,9 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.configuration.file.FileConfiguration;
 
 import tasks.Sabotage;
 import tasks.Task;
@@ -37,15 +37,15 @@ public class MapManager {
 	
 	public static World world;
 
-	public static MapGame initMap(String name, Game game) {
+	public static MapGame initMap(String name, Game game, FileConfiguration config, World _world) {
 		
 		if(name.equalsIgnoreCase("The Skeld"))
-			world = Bukkit.getWorld("world");
+			world = _world;
 		else
 			return null;
 		
 		Location emergencyMetting = new Location(world, 0.5, 99, 0.5);
-		List<Location> spawns = initSpawns();
+		List<Location> spawns = initSpawns(config);
 		List<Task> tasks = initTasks(game);
 		tasks.addAll(initLongTasks(game));
 		List<Manhole> manholes = initManholes();
@@ -61,20 +61,17 @@ public class MapManager {
 		
 	}
 	
-	private static List<Location> initSpawns() {
+	private static List<Location> initSpawns(FileConfiguration config) {
 		
 		List<Location> spawns = new ArrayList<Location>();
 		
-		spawns.add(new Location(world, 0.5, 98, 3.5));
-		spawns.add(new Location(world, 2.5, 98, 2.5));
-		spawns.add(new Location(world, 3.5, 98, 1.5));
-		spawns.add(new Location(world, 3.5, 98, -0.5));
-		spawns.add(new Location(world, 2.5, 98, -1.5));
-		spawns.add(new Location(world, 0.5, 98, -2.5));
-		spawns.add(new Location(world, -1.5, 98, -1.5));
-		spawns.add(new Location(world, -2.5, 98, -0.5));
-		spawns.add(new Location(world, -2.5, 98, 1.5));
-		spawns.add(new Location(world, -1.5, 98, 2.5));
+		for(String strLoc: config.getStringList("spawns")) {
+			
+			Location loc = new Location(world, Double.parseDouble(strLoc.split(", ")[0]), Double.parseDouble(strLoc.split(", ")[1]), Double.parseDouble(strLoc.split(", ")[2]));
+			
+			spawns.add(loc);
+			
+		}
 		
 		return spawns;
 		

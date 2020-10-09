@@ -1,16 +1,21 @@
 package tasks;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Snowball;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scoreboard.Scoreboard;
 
 import amongUs.Main;
@@ -26,6 +31,51 @@ public abstract class Sabotage {
 	private List<PlayerGame> players = new ArrayList<PlayerGame>();
 	private Map<PlayerGame, Location> locPlayers = new HashMap<PlayerGame, Location>();
 	private float speed = 0.2f;
+	
+	private static Inventory inv;
+	
+	public static void openMenu(PlayerGame player) {
+		
+		player.getPlayer().openInventory(inv);
+		
+	}
+	
+	private static ItemStack genItem(Material mat, String name, String... lores) {
+		
+		ItemStack item = new ItemStack(mat);
+		ItemMeta meta = item.getItemMeta();
+		meta.setDisplayName(name);
+		if(lores != null)
+			meta.setLore(Arrays.asList(lores));
+		
+		item.setItemMeta(meta);
+		
+		return item;
+		
+	}
+	
+	public static void createMenu() {
+		
+		inv = Bukkit.createInventory(null, 54, "Карта саботажа");
+		
+		for(int i = 0; i < inv.getSize(); i++)
+			inv.setItem(i, genItem(Material.STAINED_GLASS_PANE, "§7"));
+
+		inv.setItem(1, genItem(Material.IRON_DOOR, "Sabotage", "§eВерхний движок", "Закрыть двери в верхнем движке", "ID: doorUpDrive"));
+		inv.setItem(37, genItem(Material.IRON_DOOR, "Sabotage", "§eНижний движок", "Закрыть двери в нижнем движке", "ID: doorDownDrive"));
+		inv.setItem(20, genItem(Material.IRON_DOOR, "Sabotage", "§eОхрана", "Закрыть двери в охране", "ID: doorSecurity"));
+		inv.setItem(12, genItem(Material.IRON_DOOR, "Sabotage", "§eМедотсек", "Закрыть двери в медотсеке", "ID: doorMedbay"));
+		inv.setItem(29, genItem(Material.IRON_DOOR, "Sabotage", "§eЭлектричество", "Закрыть двери в электричестве", "ID: doorElectrical"));
+		inv.setItem(5, genItem(Material.IRON_DOOR, "Sabotage", "§eСтоловая", "Закрыть двери в столовой", "ID: doorCafeteria"));
+		inv.setItem(41, genItem(Material.IRON_DOOR, "Sabotage", "§eХранилище", "Закрыть двери в хранилище", "ID: doorStorage"));
+		
+		inv.setItem(18, genItem(Material.SEA_LANTERN, "Sabotage", "§eРектор", "Дестабилизировать реактор", "ID: reactor"));
+		inv.setItem(51, genItem(Material.REDSTONE_ORE, "Sabotage", "§eКоvмуникация", "Вывести из строя коммун-ый модуль", "ID: communicate"));
+		inv.setItem(15, genItem(Material.SAPLING, "Sabotage", "§eКислород", "Повредить кислород", "ID: oxygen"));
+		inv.setItem(30, genItem(Material.REDSTONE_COMPARATOR, "Sabotage", "§eЭлектричество", "Повредить проводку", "ID: electrical"));
+		
+	}
+	
 
 	public Sabotage(List<Location> location, Location locTo) {
 		

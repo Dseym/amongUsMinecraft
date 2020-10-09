@@ -1,7 +1,6 @@
 package amongUs;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -70,12 +69,10 @@ public class Event implements Listener {
 		try {
 			
 			PlayerGame player = lobby.getGame().getPlayer(e.getPlayer());
-			if(player == null)
+			if(player == null || player.getPlayer().hasPermission("among.command"))
 				return;
 			
-			List<String> commands = new ArrayList<String>();
-			commands.addAll(Arrays.asList("/me", "/tell", "/msg", "/w"));
-			if(commands.contains(e.getMessage().toLowerCase().split(" ")[0])) {
+			if(!e.getMessage().split(" ")[0].equalsIgnoreCase("/among")) {
 				
 				e.getPlayer().sendMessage(Main.tagPlugin + "Во время игры - запрещено");
 				
@@ -162,12 +159,63 @@ public class Event implements Listener {
 		
 	}
 	
-	private void checkCamera(PlayerGame player, Location loc) {
+	private void imposterKill(PlayerGame player) {
 		
-		Cameras camera = lobby.getGame().getMap().getCamera(loc);
-		
-		if(camera != null)
-			camera.join(player);
+		if (player.timeoutKill > 0)
+			return;
+
+		PlayerGame playerHitted = null;
+		Location loc = player.getPlayer().getLocation();
+		for (PlayerGame player2 : lobby.getGame().getPlayers()) {
+
+			if (player2 == player || !player2.isLive())
+				continue;
+
+			Object action = player2.getAction();
+
+			if (action != null) {
+
+				if (action instanceof Task && ((Task) action).getPlayerLoc()
+						.distance(loc) < lobby.getGame().distance_kill) {
+
+					playerHitted = player2;
+					((Task) action).complete(false);
+					break;
+
+				} else if (action instanceof Sabotage && ((Sabotage) action).getPlayerLoc(player2)
+						.distance(loc) < lobby.getGame().distance_kill) {
+
+					playerHitted = player2;
+					((Sabotage) action).exit(player2);
+					break;
+
+				} else if (action instanceof Cameras && ((Cameras) action).getPlayerLoc(player2)
+						.distance(loc) < lobby.getGame().distance_kill) {
+
+					playerHitted = player2;
+					((Cameras) action).exit(player2);
+					break;
+
+				}
+
+			} else if (player2.getPlayer().getLocation()
+					.distance(player.getPlayer().getLocation()) < lobby.getGame().distance_kill) {
+
+				playerHitted = player2;
+				break;
+
+			}
+
+		}
+
+		if (playerHitted != null && !playerHitted.impostor && !lobby.getGame().getVote().isActive()) {
+
+			player.getPlayer().setVelocity(playerHitted.getPlayer().getLocation().toVector()
+					.subtract(player.getPlayer().getLocation().toVector()));
+			lobby.getGame().imposterKillPlayer(playerHitted);
+			player.timeoutKill = lobby.getGame().timeout_kill;
+
+		}
 		
 	}
 	
@@ -182,6 +230,38 @@ public class Event implements Listener {
 			
 			e.setCancelled(true);
 			
+			if (e.getItem() != null && e.getItem().getType() == Material.IRON_SWORD) {
+				
+				imposterKill(player);
+				
+				return;
+				
+			}
+			
+			if (e.getItem() != null && e.getItem().getType() == Material.BRICK_STAIRS) {
+				
+				if (player.isLive()) {
+					
+					List<Location> killedBodies = new ArrayList<Location>();
+					killedBodies.addAll(lobby.getGame().getKilledBodies());
+					for (Location loc : killedBodies)
+						if (loc.distance(e.getPlayer().getLocation()) < 4)
+							lobby.getGame().meeting(player, true);
+					
+				}
+				
+				return;
+				
+			}
+			
+			if (e.getItem() != null && e.getItem().getType() == Material.REDSTONE_BLOCK) {
+				
+				Sabotage.openMenu(player);
+				
+				return;
+				
+			}
+			
 			if (e.getItem() != null && e.getItem().getType() == Material.BANNER) {
 				
 				Bukkit.dispatchCommand(e.getPlayer(), "among vopen");
@@ -193,81 +273,7 @@ public class Event implements Listener {
 			if(lobby.getGame().getVote().isActive())
 				return;
 			
-			if (e.getAction() == Action.LEFT_CLICK_BLOCK || e.getAction() == Action.LEFT_CLICK_AIR) {
-
-				if (player.isLive())
-					if (!player.getPlayer().isSneaking()) {
-
-						List<Location> killedBodies = new ArrayList<Location>();
-						killedBodies.addAll(lobby.getGame().getKilledBodies());
-						for (Location loc : killedBodies)
-							if (loc.distance(e.getPlayer().getLocation()) < 4)
-								lobby.getGame().meeting(player, true);
-
-					} else if (player.impostor) {
-
-						if (player.timeoutKill > 0)
-							return;
-
-						PlayerGame playerHitted = null;
-						Location loc = player.getPlayer().getLocation();
-						for (PlayerGame player2 : lobby.getGame().getPlayers()) {
-
-							if (player2 == player || !player2.isLive())
-								continue;
-
-							Object action = player2.getAction();
-
-							if (action != null) {
-
-								if (action instanceof Task && ((Task) action).getPlayerLoc()
-										.distance(loc) < lobby.getGame().distance_kill) {
-
-									playerHitted = player2;
-									((Task) action).complete(false);
-									break;
-
-								} else if (action instanceof Sabotage && ((Sabotage) action).getPlayerLoc(player2)
-										.distance(loc) < lobby.getGame().distance_kill) {
-
-									playerHitted = player2;
-									((Sabotage) action).exit(player2);
-									break;
-
-								} else if (action instanceof Cameras && ((Cameras) action).getPlayerLoc(player2)
-										.distance(loc) < lobby.getGame().distance_kill) {
-
-									playerHitted = player2;
-									((Cameras) action).exit(player2);
-									break;
-
-								}
-
-							} else if (player2.getPlayer().getLocation()
-									.distance(player.getPlayer().getLocation()) < lobby.getGame().distance_kill) {
-
-								playerHitted = player2;
-								break;
-
-							}
-
-						}
-
-						if (playerHitted != null && !playerHitted.impostor && !lobby.getGame().getVote().isActive()) {
-
-							player.getPlayer().setVelocity(playerHitted.getPlayer().getLocation().toVector()
-									.subtract(player.getPlayer().getLocation().toVector()));
-							lobby.getGame().imposterKillPlayer(playerHitted);
-							player.timeoutKill = lobby.getGame().timeout_kill;
-
-						}
-
-					}
-
-			} else if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
-
-				if (e.getHand() != EquipmentSlot.HAND)
-					return;
+			if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
 
 				Location loc = e.getClickedBlock().getLocation();
 
@@ -277,8 +283,6 @@ public class Event implements Listener {
 				checkTask(player, loc);
 
 				checkSabotage(player, loc);
-
-				checkCamera(player, loc);
 
 			}
 			
@@ -324,7 +328,7 @@ public class Event implements Listener {
 			ItemMeta meta = e.getCurrentItem().getItemMeta();
 			if (meta.getDisplayName().equalsIgnoreCase("Sabotage")) {
 				
-				String sabotage = meta.getLore().get(1).split("ID: ")[1];
+				String sabotage = meta.getLore().get(2).split("ID: ")[1];
 				
 				for(Sabotage sab: lobby.getGame().getSabotages())
 					if(sab.isActive()) {

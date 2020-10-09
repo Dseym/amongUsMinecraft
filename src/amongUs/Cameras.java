@@ -13,6 +13,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 public class Cameras {
 	
@@ -34,7 +37,21 @@ public class Cameras {
 				
 				PlayerGame player = game.getPlayer(e.getPlayer());
 				
-				if(player == null || !players.containsKey(player))
+				if(player == null || e.getHand() != EquipmentSlot.HAND)
+					return;
+				
+				Cameras camera = null;
+				if(e.getClickedBlock() != null)
+					camera = Lobby.getLobby(player.getPlayer()).getGame().getMap().getCamera(e.getClickedBlock().getLocation());
+				
+				if(camera != null) {
+					
+					camera.join(player);
+					return;
+					
+				}
+				
+				if(!players.containsKey(player))
 					return;
 				
 				if(e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.LEFT_CLICK_BLOCK)
@@ -100,6 +117,13 @@ public class Cameras {
 		player.getPlayer().setFlying(true);
 		player.setAction(this);
 		
+		Bukkit.getScheduler().runTaskLater(Main.plugin, new Runnable() {
+			
+			@Override
+			public void run() {player.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 9999, 0));}
+			
+		}, 20);
+		
 		next(player);
 		
 	}
@@ -117,8 +141,11 @@ public class Cameras {
 		
 		player.getPlayer().teleport(locPlayers.get(player));
 		player.getPlayer().setFlying(false);
-		player.getPlayer().setGameMode(GameMode.ADVENTURE);
+		player.getPlayer().setGameMode(GameMode.SURVIVAL);
 		player.setAction(null);
+		
+		if(player.isLive())
+			player.getPlayer().removePotionEffect(PotionEffectType.INVISIBILITY);
 		
 		players.remove(player);
 		locPlayers.remove(player);

@@ -27,6 +27,8 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
+import org.bukkit.scoreboard.Team.Option;
+import org.bukkit.scoreboard.Team.OptionStatus;
 
 import net.md_5.bungee.api.ChatMessageType;
 import net.minecraft.server.v1_12_R1.Packet;
@@ -68,10 +70,10 @@ public class Game {
 	
 	private String impostersStr = "І4 ";
 
-	public Game(FileConfiguration config, Lobby lobby) {
+	public Game(FileConfiguration config, Lobby lobby, Location loc) {
 		
 		this.lobby = lobby;
-		reload(config);
+		reload(config, loc);
 		
 	}
 	
@@ -84,35 +86,35 @@ public class Game {
 	@SuppressWarnings("deprecation")
 	public String start(List<Player> players) {
 		
-		if(players == null || players.size() < 3)
-			return "Ќужно больше 2х игроков";
-		
-		if(emergency_metting < 1)
-			return "emergency_metting - не может быть меньше 0";
-		
-		if(time_voting < 1)
-			return "time_voting - не может быть меньше 1";
-		
-		if(speed_player < 1)
-			return "speed_player - не может быть меньше 1";
-		
-		if(timeout_kill < 1)
-			return "timeout_kill - не может быть меньше 0";
-		
-		if(distance_kill < 1)
-			return "distance_kill - не может быть меньше 1";
-		
-		if(tasksNum < 1)
-			return "tasksNum - не может быть меньше 1";
-		
-		if(timeout_metting < 1)
-			return "timeout_metting - не может быть меньше 0";
-
-		if(imposters < 1)
-			return "ѕредателей не может быть меньше 1";
-	
-		if(imposters > players.size()-imposters-1)
-			return "ѕредателей должно быть меньше экипажа";
+//		if(players == null || players.size() < 3)
+//			return "Ќужно больше 2х игроков";
+//		
+//		if(emergency_metting < 1)
+//			return "emergency_metting - не может быть меньше 0";
+//		
+//		if(time_voting < 1)
+//			return "time_voting - не может быть меньше 1";
+//		
+//		if(speed_player < 1)
+//			return "speed_player - не может быть меньше 1";
+//		
+//		if(timeout_kill < 1)
+//			return "timeout_kill - не может быть меньше 0";
+//		
+//		if(distance_kill < 1)
+//			return "distance_kill - не может быть меньше 1";
+//		
+//		if(tasksNum < 1)
+//			return "tasksNum - не может быть меньше 1";
+//		
+//		if(timeout_metting < 1)
+//			return "timeout_metting - не может быть меньше 0";
+//
+//		if(imposters < 1)
+//			return "ѕредателей не может быть меньше 1";
+//	
+//		if(imposters > players.size()-imposters-1)
+//			return "ѕредателей должно быть меньше экипажа";
 		
 		if(map.getSpawns().size() < players.size())
 			return "Ќа карте недостаточно места дл€ всех игроков";
@@ -122,8 +124,6 @@ public class Game {
 		
 		for(Door door: map.getDoors())
 			door.openDoor();
-		
-		tpToSpawn();
 		
 		map.getWorld().setDifficulty(Difficulty.PEACEFUL);
 		
@@ -152,10 +152,19 @@ public class Game {
 			item.setItemMeta(meta);
 			
 			player.getPlayer().getInventory().setItem(8, item);
+			
+			item = new ItemStack(Material.BRICK_STAIRS);
+			meta = item.getItemMeta();
+			meta.setDisplayName("–епорт");
+			item.setItemMeta(meta);
+			
+			player.getPlayer().getInventory().setItem(3, item);
 			player.getPlayer().setHealth(player.getPlayer().getMaxHealth());
 			player.getPlayer().setSaturation((float)player.getPlayer().getMaxHealth());
 			
 		}
+		
+		Collections.shuffle(this.players);
 		
 		for(int i = 0; i < imposters; i++) {
 			
@@ -167,28 +176,23 @@ public class Game {
 			impostersStr += " " + player.getPlayer().getDisplayName();
 			player.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR, net.md_5.bungee.api.chat.TextComponent.fromLegacyText(impostersStr));
 			
-			Map<String, String> sabotageTypes = map.getSabotageTypes();
-			int num = 0;
-			for(String str: sabotageTypes.keySet()) {
-				
-				ItemStack item = new ItemStack(str.indexOf("door") < 0 ? Material.REDSTONE_BLOCK : Material.IRON_DOOR, 1);
-				ItemMeta meta = item.getItemMeta();
-				List<String> lore = new ArrayList<String>();
-				
-				meta.setDisplayName("Sabotage");
-				lore.add(sabotageTypes.get(str));
-				lore.add("ID: " + str);
-				
-				meta.setLore(lore);
-				item.setItemMeta(meta);
-				
-				player.getPlayer().getInventory().setItem(num+9, item);
-				
-				num++;
-				
-			}
+			ItemStack item = new ItemStack(Material.REDSTONE_BLOCK);
+			ItemMeta meta = item.getItemMeta();
+			meta.setDisplayName(" арта саботажа");
+			item.setItemMeta(meta);
+			player.getPlayer().getInventory().setItem(7, item);
+			
+			item = new ItemStack(Material.IRON_SWORD);
+			meta = item.getItemMeta();
+			meta.setDisplayName("Ќож");
+			item.setItemMeta(meta);
+			player.getPlayer().getInventory().setItem(1, item);
 			
 		}
+		
+		Collections.shuffle(this.players);
+		
+		tpToSpawn();
 		
 		for(PlayerGame player: this.players) {
 			
@@ -201,6 +205,8 @@ public class Game {
 				speed_player = 9;
 				
 			}
+			
+			player.getPlayer().getInventory().setHeldItemSlot(0);
 			
 			player.getPlayer().setWalkSpeed(((float)(speed_player+1))/10);
 			
@@ -294,7 +300,6 @@ public class Game {
 		
 		tpToSpawn();
 		
-		lobby.isGameStop();
 		if(timerUpdate != null)
 			timerUpdate.cancel();
 		
@@ -304,6 +309,8 @@ public class Game {
 			sab.complete();
 		for(Task task: getTasks())
 			task.complete(false);
+		
+		lobby.isGameStop();
 		
 		for(PlayerGame player: players) {
 			
@@ -392,10 +399,10 @@ public class Game {
 			if(player.isLive() && !player.impostor)
 				membersNum++;
 		
-		if(impostersNum+1 > membersNum)
-			impostersWin();
-		if(impostersNum == 0)
-			membersWin();
+//		if(impostersNum+1 > membersNum)
+//			impostersWin();
+//		if(impostersNum == 0)
+//			membersWin();
 		
 		if(timeoutMeeting > 0)
 			timeoutMeeting--;
@@ -621,7 +628,7 @@ public class Game {
 		
 	}
 	
-	public void reload(FileConfiguration config) {
+	public void reload(FileConfiguration config, Location loc) {
 		
 		isStart = false;
 		
@@ -638,12 +645,13 @@ public class Game {
 		
 		teamPlayers = scoreboard.registerNewTeam("amongPlayers");
 		teamImposters = scoreboard.registerNewTeam("amongImposters");
+		teamPlayers.setOption(Option.NAME_TAG_VISIBILITY, OptionStatus.NEVER);
 		scoreboard.registerNewTeam("amongSabotage");
 		scoreboard.registerNewTeam("amongTasks");
 		
 		String mapName = config.getString("map");
 		
-		map = MapManager.initMap(mapName, this);
+		map = MapManager.initMap(mapName, this, config, loc.getWorld());
 		
 		if(map == null) {
 			
@@ -658,13 +666,6 @@ public class Game {
 		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "scoreboard teams option amongSabotage color red");
 		
 		teamPlayers.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.NEVER);
-		
-		for(int i = 0; i < Math.floor(Math.random() * 3); i++) {
-			
-			Collections.shuffle(this.players);
-			Collections.shuffle(map.getSpawns());
-			
-		}
 		
 		imposters = config.getInt("imposters");
 		confirm_eject = config.getBoolean("confirm_eject");

@@ -1,6 +1,14 @@
 # amongUsMinecraft
 Плагин. Играй в Среди Нас в майнкрафт! / Plugin. Play Among Us in Minecraft!
 
+### Updates
+1. Added a multi-game
+2. Changed sabotage menu
+3. Changed mechanics killing and reporting
+4. Added a change in the spawn of players during the meeting(in gameConf)
+5. Changed sabotage oxygen
+6. Bug fixes
+
 # ENG
 ## Description
 New minecraft mini-game based on the canon of the game Among Us! Complete tasks, look for imposters, or kill if you are an imposter yourself!
@@ -13,9 +21,10 @@ New minecraft mini-game based on the canon of the game Among Us! Complete tasks,
 2. among.create - create game
 3. among.setting - set settings game
 4. among.setlobby - set lobby
+5. among.command - send commands while playing
 
 ## Game config
-In file AmongUs/gameConfig/example.yml
+In file AmongUs/gameConfig/example.yml (you can create your)
 ```
 map: The Skeld
 visual_task: true
@@ -28,6 +37,17 @@ speed_player: 2
 timeout_kill: 15
 distance_kill: 2
 tasksNum: 16
+spawns:
+- 0.5, 98, 3.5
+- 2.5, 98, 2.5
+- 3.5, 98, 1.5
+- 3.5, 98, -0.5
+- 2.5, 98, -1.5
+- 0.5, 98, -2.5
+- -1.5, 98, -1.5
+- -2.5, 98, -0.5
+- -2.5, 98, 1.5
+- -1.5, 98, 2.5
 ```
 
 Video about the plugin (in Russian) - https://youtu.be/lHh4xp_ziro.
@@ -58,9 +78,10 @@ If you need to translate the plugin into English, then write to Issues.
 2. among.create - создать игру
 3. among.setting - установить настройку игры
 4. among.setlobby - установить лобби
+5. among.command - отправлять команды во время игры
 
 ## Игровой конфиг(gameConfig)
-В файле AmongUs/gameConfig/example.yml
+В файле AmongUs/gameConfig/example.yml (вы можете создать свой)
 ```
 map: The Skeld
 visual_task: true
@@ -73,6 +94,17 @@ speed_player: 2
 timeout_kill: 15
 distance_kill: 2
 tasksNum: 16
+spawns:
+- 0.5, 98, 3.5
+- 2.5, 98, 2.5
+- 3.5, 98, 1.5
+- 3.5, 98, -0.5
+- 2.5, 98, -1.5
+- 0.5, 98, -2.5
+- -1.5, 98, -1.5
+- -2.5, 98, -0.5
+- -2.5, 98, 1.5
+- -1.5, 98, 2.5
 ```
 
 Видео о плагине (на русском) - https://youtu.be/lHh4xp_ziro.

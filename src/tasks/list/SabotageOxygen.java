@@ -25,7 +25,7 @@ public class SabotageOxygen extends Sabotage {
 	private String code = "";
 	private String enteredCode = "";
 	private BossBar bar;
-	private int timeToLose = 50;
+	private int timeToLose = 40;
 	private Location signEnterCode;
 	private Location signCode;
 
@@ -51,14 +51,14 @@ public class SabotageOxygen extends Sabotage {
 					
 					timeToLose--;
 					bar.setVisible(true);
-					bar.setProgress(((double)timeToLose)/50.0);
+					bar.setProgress(((double)timeToLose)/40.0);
 					
 					for(PlayerGame player: game.getPlayers())
 						player.sendTitle("", "§cСаботаж кислорода");
 					
 				} else {
 					
-					timeToLose = 50;
+					timeToLose = 40;
 					bar.setVisible(false);
 					
 				}
@@ -93,10 +93,7 @@ public class SabotageOxygen extends Sabotage {
 						if(enteredCode.equalsIgnoreCase(code))
 							complete();
 						else
-							player.sendMessage("§b§oНеверный код");
-						
-						enteredCode = "";
-						update();
+							player.sendMessage("§b§oВведите код полностью");
 						
 					}
 					
@@ -107,8 +104,18 @@ public class SabotageOxygen extends Sabotage {
 				if(block.getType() != Material.SIGN && block.getType() != Material.WALL_SIGN)
 					return;
 				
+				String num = ((Sign)block.getState()).getLine(1);
+				
+				if(!("" + code.toCharArray()[enteredCode.length()]).equalsIgnoreCase(num)) {
+					
+					player.sendMessage("§b§oНеверная цифра");
+					
+					return;
+					
+				}
+				
 				if(enteredCode.length() < 6)
-					enteredCode += ((Sign)block.getState()).getLine(1);
+					enteredCode += num;
 				
 				update();
 				

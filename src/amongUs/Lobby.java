@@ -16,19 +16,31 @@ import org.bukkit.scoreboard.Scoreboard;
 
 public class Lobby {
 	
-	public static Lobby lobby;
+	public static List<Lobby> lobby = new ArrayList<Lobby>();
 
 	private Location loc;
 	private List<Player> players = new ArrayList<Player>();
 	private Map<Player, Location> locPlayers = new HashMap<Player, Location>();
 	private Game game;
 	private Scoreboard board;
+	private String name;
 	
 	
 	public static Lobby getLobby(Player player) {
 		
-		for(Player _player: lobby.getPlayers())
-			if(_player == player)
+		for(Lobby lobby: lobby)
+			for(Player _player: lobby.getPlayers())
+				if(_player == player)
+					return lobby;
+		
+		return null;
+		
+	}
+	
+	public static Lobby getLobby(String name) {
+		
+		for(Lobby lobby: lobby)
+			if(name.equalsIgnoreCase(lobby.getName()))
 				return lobby;
 		
 		return null;
@@ -36,15 +48,28 @@ public class Lobby {
 	}
 	
 	
-	public Lobby(Location loc) {
+	public String getName() {
+		
+		return name;
+		
+	}
+	
+	public void setLoc(Location loc) {
 		
 		this.loc = loc;
+		
+	}
+	
+	public Lobby(Location loc, String name) {
+		
+		this.loc = loc;
+		this.name = name;
 		Bukkit.getPluginManager().registerEvents(new Event(this), Main.plugin);
 		board = Bukkit.getScoreboardManager().getNewScoreboard();
 		Objective obj = board.registerNewObjective("game", "dummy");
 		obj.setDisplaySlot(DisplaySlot.SIDEBAR);
 		obj.setDisplayName("Конфиг");
-		obj.getScore("Нет игры").setScore(0);;
+		obj.getScore("Нет игры").setScore(0);
 		
 	}
 	
@@ -53,23 +78,28 @@ public class Lobby {
 		if(game != null)
 			game.end();
 		
-		game = new Game(config, this);
+		game = new Game(config, this, loc);
 		
 		reloadSb();
 		
-		for(Player _player: players)
+		int numPlayer = 0;
+		for(Player _player: players) {
+			
+			numPlayer++;
+			
 			_player.sendMessage(Main.tagPlugin + "Создана игра для этого лобби");
+			
+			if(numPlayer > game.getMap().getSpawns().size())
+				leave(_player, false);
+			
+		}
 		
 	}
 	
 	public void isGameStop() {
 		
-		for(Player player: players) {
-			
-			player.setScoreboard(board);
-			player.teleport(loc);
-			
-		}
+		for(Player player: players)
+			leave(player, true);
 		
 		game = null;
 		
@@ -146,6 +176,14 @@ public class Lobby {
 			
 		}
 		
+		if(game != null && game.getMap().getSpawns().size()-1 < players.size()) {
+			
+			player.sendMessage(Main.tagPlugin + "Максимум игроков");
+			
+			return;
+			
+		}
+		
 		player.sendMessage(Main.tagPlugin + "Вы вошли в лобби");
 		
 		player.setScoreboard(board);
@@ -162,14 +200,6 @@ public class Lobby {
 	}
 	
 	public void leave(Player player, boolean disconnect) {
-		
-		if(!players.contains(player)) {
-			
-			player.sendMessage(Main.tagPlugin + "Вы не в лобби");
-			
-			return;
-			
-		}
 		
 		if(!disconnect && game != null && game.isStart()) {
 			

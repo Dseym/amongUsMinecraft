@@ -94,9 +94,6 @@ public class Vote {
 		if(player == null)
 			return "Такого игрока нет в игре";
 		
-		if(whoVoting == player)
-			return "Вы не можете голосовать за себя";
-		
 		if(!player.isLive())
 			return "Этот игрок мертв";
 
@@ -200,9 +197,15 @@ public class Vote {
 		if(!active)
 			return;
 		
-		for(PlayerGame player: game.getPlayers())
+		for(PlayerGame player: game.getPlayers()) {
+			
+			if(player.impostor && player.isLive())
+				player.timeoutKill = game.timeout_kill;
+			
 			if(!(votes.containsKey(player) || skipping.contains(player)))
 				skip(player.getPlayer());
+			
+		}
 		
 		bar.removeAll();
 		
