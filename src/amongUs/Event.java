@@ -44,7 +44,7 @@ public class Event implements Listener {
 			if(loc.distance(player.getPlayer().getLocation()) < 4) {
 				
 				player.getPlayer().resetTitle();
-				player.sendTitle("", "Рядом обнаружено тело (ЛКМ)");
+				player.sendTitle("", Messages.visibleBody);
 				
 			}
 		
@@ -74,7 +74,7 @@ public class Event implements Listener {
 			
 			if(!e.getMessage().split(" ")[0].equalsIgnoreCase("/among")) {
 				
-				e.getPlayer().sendMessage(Main.tagPlugin + "Во время игры - запрещено");
+				e.getPlayer().sendMessage(Main.tagPlugin + Messages.notPerm);
 				
 				e.setCancelled(true);
 				
@@ -324,7 +324,6 @@ public class Event implements Listener {
 			if(lobby.getGame().getVote().isActive() || !player.impostor)
 				return;
 		
-			
 			ItemMeta meta = e.getCurrentItem().getItemMeta();
 			if (meta.getDisplayName().equalsIgnoreCase("Sabotage")) {
 				
@@ -333,7 +332,7 @@ public class Event implements Listener {
 				for(Sabotage sab: lobby.getGame().getSabotages())
 					if(sab.isActive()) {
 						
-						player.sendMessage("§b§oНельзя устраивать несколько саботажей");
+						player.sendMessage("§b§o" + Messages.sabotageLimit);
 						return;
 						
 					}

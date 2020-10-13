@@ -24,7 +24,7 @@ public class Lobby {
 	private Game game;
 	private Scoreboard board;
 	private String name;
-	
+	private int time = 60;
 	
 	public static Lobby getLobby(Player player) {
 		
@@ -71,6 +71,36 @@ public class Lobby {
 		obj.setDisplayName("Конфиг");
 		obj.getScore("Нет игры").setScore(0);
 		
+		Bukkit.getScheduler().runTaskTimer(Main.plugin, new Runnable() {
+			
+			@Override
+			public void run() {
+				
+				if(game != null && !game.isStart() && players.size() > Math.floor(game.getMap().getSpawns().size()/2))
+					time--;
+				else
+					time = 60;
+				
+				reloadSb();
+				
+				if(time < 1) {
+					
+					String response = startGame();
+					if(!response.equalsIgnoreCase("true")) {
+						
+						for(Player player: players)
+							player.sendMessage(Main.tagPlugin + response);
+						
+						return;
+						
+					}
+					
+				}
+				
+			}
+			
+		}, 20, 20);
+		
 	}
 	
 	public void createGame(FileConfiguration config) {
@@ -98,7 +128,11 @@ public class Lobby {
 	
 	public void isGameStop() {
 		
-		for(Player player: players)
+		List<Player> _players = new ArrayList<Player>();
+		
+		_players.addAll(players);
+		
+		for(Player player: _players)
 			leave(player, true);
 		
 		game = null;
@@ -115,6 +149,8 @@ public class Lobby {
 		
 		Objective obj = board.getObjective("game");
 
+		obj.getScore("До начала " + time).setScore(11);
+		obj.getScore(" ").setScore(10);
 		obj.getScore("imposters: " + game.imposters).setScore(9);
 		obj.getScore("confirm_eject: " + game.confirm_eject).setScore(8);
 		obj.getScore("emergency_metting: " + game.emergency_metting).setScore(7);
@@ -208,6 +244,8 @@ public class Lobby {
 			return;
 			
 		}
+		
+		time = 60;
 		
 		player.sendMessage(Main.tagPlugin + "Вы вышли из лобби");
 		

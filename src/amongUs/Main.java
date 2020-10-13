@@ -35,8 +35,6 @@ public class Main extends JavaPlugin {
 	
 	public void onEnable() {
 		
-		getDataFolder().mkdirs();
-		
 		tagPlugin = ChatColor.RESET + "[" + ChatColor.BLUE + getName() + ChatColor.RESET + "] ";
 		plugin = this;
 		
@@ -44,14 +42,20 @@ public class Main extends JavaPlugin {
 		
 		protocollib = ProtocolLibrary.getProtocolManager();
 		
-		getDataFolder().mkdirs();
+		File gameConf = new File(getDataFolder() + File.separator + "gameConfig");
+		gameConf.mkdirs();
 		
 		try {
 			
 			File config = new File(getDataFolder() + File.separator + "config.yml");
 			
-			if(!config.exists())
+			if(!config.exists()) {
+				
 				config.createNewFile();
+				new File(gameConf + File.separator + "example.yml").createNewFile();
+				new File(getDataFolder() + File.separator + "messages.yml").createNewFile();
+				
+			}
 			
 		} catch (Exception e) {}
 		
@@ -65,7 +69,7 @@ public class Main extends JavaPlugin {
 				Lobby.lobby.add(new Lobby(new Location(Bukkit.getWorld(strLoc[0]), Integer.parseInt(strLoc[1]), Integer.parseInt(strLoc[2]), Integer.parseInt(strLoc[3])), str));
 			
 			}
-				
+			
 		} catch (Exception e) {}
 		
 		getLogger().info("Started!");
@@ -127,7 +131,9 @@ public class Main extends JavaPlugin {
 						
 						PacketPlayOutEntityEquipment packet = new PacketPlayOutEntityEquipment(event.getPlayer().getEntityId(), EnumItemSlot.MAINHAND, new ItemStack(new Block(Material.AIR, null)));
 						
-						lobby.getGame().sendPackets(packet);
+						for(Player player: lobby.getPlayers())
+							if(player != event.getPlayer())
+								lobby.getGame().sendPacket(player.getPlayer(), packet);
 						
 				    }
 					

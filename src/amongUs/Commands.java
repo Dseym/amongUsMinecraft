@@ -62,7 +62,7 @@ public class Commands implements CommandExecutor {
 		
 		if(!sender.hasPermission("among.lobby")) {
 			
-			sender.sendMessage(Main.tagPlugin + "Нет прав");
+			sender.sendMessage(Main.tagPlugin + Messages.notPerm);
 			
 			return;
 			
@@ -70,7 +70,7 @@ public class Commands implements CommandExecutor {
 		
 		if(args.length == 1) {
 			
-			sender.sendMessage(Main.tagPlugin + "Укажите название");
+			sender.sendMessage(Main.tagPlugin + Messages.lacksArgs);
 			
 			return;
 			
@@ -91,7 +91,7 @@ public class Commands implements CommandExecutor {
 		
 		try {config.save(file);} catch (IOException e) {}
 		
-		sender.sendMessage(Main.tagPlugin + "Лобби создано");
+		sender.sendMessage(Main.tagPlugin + Messages.success);
 		
 	}
 
@@ -100,7 +100,7 @@ public class Commands implements CommandExecutor {
 		Lobby lobby = Lobby.getLobby((Player)sender);
 		if(lobby == null) {
 			
-			sender.sendMessage(Main.tagPlugin + "Вы не в лобби");
+			sender.sendMessage(Main.tagPlugin + Messages.plNotInLobby);
 			
 			return;
 			
@@ -114,7 +114,7 @@ public class Commands implements CommandExecutor {
 		
 		if(args.length == 1) {
 			
-			sender.sendMessage(Main.tagPlugin + "Укажите лобби (/among list)");
+			sender.sendMessage(Main.tagPlugin + Messages.lacksArgs);
 			
 			return;
 			
@@ -123,7 +123,7 @@ public class Commands implements CommandExecutor {
 		Lobby lobby = Lobby.getLobby(args[1]);
 		if(lobby == null) {
 			
-			sender.sendMessage(Main.tagPlugin + "Нет такого лобби");
+			sender.sendMessage(Main.tagPlugin + Messages.lobbyNotFound);
 			
 			return;
 			
@@ -132,7 +132,7 @@ public class Commands implements CommandExecutor {
 		Lobby lobby2 = Lobby.getLobby((Player)sender);
 		if(lobby2 != null) {
 			
-			sender.sendMessage(Main.tagPlugin + "Вы уже в лобби");
+			sender.sendMessage(Main.tagPlugin + Messages.plInLobby);
 			
 			return;
 			
@@ -147,7 +147,7 @@ public class Commands implements CommandExecutor {
 		Lobby lobby = Lobby.getLobby((Player)sender);
 		if(lobby == null) {
 			
-			sender.sendMessage(Main.tagPlugin + "Вы не в лобби");
+			sender.sendMessage(Main.tagPlugin + Messages.plNotInLobby);
 			
 			return;
 			
@@ -155,7 +155,7 @@ public class Commands implements CommandExecutor {
 		
 		if(!sender.hasPermission("among.setting")) {
 			
-			sender.sendMessage(Main.tagPlugin + "Нет прав");
+			sender.sendMessage(Main.tagPlugin + Messages.notPerm);
 			
 			return;
 			
@@ -163,7 +163,7 @@ public class Commands implements CommandExecutor {
 		
 		if(lobby.getGame() == null) {
 			
-			sender.sendMessage(Main.tagPlugin + "Сейчас нет игры");
+			sender.sendMessage(Main.tagPlugin + Messages.notGame);
 			
 			return;
 			
@@ -171,7 +171,7 @@ public class Commands implements CommandExecutor {
 		
 		if(lobby.getGame().isStart()) {
 			
-			sender.sendMessage(Main.tagPlugin + "Игра уже идет");
+			sender.sendMessage(Main.tagPlugin + Messages.isGameStart);
 			
 			return;
 			
@@ -179,7 +179,7 @@ public class Commands implements CommandExecutor {
 		
 		if(args.length == 1) {
 			
-			sender.sendMessage(Main.tagPlugin + "Укажите настройку");
+			sender.sendMessage(Main.tagPlugin + Messages.lacksArgs);
 			
 			return;
 			
@@ -187,7 +187,7 @@ public class Commands implements CommandExecutor {
 		
 		if(args.length == 2) {
 			
-			sender.sendMessage(Main.tagPlugin + "Укажите значение");
+			sender.sendMessage(Main.tagPlugin + Messages.lacksArgs);
 			
 			return;
 			
@@ -200,7 +200,7 @@ public class Commands implements CommandExecutor {
 			
 		} catch (Exception e) {
 			
-			sender.sendMessage(Main.tagPlugin + "Нет такой настройки");
+			sender.sendMessage(Main.tagPlugin + Messages.notFoundSett);
 			return;
 			
 		}
@@ -215,11 +215,11 @@ public class Commands implements CommandExecutor {
 				
 				setting.set(lobby.getGame(), Integer.parseInt(args[2]));
 				lobby.reloadSb();
-				sender.sendMessage(Main.tagPlugin + "Настройка изменена");
+				sender.sendMessage(Main.tagPlugin + Messages.success);
 				
 			} catch (Exception e1) {
 				
-				sender.sendMessage(Main.tagPlugin + "Неверное значение");
+				sender.sendMessage(Main.tagPlugin + Messages.incorrectValue);
 				
 			}
 			
@@ -231,7 +231,7 @@ public class Commands implements CommandExecutor {
 		
 		if(!(sender instanceof Player)) {
 			
-			sender.sendMessage(Main.tagPlugin + "Вы не игрок");
+			sender.sendMessage(Main.tagPlugin + Messages.senderNotPl);
 			return;
 			
 		}
@@ -242,7 +242,7 @@ public class Commands implements CommandExecutor {
 		
 		if(lobby == null) {
 			
-			sender.sendMessage(Main.tagPlugin + "Вы не в лобби");
+			sender.sendMessage(Main.tagPlugin + Messages.plNotInLobby);
 			
 			return;
 			
@@ -250,7 +250,7 @@ public class Commands implements CommandExecutor {
 		
 		if(lobby.getGame() == null) {
 			
-			sender.sendMessage(Main.tagPlugin + "Сейчас нет игры");
+			sender.sendMessage(Main.tagPlugin + Messages.notGame);
 			return;
 			
 		}
@@ -266,7 +266,7 @@ public class Commands implements CommandExecutor {
 		Lobby lobby = Lobby.getLobby((Player)sender);
 		if(lobby == null) {
 			
-			sender.sendMessage(Main.tagPlugin + "Вы не в лобби");
+			sender.sendMessage(Main.tagPlugin + Messages.plNotInLobby);
 			
 			return;
 			
@@ -274,7 +274,7 @@ public class Commands implements CommandExecutor {
 		
 		if(!sender.hasPermission("among.start")) {
 			
-			sender.sendMessage(Main.tagPlugin + "Нет прав");
+			sender.sendMessage(Main.tagPlugin + Messages.notPerm);
 			
 			return;
 			
@@ -282,7 +282,7 @@ public class Commands implements CommandExecutor {
 		
 		if(lobby.getGame() == null) {
 			
-			sender.sendMessage(Main.tagPlugin + "Нет игры");
+			sender.sendMessage(Main.tagPlugin + Messages.notGame);
 			
 			return;
 			
@@ -290,7 +290,7 @@ public class Commands implements CommandExecutor {
 		
 		if(lobby.getGame().isStart()) {
 			
-			sender.sendMessage(Main.tagPlugin + "Игра уже идет");
+			sender.sendMessage(Main.tagPlugin + Messages.isGameStart);
 			
 			return;
 			
@@ -311,7 +311,7 @@ public class Commands implements CommandExecutor {
 		Lobby lobby = Lobby.getLobby((Player)sender);
 		if(lobby == null) {
 			
-			sender.sendMessage(Main.tagPlugin + "Вы не в лобби");
+			sender.sendMessage(Main.tagPlugin + Messages.plNotInLobby);
 			
 			return;
 			
@@ -319,7 +319,7 @@ public class Commands implements CommandExecutor {
 		
 		if(!sender.hasPermission("among.create")) {
 			
-			sender.sendMessage(Main.tagPlugin + "Нет прав");
+			sender.sendMessage(Main.tagPlugin + Messages.notPerm);
 			
 			return;
 			
@@ -327,7 +327,7 @@ public class Commands implements CommandExecutor {
 		
 		if(lobby.getGame() != null && lobby.getGame().isStart()) {
 			
-			sender.sendMessage(Main.tagPlugin + "Игра уже идет");
+			sender.sendMessage(Main.tagPlugin + Messages.isGameStart);
 			
 			return;
 			
@@ -335,7 +335,7 @@ public class Commands implements CommandExecutor {
 		
 		if(args.length == 1) {
 			
-			sender.sendMessage(Main.tagPlugin + "Укажите настройки игры(из папки AmongUs, пример game))");
+			sender.sendMessage(Main.tagPlugin + Messages.lacksArgs);
 			
 			return;
 			
@@ -350,7 +350,7 @@ public class Commands implements CommandExecutor {
 			
 		} catch (Exception e) {
 			
-			sender.sendMessage(Main.tagPlugin + "Нет такого файла настроек");
+			sender.sendMessage(Main.tagPlugin + Messages.notFoundConfig);
 			e.printStackTrace();
 			
 		}
@@ -361,14 +361,14 @@ public class Commands implements CommandExecutor {
 		
 		if(!(sender instanceof Player)) {
 			
-			sender.sendMessage(Main.tagPlugin + "Вы не игрок");
+			sender.sendMessage(Main.tagPlugin + Messages.senderNotPl);
 			return;
 			
 		}
 		
 		if(args.length == 1) {
 			
-			sender.sendMessage(Main.tagPlugin + "Укажите ник или skip");
+			sender.sendMessage(Main.tagPlugin + Messages.lacksArgs);
 			return;
 			
 		}
@@ -377,7 +377,7 @@ public class Commands implements CommandExecutor {
 		
 		if(Lobby.lobby == null) {
 			
-			sender.sendMessage(Main.tagPlugin + "Нет лобби");
+			sender.sendMessage(Main.tagPlugin + Messages.lobbyNotFound);
 			
 			return;
 			
@@ -386,7 +386,7 @@ public class Commands implements CommandExecutor {
 		Lobby lobby = Lobby.getLobby((Player)sender);
 		if(lobby.getGame() == null) {
 			
-			sender.sendMessage(Main.tagPlugin + "Сейчас нет игры");
+			sender.sendMessage(Main.tagPlugin + Messages.notGame);
 			return;
 			
 		}
@@ -395,7 +395,7 @@ public class Commands implements CommandExecutor {
 			
 			String answ = lobby.getGame().getVote().skip(player);
 			if(answ.equalsIgnoreCase("true"))
-				sender.sendMessage(Main.tagPlugin + "§b§oВы проголосовали");
+				sender.sendMessage(Main.tagPlugin + "§b§o" + Messages.success);
 			else
 				sender.sendMessage(Main.tagPlugin + "§b§o" + answ);
 			
@@ -405,7 +405,7 @@ public class Commands implements CommandExecutor {
 		
 		String answ = lobby.getGame().getVote().vote(player, args[1]);
 		if(answ.equalsIgnoreCase("true"))
-			sender.sendMessage(Main.tagPlugin + "§b§oВы проголосовали");
+			sender.sendMessage(Main.tagPlugin + "§b§o" + Messages.success);
 		else
 			sender.sendMessage(Main.tagPlugin + "§b§o" + answ);
 		
@@ -413,18 +413,7 @@ public class Commands implements CommandExecutor {
 	
 	private void help(CommandSender sender) {
 		
-		sender.sendMessage(Main.tagPlugin + "\n------------Команды------------\n"
-						 + " /among create gameConf - §eсоздать игру§r\n"
-						 + " /among start - §eначать игру§r\n"
-						 + " /among v (nickName/skip) - §eголосовать§r\n"
-						 + " /among help - §eэто меню§r\n"
-						 + " /among vopen - §eоткрыть планшет голосования§r\n"
-						 + " /among setting sett val - §eизменить наст-ку игры§r\n"
-						 + " /among join name - §eвойти в лобби§r\n"
-						 + " /among leave - §eвыйти из лобби§r\n"
-						 + " /among setlobby name - §eсоздать лобби§r\n"
-						 + " /among list - §eсписок лобби§r\n"
-						 + "------------Команды------------");
+		sender.sendMessage(Main.tagPlugin + Messages.helpMenu);
 		
 	}
 

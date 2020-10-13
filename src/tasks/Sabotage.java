@@ -27,6 +27,7 @@ public abstract class Sabotage {
 	protected List<Location> location;
 	protected Location locTo;
 	public boolean show = true;
+	private int timeout = 10;
 	
 	private List<PlayerGame> players = new ArrayList<PlayerGame>();
 	private Map<PlayerGame, Location> locPlayers = new HashMap<PlayerGame, Location>();
@@ -70,7 +71,7 @@ public abstract class Sabotage {
 		inv.setItem(41, genItem(Material.IRON_DOOR, "Sabotage", "§eХранилище", "Закрыть двери в хранилище", "ID: doorStorage"));
 		
 		inv.setItem(18, genItem(Material.SEA_LANTERN, "Sabotage", "§eРектор", "Дестабилизировать реактор", "ID: reactor"));
-		inv.setItem(51, genItem(Material.REDSTONE_ORE, "Sabotage", "§eКоvмуникация", "Вывести из строя коммун-ый модуль", "ID: communicate"));
+		inv.setItem(51, genItem(Material.REDSTONE_ORE, "Sabotage", "§eКоммуникация", "Вывести из строя коммун-ый модуль", "ID: communicate"));
 		inv.setItem(15, genItem(Material.SAPLING, "Sabotage", "§eКислород", "Повредить кислород", "ID: oxygen"));
 		inv.setItem(30, genItem(Material.REDSTONE_COMPARATOR, "Sabotage", "§eЭлектричество", "Повредить проводку", "ID: electrical"));
 		
@@ -111,6 +112,11 @@ public abstract class Sabotage {
 						ent.setGlowing(true);
 					else
 						ent.setGlowing(false);
+					
+					if(!active)
+						timeout--;
+					else
+						timeout = 10;
 					
 				}
 				
@@ -156,6 +162,9 @@ public abstract class Sabotage {
 	}
 	
 	public void start() {
+		
+		if(timeout > 0)
+			return;
 		
 		active = true;
 		startAbsr();

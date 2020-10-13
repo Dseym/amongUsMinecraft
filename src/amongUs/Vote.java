@@ -125,7 +125,7 @@ public class Vote {
 			
 			ItemStack item = new ItemStack(Material.SKULL_ITEM, 1, (short)3);
 			ItemMeta meta = item.getItemMeta();
-			meta.setDisplayName(player.getPlayer().getDisplayName());
+			meta.setDisplayName(player.getPlayer().getName());
 			item.setItemMeta(meta);
 			
 			invVote.addItem(item);

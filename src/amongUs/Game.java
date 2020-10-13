@@ -60,7 +60,6 @@ public class Game {
 	private MapGame map;
 	private Map<Integer, Location> killedBodies = new HashMap<Integer,Location>();
 	private BossBar bar;
-	private Team teamImposters;
 	private Vote vote;
 	public int timeoutMeeting = 15;
 	private Team teamPlayers;
@@ -217,16 +216,10 @@ public class Game {
 			for(PotionEffect effect: player.getPlayer().getActivePotionEffects())
 				player.getPlayer().removePotionEffect(effect.getType());
 			
-			if(player.impostor) {
-				
+			if(player.impostor)
 				player.sendTitle("§4§lПредатель", impostersStr);
-				teamImposters.addEntry(player.getPlayer().getName());
-				
-			} else {
-				
+			else
 				player.sendTitle("§b§lЧлен экипажа", "Обнаружено §4" + imposters + " предателя§r среди вас");
-				
-			}
 			
 			player.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 99999, 0));
 			
@@ -303,17 +296,21 @@ public class Game {
 		if(timerUpdate != null)
 			timerUpdate.cancel();
 		
-		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "scoreboard teams option amongImposters color red");
+		if(vote.isActive())
+			vote.result();
 		
 		for(Sabotage sab: map.getSabotageTasks())
 			sab.complete();
 		for(Task task: getTasks())
 			task.complete(false);
-		
-		lobby.isGameStop();
+		for(PlayerGame player: map.getCameras().getPlayers())
+			map.getCameras().exit(player);
 		
 		for(PlayerGame player: players) {
 			
+			for(PotionEffect effect: player.getPlayer().getActivePotionEffects())
+				player.getPlayer().removePotionEffect(effect.getType());
+
 			player.getPlayer().setWalkSpeed((float)0.2);
 			player.getPlayer().getInventory().clear();
 			
@@ -323,18 +320,15 @@ public class Game {
 			for(PlayerGame _player: players)
 				player.getPlayer().showPlayer(_player.getPlayer());
 			
+			player.sendMessage("Предатели: " + impostersStr);
+			
 		}
 		
-		if(vote.isActive())
-			vote.result();
-		
-		for(PlayerGame player: map.getCameras().getPlayers())
-			map.getCameras().exit(player);
-		
-		teamImposters.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.ALWAYS);
 		for(Entity ent: map.getWorld().getEntities())
 			if(ent.getType() == EntityType.SNOWBALL)
 				ent.remove();
+		
+		lobby.isGameStop();
 		
 		for(int id: killedBodies.keySet()) {
 			
@@ -547,6 +541,13 @@ public class Game {
 		
 	}
 	
+	@SuppressWarnings("rawtypes")
+	public void sendPacket(Player player, Packet packet) {
+		
+		((CraftPlayer)player).getHandle().playerConnection.sendPacket(packet);
+		
+	}
+	
 	public void setValue(Object packet, String name, Object value) {
 		
 		try {
@@ -640,11 +641,10 @@ public class Game {
 		
 		Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
 		for(Team team: scoreboard.getTeams())
-			if(team.getName().equalsIgnoreCase("amongPlayers") || team.getName().equalsIgnoreCase("amongImposters") || team.getName().equalsIgnoreCase("amongTasks") || team.getName().equalsIgnoreCase("amongSabotage"))
+			if(team.getName().equalsIgnoreCase("amongPlayers") || team.getName().equalsIgnoreCase("amongTasks") || team.getName().equalsIgnoreCase("amongSabotage"))
 				team.unregister();
 		
 		teamPlayers = scoreboard.registerNewTeam("amongPlayers");
-		teamImposters = scoreboard.registerNewTeam("amongImposters");
 		teamPlayers.setOption(Option.NAME_TAG_VISIBILITY, OptionStatus.NEVER);
 		scoreboard.registerNewTeam("amongSabotage");
 		scoreboard.registerNewTeam("amongTasks");
