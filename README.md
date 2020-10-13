@@ -7,7 +7,8 @@ New minecraft mini-game based on the canon of the game Among Us! Complete tasks,
 
 ### Updates 1.2
 1. The messages.yml config has been partially added
-2. Bug fixes
+2. Added game autostart
+3. Bug fixes
 
 ## Commands
 /among help - get all commands
