@@ -38,6 +38,8 @@ public class Main extends JavaPlugin {
 		tagPlugin = ChatColor.RESET + "[" + ChatColor.BLUE + getName() + ChatColor.RESET + "] ";
 		plugin = this;
 		
+		Messages.init();
+		
 		getCommand("among").setExecutor((CommandExecutor)new Commands());
 		
 		protocollib = ProtocolLibrary.getProtocolManager();
