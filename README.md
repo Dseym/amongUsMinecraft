@@ -21,7 +21,7 @@ New minecraft mini-game based on the canon of the game Among Us! Complete tasks,
 5. among.command - send commands while playing
 
 ## Messages
-In file AmongUs/messages.yml
+In file AmongUs/messages.yml (will be replenished)
 ```
 notPerm: "Нет прав"
 lacksArgs: "Не хватает аргументов"
@@ -99,7 +99,7 @@ If you need to translate the plugin into English, then write to Issues.
 5. among.command - отправлять команды во время игры
 
 ## Сообщения
-В файле AmongUs/messages.yml
+В файле AmongUs/messages.yml (будет пополняться)
 ```
 notPerm: "Нет прав"
 lacksArgs: "Не хватает аргументов"
