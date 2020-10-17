@@ -81,18 +81,18 @@ public class MapManager {
 		
 		Map<String, String> sabotageTypes = new HashMap<String, String>();
 		
-		sabotageTypes.put("doorUpDrive", "Закрыть двери в верхнем движке");
-		sabotageTypes.put("doorDownDrive", "Закрыть двери в нижнем движке");
-		sabotageTypes.put("doorSecurity", "Закрыть двери в охране");
-		sabotageTypes.put("doorMedbay", "Закрыть двери в медотсеке");
-		sabotageTypes.put("doorElectrical", "Закрыть двери в электричестве");
-		sabotageTypes.put("doorCafeteria", "Закрыть двери в столовой");
-		sabotageTypes.put("doorStorage", "Закрыть двери в хранилище");
+		sabotageTypes.put("doorUpDrive", Messages.sabType_doorUpDrive);
+		sabotageTypes.put("doorDownDrive", Messages.sabType_doorDownDrive);
+		sabotageTypes.put("doorSecurity", Messages.sabType_doorSecurity);
+		sabotageTypes.put("doorMedbay", Messages.sabType_doorMedbay);
+		sabotageTypes.put("doorElectrical", Messages.sabType_doorElectrical);
+		sabotageTypes.put("doorCafeteria", Messages.sabType_doorCafeteria);
+		sabotageTypes.put("doorStorage", Messages.sabType_doorStorage);
 		
-		sabotageTypes.put("reactor", "Дестабилизировать реактор");
-		sabotageTypes.put("communicate", "Вывести из строя коммун-ый модуль");
-		sabotageTypes.put("oxygen", "Повредить кислород");
-		sabotageTypes.put("electrical", "Повредить проводку");
+		sabotageTypes.put("reactor", Messages.sabType_reactor);
+		sabotageTypes.put("communicate", Messages.sabType_communicate);
+		sabotageTypes.put("oxygen", Messages.sabType_oxygen);
+		sabotageTypes.put("electrical", Messages.sabType_electrical);
 		
 		return sabotageTypes;
 		

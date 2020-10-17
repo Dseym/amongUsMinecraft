@@ -1,6 +1,6 @@
 name: AmongUs
-version: 1.2
+version: 1.2.1
 main: amongUs.Main
 commands:
   among:
-    usage: /among <String> [String]
+    usage: /among <String> [String] [String]

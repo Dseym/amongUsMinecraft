@@ -15,6 +15,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 import amongUs.Game;
 import amongUs.Main;
+import amongUs.Messages;
 import amongUs.PlayerGame;
 import tasks.Sabotage;
 
@@ -29,7 +30,7 @@ public class SabotageReactor extends Sabotage {
 		
 		super(loc, locTo);
 		
-		bar = Bukkit.createBossBar("Реактор", BarColor.RED, BarStyle.SOLID);
+		bar = Bukkit.createBossBar(Messages.reactorBar, BarColor.RED, BarStyle.SOLID);
 		
 		Bukkit.getScheduler().runTaskTimer(Main.plugin, new Runnable() {
 			
@@ -53,7 +54,7 @@ public class SabotageReactor extends Sabotage {
 					bar.setProgress(((double)timeToLose)/40.0);
 					
 					for(PlayerGame player: game.getPlayers())
-						player.sendTitle("", "§cСаботаж реактора");
+						player.sendTitle("", "В§c" + Messages.reactorSabotage);
 					
 				} else {
 					

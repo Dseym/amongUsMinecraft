@@ -34,7 +34,7 @@ public class Vote {
 		
 		timeVote = game.time_voting;
 		
-		bar = Bukkit.createBossBar("Голосование", BarColor.GREEN, BarStyle.SOLID);
+		bar = Bukkit.createBossBar(Messages.vote, BarColor.GREEN, BarStyle.SOLID);
 		
 		Bukkit.getScheduler().runTaskTimer(Main.plugin, new Runnable() {@Override public void run() {tick();}}, 20, 20);
 		
@@ -48,7 +48,7 @@ public class Vote {
 				if(item == null || !e.getClickedInventory().equals(invVote))
 					return;
 				
-				if(!item.getItemMeta().getDisplayName().equalsIgnoreCase("Пропустить"))
+				if(!item.getItemMeta().getDisplayName().equalsIgnoreCase(Messages.skipVote))
 					Bukkit.dispatchCommand(e.getWhoClicked(), "among v " + item.getItemMeta().getDisplayName());
 				else
 					Bukkit.dispatchCommand(e.getWhoClicked(), "among v skip");
@@ -78,24 +78,24 @@ public class Vote {
 	public String vote(Player player1, String player2) {
 		
 		if(!active)
-			return "Сейчас нет голосования";
+			return Messages.voteNotFound;
 		
 		PlayerGame whoVoting = game.getPlayer(player1);
 		if(whoVoting == null)
-			return "Вы не в игре";
+			return Messages.plNotInGame;
 		
 		if(!whoVoting.isLive())
-			return "Вы мертвы";
+			return Messages.youDied;
 		
 		if(votes.containsKey(whoVoting) || skipping.contains(whoVoting))
-			return "Вы уже голосовали";
+			return Messages.youYetVoted;
 		
 		PlayerGame player = game.getPlayer(Bukkit.getPlayer(player2));
 		if(player == null)
-			return "Такого игрока нет в игре";
+			return Messages.playerNotFound;
 		
 		if(!player.isLive())
-			return "Этот игрок мертв";
+			return Messages.plDied;
 
 		
 		votes.put(whoVoting, player);
@@ -117,7 +117,7 @@ public class Vote {
 		active = true;
 		timeVote = game.time_voting;
 		
-		invVote = Bukkit.createInventory(null, 36, "Голосование");
+		invVote = Bukkit.createInventory(null, 36, Messages.vote);
 		
 		for(PlayerGame player: game.getPlayers()) {
 			
@@ -134,7 +134,7 @@ public class Vote {
 		
 		ItemStack item = new ItemStack(Material.BARRIER);
 		ItemMeta meta = item.getItemMeta();
-		meta.setDisplayName("Пропустить");
+		meta.setDisplayName(Messages.skipVote);
 		item.setItemMeta(meta);
 		
 		invVote.setItem(35, item);
@@ -144,17 +144,17 @@ public class Vote {
 	public String openInv(Player player) {
 		
 		if(!active)
-			return "Сейчас нет голосования";
+			return Messages.voteNotFound;
 		
 		PlayerGame whoVoting = game.getPlayer(player);
 		if(whoVoting == null)
-			return "Вы не в игре";
+			return Messages.plNotInGame;
 		
 		if(!whoVoting.isLive())
-			return "Вы мертвы";
+			return Messages.youDied;
 		
 		if(votes.containsKey(whoVoting) || skipping.contains(whoVoting))
-			return "Вы уже голосовали";
+			return Messages.youYetVoted;
 		
 		player.openInventory(invVote);
 		
@@ -165,17 +165,17 @@ public class Vote {
 	public String skip(Player player) {
 		
 		if(!active)
-			return "Сейчас нет голосования";
+			return Messages.voteNotFound;
 		
 		PlayerGame whoVoting = game.getPlayer(player);
 		if(whoVoting == null)
-			return "Вы не в игре";
+			return Messages.plNotInGame;
 		
 		if(!whoVoting.isLive())
-			return "Вы мертвы";
+			return Messages.youDied;
 		
 		if(votes.containsKey(whoVoting) || skipping.contains(whoVoting))
-			return "Вы уже голосовали";
+			return Messages.youYetVoted;
 		
 		skipping.add(whoVoting);
 		
@@ -215,12 +215,12 @@ public class Vote {
 		if(skipping.size() > votes.size()) {
 			
 			for(PlayerGame player: game.getPlayers())
-				player.sendTitle("Голосование скипнуто", "");
+				player.sendTitle(Messages.voteSkipped, "");
 			
 		} else if(skipping.size() == votes.size()) {
 			
 			for(PlayerGame player: game.getPlayers())
-				player.sendTitle("Мы не смогли принять единого решения", "");
+				player.sendTitle(Messages.notSingleDesition, "");
 			
 		} else {
 			
@@ -254,14 +254,14 @@ public class Vote {
 			for(PlayerGame list: votes.keySet())
 				if(list != player && votes.get(list).size() == lastVotes) {
 					
-					player.sendTitle("Мы не смогли принять единого решения", "");
+					player.sendTitle(Messages.notSingleDesition, "");
 					return;
 					
 				}
 			
 			game.killPlayer(player);
 			for(PlayerGame _player: game.getPlayers())
-				_player.sendTitle(player.getPlayer().getDisplayName() + (game.confirm_eject ? (player.impostor ? " был предателем" : " не был предателем") : " был изгнан"), "");
+				_player.sendTitle(player.getPlayer().getDisplayName() + (game.confirm_eject ? (player.impostor ? Messages.beImpostor : Messages.notBeImpostor) : Messages.beEject), "");
 			
 		}
 		

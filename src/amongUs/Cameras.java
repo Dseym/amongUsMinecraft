@@ -8,14 +8,15 @@ import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public class Cameras {
 	
@@ -42,7 +43,7 @@ public class Cameras {
 				
 				Cameras camera = null;
 				if(e.getClickedBlock() != null)
-					camera = Lobby.getLobby(player.getPlayer()).getGame().getMap().getCamera(e.getClickedBlock().getLocation());
+					camera = game.getMap().getCamera(e.getClickedBlock().getLocation());
 				
 				if(camera != null) {
 					
@@ -117,12 +118,12 @@ public class Cameras {
 		player.getPlayer().setFlying(true);
 		player.setAction(this);
 		
-		Bukkit.getScheduler().runTaskLater(Main.plugin, new Runnable() {
-			
-			@Override
-			public void run() {player.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 9999, 0));}
-			
-		}, 20);
+		ItemStack item = new ItemStack(Material.STONE_BUTTON);
+		ItemMeta meta = item.getItemMeta();
+		meta.setDisplayName("Выйти");
+		item.setItemMeta(meta);
+		
+		player.getPlayer().getInventory().setItem(0, item);
 		
 		next(player);
 		
@@ -143,9 +144,7 @@ public class Cameras {
 		player.getPlayer().setFlying(false);
 		player.getPlayer().setGameMode(GameMode.SURVIVAL);
 		player.setAction(null);
-		
-		if(player.isLive())
-			player.getPlayer().removePotionEffect(PotionEffectType.INVISIBILITY);
+		player.getPlayer().getInventory().setItem(0, null);
 		
 		players.remove(player);
 		locPlayers.remove(player);

@@ -12,6 +12,7 @@ import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.scoreboard.Scoreboard;
 
 import amongUs.Main;
+import amongUs.Messages;
 import amongUs.PlayerGame;
 
 public abstract class Task {
@@ -139,7 +140,7 @@ public abstract class Task {
 		if(timer != null && !timer.isCancelled())
 			timer.cancel();
 		
-		timer = Bukkit.getScheduler().runTaskLater(Main.plugin, new Runnable() {@Override public void run() {player.sendMessage("§bЗадание: §oтайм-аут"); complete(false);}}, 15*20);
+		timer = Bukkit.getScheduler().runTaskLater(Main.plugin, new Runnable() {@Override public void run() {player.sendMessage(Messages.taskTimeout); complete(false);}}, 15*20);
 		
 	}
 	
@@ -199,7 +200,7 @@ public abstract class Task {
 		timer = null;
 		isComplete = success;
 		if(success)
-			player.sendTitle("Задание выполнено", "");
+			player.sendTitle(Messages.taskComplete, "");
 		
 		player.getPlayer().teleport(lastLocPlayer);
 		player = null;

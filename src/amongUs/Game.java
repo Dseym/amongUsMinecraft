@@ -53,6 +53,7 @@ public class Game {
 	protected int tasksNum = 5;
 	protected boolean visual_task = true;
 	protected int imposters = 1;
+	protected int playerOnCount = 5;
 	
 	private int emergencyMettingNum = 0;
 	private List<PlayerGame> players = new ArrayList<PlayerGame>();
@@ -67,7 +68,7 @@ public class Game {
 	private Lobby lobby;
 	private BukkitTask timerUpdate;
 	
-	private String impostersStr = "§4 ";
+	private String impostersStr = "В§4 ";
 
 	public Game(FileConfiguration config, Lobby lobby, Location loc) {
 		
@@ -86,37 +87,43 @@ public class Game {
 	public String start(List<Player> players) {
 		
 		if(players == null || players.size() < 3)
-			return "Нужно больше 2х игроков";
+			return Messages.fewPlayer;
 		
 		if(emergency_metting < 1)
-			return "emergency_metting - не может быть меньше 0";
+			return "emergency_metting - " + Messages.incorrectValue;
 		
 		if(time_voting < 1)
-			return "time_voting - не может быть меньше 1";
+			return "time_voting - " + Messages.incorrectValue;
 		
 		if(speed_player < 1)
-			return "speed_player - не может быть меньше 1";
+			return "speed_player - " + Messages.incorrectValue;
 		
 		if(timeout_kill < 1)
-			return "timeout_kill - не может быть меньше 0";
+			return "timeout_kill - " + Messages.incorrectValue;
 		
 		if(distance_kill < 1)
-			return "distance_kill - не может быть меньше 1";
+			return "distance_kill - " + Messages.incorrectValue;
 		
 		if(tasksNum < 1)
-			return "tasksNum - не может быть меньше 1";
+			return "tasksNum - " + Messages.incorrectValue;
 		
 		if(timeout_metting < 1)
-			return "timeout_metting - не может быть меньше 0";
+			return "timeout_metting - " + Messages.incorrectValue;
 
 		if(imposters < 1)
-			return "Предателей не может быть меньше 1";
+			return "imposters - " + Messages.incorrectValue;
+		
+		if(getTasks().size() < tasksNum)
+			return "tasksNum - " + Messages.incorrectValue;
+		
+		if(speed_player > 9)
+			return "speed_player - " + Messages.incorrectValue;
 	
 		if(imposters > players.size()-imposters-1)
-			return "Предателей должно быть меньше экипажа";
+			return Messages.fewCrewmate;
 		
 		if(map.getSpawns().size() < players.size())
-			return "На карте недостаточно места для всех игроков";
+			return Messages.fewSpawnsOnMap;
 		
 		for(Player player: players)
 			this.players.add(new PlayerGame(player));
@@ -125,16 +132,6 @@ public class Game {
 			door.openDoor();
 		
 		map.getWorld().setDifficulty(Difficulty.PEACEFUL);
-		
-		if(getTasks().size() < tasksNum) {
-			
-			Main.plugin.getLogger().warning("На карте только " + getTasks().size() + " заданий");
-			for(PlayerGame player: this.players)
-				player.sendMessage("На карте только §o" + getTasks().size() + "§r заданий");
-			
-			tasksNum = getTasks().size();
-			
-		}
 		
 		Collections.shuffle(getTasks());
 		
@@ -147,14 +144,14 @@ public class Game {
 			
 			ItemStack item = new org.bukkit.inventory.ItemStack(Material.BANNER);
 			ItemMeta meta = item.getItemMeta();
-			meta.setDisplayName("Голосование");
+			meta.setDisplayName(Messages.vote);
 			item.setItemMeta(meta);
 			
 			player.getPlayer().getInventory().setItem(8, item);
 			
 			item = new ItemStack(Material.BRICK_STAIRS);
 			meta = item.getItemMeta();
-			meta.setDisplayName("Репорт");
+			meta.setDisplayName(Messages.report);
 			item.setItemMeta(meta);
 			
 			player.getPlayer().getInventory().setItem(3, item);
@@ -170,20 +167,21 @@ public class Game {
 			PlayerGame player = this.players.get(i);
 			player.impostor = true;
 			player.timeoutKill = timeout_kill;
-			player.timeoutBar = Bukkit.createBossBar("Откат", BarColor.YELLOW, BarStyle.SOLID);
+			player.timeoutBar = Bukkit.createBossBar(Messages.rollback, BarColor.YELLOW, BarStyle.SOLID);
 			player.timeoutBar.addPlayer(player.getPlayer());
 			impostersStr += " " + player.getPlayer().getDisplayName();
-			player.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR, net.md_5.bungee.api.chat.TextComponent.fromLegacyText(impostersStr));
+			
+			try {player.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR, net.md_5.bungee.api.chat.TextComponent.fromLegacyText(impostersStr));} catch(Exception e) {};
 			
 			ItemStack item = new ItemStack(Material.REDSTONE_BLOCK);
 			ItemMeta meta = item.getItemMeta();
-			meta.setDisplayName("Карта саботажа");
+			meta.setDisplayName(Messages.mapSabotage);
 			item.setItemMeta(meta);
 			player.getPlayer().getInventory().setItem(7, item);
 			
 			item = new ItemStack(Material.IRON_SWORD);
 			meta = item.getItemMeta();
-			meta.setDisplayName("Нож");
+			meta.setDisplayName(Messages.knife);
 			item.setItemMeta(meta);
 			player.getPlayer().getInventory().setItem(1, item);
 			
@@ -194,16 +192,6 @@ public class Game {
 		tpToSpawn();
 		
 		for(PlayerGame player: this.players) {
-			
-			if(speed_player > 9) {
-				
-				Main.plugin.getLogger().warning("Максимальная скорость игроков 9");
-				for(PlayerGame _player: this.players)
-					_player.sendMessage("Максимальная скорость игроков 9");
-				
-				speed_player = 9;
-				
-			}
 			
 			player.getPlayer().getInventory().setHeldItemSlot(0);
 			
@@ -217,9 +205,9 @@ public class Game {
 				player.getPlayer().removePotionEffect(effect.getType());
 			
 			if(player.impostor)
-				player.sendTitle("§4§lПредатель", impostersStr);
+				player.sendTitle("В§4В§l" + Messages.impostor, impostersStr);
 			else
-				player.sendTitle("§b§lЧлен экипажа", "Обнаружено §4" + imposters + " предателя§r среди вас");
+				player.sendTitle("В§bВ§l" + Messages.crewmate, Messages.impostersNum.replace("@impostersNum@", "" + imposters));
 			
 			player.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 99999, 0));
 			
@@ -255,13 +243,13 @@ public class Game {
 		for(PlayerGame player: players)
 			if(player.impostor) {
 				
-				player.sendMessage("§2§lПобеда");
-				player.sendTitle("§2§lПобеда", "");
+				player.sendMessage("В§2В§l" + Messages.win);
+				player.sendTitle("В§2В§l" + Messages.win, "");
 				
 			} else {
 				
-				player.sendMessage("§4§lПоражение");
-				player.sendTitle("§4§lПоражение", "");
+				player.sendMessage("В§4В§l" + Messages.lose);
+				player.sendTitle("В§4В§l" + Messages.lose, "");
 				
 			}
 		
@@ -274,13 +262,13 @@ public class Game {
 		for(PlayerGame player: players)
 			if(player.impostor) {
 				
-				player.sendMessage("§4§lПоражение");
-				player.sendTitle("§4§lПоражение", "");
+				player.sendMessage("В§4В§l" + Messages.lose);
+				player.sendTitle("В§4В§l" + Messages.lose, "");
 				
 			} else {
 				
-				player.sendMessage("§2§lПобеда");
-				player.sendTitle("§2§lПобеда", "");
+				player.sendMessage("В§2В§l" + Messages.win);
+				player.sendTitle("В§2В§l" + Messages.win, "");
 				
 			}
 		
@@ -320,7 +308,7 @@ public class Game {
 			for(PlayerGame _player: players)
 				player.getPlayer().showPlayer(_player.getPlayer());
 			
-			player.sendMessage("Предатели: " + impostersStr);
+			player.sendMessage(impostersStr);
 			
 		}
 		
@@ -350,7 +338,7 @@ public class Game {
 		
 	}
 	
-	public void update() {
+	private void update() {
 		
 		double completeTask = 0.0;
 		for(Task task: getTasks())
@@ -455,14 +443,14 @@ public class Game {
 		
 		if(!kill && emergency_metting-1 < emergencyMettingNum) {
 			
-			player.sendMessage("§c§oБольше нельзя собираться");
+			player.sendMessage("В§cВ§o" + Messages.emergencyMeetingLimit);
 			return;
 			
 		}
 		
 		if(!kill && timeoutMeeting > 0) {
 			
-			player.sendMessage("§c§oЭкипаж должен подождать " + timeoutMeeting + " до след собрания");
+			player.sendMessage("В§cВ§o" + Messages.emergencyMeetingTimeout.replace("@timeout@", "" + timeoutMeeting));
 			return;
 			
 		}
@@ -471,7 +459,7 @@ public class Game {
 			
 			if(!kill && (sab instanceof SabotageReactor || sab instanceof SabotageOxygen) && sab.isActive()) {
 				
-				player.sendMessage("§c§oВо время экстренных ситуаций, собрания запрещены");
+				player.sendMessage("В§cВ§o" + Messages.emergencyMeetingAndSabotage);
 				return;
 				
 			}
@@ -518,13 +506,13 @@ public class Game {
 			
 			if(kill) {
 				
-				_player.sendMessage("§c§lСообщение о трупе§r - от §o" + player.getPlayer().getName());
-				_player.sendTitle("§c§lСообщение о трупе", "");
+				_player.sendMessage("В§cВ§l" + Messages.reportBody.replace("@player@", player.getPlayer().getName()));
+				_player.sendTitle("В§cВ§l" + Messages.reportBody.replace("@player@", player.getPlayer().getName()), "");
 				
 			} else {
 				
-				_player.sendMessage("§lСрочное собрание§r - от §o" + player.getPlayer().getName());
-				_player.sendTitle("§lСрочное собрание", "");
+				_player.sendMessage("В§l" + Messages.emergencyMeeting.replace("@player@", player.getPlayer().getName()));
+				_player.sendTitle("В§l" + Messages.emergencyMeeting.replace("@player@", player.getPlayer().getName()), "");
 				emergencyMettingNum++;
 				
 			}
@@ -538,13 +526,6 @@ public class Game {
 		
 		for(PlayerGame player: players)
 			((CraftPlayer)player.getPlayer()).getHandle().playerConnection.sendPacket(packet);
-		
-	}
-	
-	@SuppressWarnings("rawtypes")
-	public void sendPacket(Player player, Packet packet) {
-		
-		((CraftPlayer)player).getHandle().playerConnection.sendPacket(packet);
 		
 	}
 	
@@ -572,7 +553,7 @@ public class Game {
 	
 	public void imposterKillPlayer(PlayerGame player) {
 		
-		player.sendTitle("§c§lВас убили", "");
+		player.sendTitle("В§cВ§l" + Messages.playerDied, "");
 		
 		PacketPlayOutNamedEntitySpawn body = new PacketPlayOutNamedEntitySpawn(((CraftPlayer)player.getPlayer()).getHandle());
 		int id = (int)Math.floor(Math.random() * Integer.MAX_VALUE);
@@ -634,7 +615,21 @@ public class Game {
 		isStart = false;
 		
 		vote = new Vote(this);
-		bar = Bukkit.createBossBar("Задания", BarColor.WHITE, BarStyle.SOLID);
+		bar = Bukkit.createBossBar(Messages.tasks, BarColor.WHITE, BarStyle.SOLID);
+		
+		String mapName = config.getString("map");
+		
+		map = MapManager.initMap(mapName, this, config, loc.getWorld());
+		
+		if(map == null) {
+			
+			Main.plugin.getLogger().warning(Messages.mapNotFound);
+			for(PlayerGame player: this.players)
+				player.sendMessage(Messages.mapNotFound);
+			
+			return;
+			
+		}
 		
 		killedBodies.clear();
 		this.players.clear();
@@ -648,20 +643,6 @@ public class Game {
 		teamPlayers.setOption(Option.NAME_TAG_VISIBILITY, OptionStatus.NEVER);
 		scoreboard.registerNewTeam("amongSabotage");
 		scoreboard.registerNewTeam("amongTasks");
-		
-		String mapName = config.getString("map");
-		
-		map = MapManager.initMap(mapName, this, config, loc.getWorld());
-		
-		if(map == null) {
-			
-			Main.plugin.getLogger().warning("Карта " + mapName + " не найдена");
-			for(PlayerGame player: this.players)
-				player.sendMessage("Карта §o" + mapName + "§r не найдена");
-			
-			return;
-			
-		}
 		
 		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "scoreboard teams option amongSabotage color red");
 		
@@ -677,6 +658,7 @@ public class Game {
 		distance_kill = config.getInt("distance_kill");
 		tasksNum = config.getInt("tasksNum");
 		visual_task = config.getBoolean("visual_task");
+		playerOnCount = config.getInt("playerOnCount");
 		
 	}
 	

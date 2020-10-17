@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.bukkit.Location;
 
+import amongUs.Messages;
+
 public abstract class Longs extends Task {
 	
 	private List<Location> nextStepsLocation;
@@ -28,7 +30,7 @@ public abstract class Longs extends Task {
 			
 		}
 		
-		player.sendMessage("§b§oЗадание: этап пройден");
+		player.sendMessage("В§bВ§o" + Messages.stepComplete);
 		
 		super.complete(false);
 		

@@ -33,8 +33,8 @@ public class Manhole {
 		
 		Player _player = player.getPlayer();
 		
-		player.getPlayer().removePotionEffect(PotionEffectType.SPEED);
-		player.getPlayer().removePotionEffect(PotionEffectType.INVISIBILITY);
+		_player.removePotionEffect(PotionEffectType.SPEED);
+		_player.removePotionEffect(PotionEffectType.INVISIBILITY);
 		
 		if(_player.getLocation().distance(location) < 1.5) {
 			

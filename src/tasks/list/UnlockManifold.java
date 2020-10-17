@@ -15,6 +15,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 
 import amongUs.Main;
+import amongUs.Messages;
 import tasks.Task;
 
 public class UnlockManifold extends Task {
@@ -49,11 +50,11 @@ public class UnlockManifold extends Task {
 				if(num == currentNum+1) {
 					
 					currentNum++;
-					player.sendMessage("§b§oЗадание: " + num);
+					player.sendMessage("" + num);
 					
 				} else {
 					
-					player.sendMessage("§b§oЗадание: неверно");
+					player.sendMessage("В§bВ§o" + Messages.unlockManifoldTask);
 					complete(false);
 					
 				}

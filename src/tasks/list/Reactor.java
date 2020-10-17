@@ -13,6 +13,7 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.scheduler.BukkitTask;
 
 import amongUs.Main;
+import amongUs.Messages;
 import tasks.Task;
 
 public class Reactor extends Task {
@@ -83,7 +84,7 @@ public class Reactor extends Task {
 					
 				} else {
 					
-					player.sendMessage("§bЗадание: §oневерно");
+					player.sendMessage("В§b" + Messages.reactorTask);
 					complete(false);
 					
 				}

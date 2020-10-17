@@ -19,12 +19,6 @@ import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
-
-import net.minecraft.server.v1_12_R1.Block;
-import net.minecraft.server.v1_12_R1.EnumItemSlot;
-import net.minecraft.server.v1_12_R1.ItemStack;
-import net.minecraft.server.v1_12_R1.Material;
-import net.minecraft.server.v1_12_R1.PacketPlayOutEntityEquipment;
 import tasks.Sabotage;
 
 public class Main extends JavaPlugin {
@@ -76,9 +70,6 @@ public class Main extends JavaPlugin {
 		
 		getLogger().info("Started!");
 		
-		for(Lobby lobby: Lobby.lobby)
-			Bukkit.getPluginManager().registerEvents(new Event(lobby), this);
-		
 		getLogger().info("ProtocolLib connecting...");
 		
 		Runnable runnable = new Runnable() {
@@ -122,20 +113,16 @@ public class Main extends JavaPlugin {
 					
 				});
 				
-				protocollib.addPacketListener(new PacketAdapter(Main.plugin, ListenerPriority.NORMAL, PacketType.Play.Client.HELD_ITEM_SLOT) {
+				protocollib.addPacketListener(new PacketAdapter(Main.plugin, ListenerPriority.NORMAL, PacketType.Play.Server.ENTITY_EQUIPMENT) {
 					
 					@Override
-				    public void onPacketReceiving(PacketEvent event) {
+				    public void onPacketSending(PacketEvent event) {
 						
 						Lobby lobby = Lobby.getLobby(event.getPlayer());
 						if(lobby == null || lobby.getGame() == null)
 							return;
 						
-						PacketPlayOutEntityEquipment packet = new PacketPlayOutEntityEquipment(event.getPlayer().getEntityId(), EnumItemSlot.MAINHAND, new ItemStack(new Block(Material.AIR, null)));
-						
-						for(Player player: lobby.getPlayers())
-							if(player != event.getPlayer())
-								lobby.getGame().sendPacket(player.getPlayer(), packet);
+						event.setCancelled(true);
 						
 				    }
 					

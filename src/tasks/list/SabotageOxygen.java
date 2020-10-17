@@ -17,6 +17,7 @@ import org.bukkit.inventory.EquipmentSlot;
 
 import amongUs.Game;
 import amongUs.Main;
+import amongUs.Messages;
 import amongUs.PlayerGame;
 import tasks.Sabotage;
 
@@ -36,7 +37,7 @@ public class SabotageOxygen extends Sabotage {
 		this.signEnterCode = signEnterCode;
 		this.signCode = signCode;
 		
-		bar = Bukkit.createBossBar("Кислород", BarColor.RED, BarStyle.SOLID);
+		bar = Bukkit.createBossBar(Messages.oxygenBar, BarColor.RED, BarStyle.SOLID);
 		
 		Bukkit.getScheduler().runTaskTimer(Main.plugin, new Runnable() {
 			
@@ -54,7 +55,7 @@ public class SabotageOxygen extends Sabotage {
 					bar.setProgress(((double)timeToLose)/40.0);
 					
 					for(PlayerGame player: game.getPlayers())
-						player.sendTitle("", "§cСаботаж кислорода");
+						player.sendTitle("", "В§c" + Messages.oxygenSabotage);
 					
 				} else {
 					
@@ -93,7 +94,7 @@ public class SabotageOxygen extends Sabotage {
 						if(enteredCode.equalsIgnoreCase(code))
 							complete();
 						else
-							player.sendMessage("§b§oВведите код полностью");
+							player.sendMessage("В§bВ§o" + Messages.oxygenCodeNotFull);
 						
 					}
 					
@@ -108,7 +109,7 @@ public class SabotageOxygen extends Sabotage {
 				
 				if(!("" + code.toCharArray()[enteredCode.length()]).equalsIgnoreCase(num)) {
 					
-					player.sendMessage("§b§oНеверная цифра");
+					player.sendMessage("В§bВ§o" + Messages.oxygenWrongNum);
 					
 					return;
 					
@@ -129,7 +130,7 @@ public class SabotageOxygen extends Sabotage {
 		
 		Sign sign = ((Sign) signEnterCode.getBlock().getState());
 		
-		sign.setLine(0, "Введено:");
+		sign.setLine(0, "Entered:");
 		sign.setLine(1, enteredCode);
 		
 		sign.update();
@@ -154,7 +155,7 @@ public class SabotageOxygen extends Sabotage {
 		
 		Sign sign = ((Sign) signCode.getBlock().getState());
 		
-		sign.setLine(0, "Код:");
+		sign.setLine(0, "Code:");
 		sign.setLine(1, code);
 		
 		sign.update();

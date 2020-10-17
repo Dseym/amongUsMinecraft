@@ -7,6 +7,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 import amongUs.Main;
+import amongUs.Messages;
 import tasks.Task;
 
 public class Card extends Task {
@@ -40,12 +41,12 @@ public class Card extends Task {
 					if(from.distance(to) > 0.24) {
 						
 						active = false;
-						player.sendMessage("§bЗадание: §oслишком быстро");
+						player.sendMessage("В§b" + Messages.cardFastTask);
 						
 					} else if(from.distance(to) < 0.10) {
 						
 						active = false;
-						player.sendMessage("§bЗадание: §oслишком медленно");
+						player.sendMessage("В§b" + Messages.cardSlowTask);
 						
 					}
 					

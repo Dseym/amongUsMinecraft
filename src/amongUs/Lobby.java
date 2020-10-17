@@ -68,15 +68,18 @@ public class Lobby {
 		board = Bukkit.getScoreboardManager().getNewScoreboard();
 		Objective obj = board.registerNewObjective("game", "dummy");
 		obj.setDisplaySlot(DisplaySlot.SIDEBAR);
-		obj.setDisplayName("Конфиг");
-		obj.getScore("Нет игры").setScore(0);
+		obj.setDisplayName(Messages.configMess);
+		obj.getScore(Messages.notGame).setScore(0);
 		
 		Bukkit.getScheduler().runTaskTimer(Main.plugin, new Runnable() {
 			
 			@Override
 			public void run() {
 				
-				if(game != null && !game.isStart() && players.size() > Math.floor(game.getMap().getSpawns().size()/2))
+				if(game == null || game.isStart())
+					return;
+				
+				if(game.playerOnCount != -1 && players.size() > game.playerOnCount-1)
 					time--;
 				else
 					time = 60;
@@ -87,6 +90,8 @@ public class Lobby {
 					
 					String response = startGame();
 					if(!response.equalsIgnoreCase("true")) {
+						
+						time = 60;
 						
 						for(Player player: players)
 							player.sendMessage(Main.tagPlugin + response);
@@ -110,6 +115,14 @@ public class Lobby {
 		
 		game = new Game(config, this, loc);
 		
+		if(game.getMap() == null) {
+			
+			game = null;
+			
+			return;
+			
+		}
+		
 		reloadSb();
 		
 		int numPlayer = 0;
@@ -117,7 +130,7 @@ public class Lobby {
 			
 			numPlayer++;
 			
-			_player.sendMessage(Main.tagPlugin + "Создана игра для этого лобби");
+			_player.sendMessage(Main.tagPlugin + Messages.gameCreated);
 			
 			if(numPlayer > game.getMap().getSpawns().size())
 				leave(_player, false);
@@ -149,18 +162,12 @@ public class Lobby {
 		
 		Objective obj = board.getObjective("game");
 
-		obj.getScore("До начала " + time).setScore(11);
-		obj.getScore(" ").setScore(10);
-		obj.getScore("imposters: " + game.imposters).setScore(9);
-		obj.getScore("confirm_eject: " + game.confirm_eject).setScore(8);
-		obj.getScore("emergency_metting: " + game.emergency_metting).setScore(7);
-		obj.getScore("timeout_metting: " + game.timeout_metting).setScore(6);
-		obj.getScore("time_voting: " + game.time_voting).setScore(5);
-		obj.getScore("speed_player: " + game.speed_player).setScore(4);
-		obj.getScore("timeout_kill: " + game.timeout_kill).setScore(3);
-		obj.getScore("distance_kill: " + game.distance_kill).setScore(2);
-		obj.getScore("tasksNum: " + game.tasksNum).setScore(1);
-		obj.getScore("visual_task: " + game.visual_task).setScore(0);
+		obj.getScore(Messages.countToGame.replace("@time@", "" + time)).setScore(5);
+		obj.getScore(" ").setScore(4);
+		obj.getScore("Number imposters: " + game.imposters).setScore(3);
+		obj.getScore("Confirm Eject: " + game.confirm_eject).setScore(2);
+		obj.getScore("Number Tasks: " + game.tasksNum).setScore(1);
+		obj.getScore("Visual Tasks: " + game.visual_task).setScore(0);
 		
 	}
 	
@@ -198,7 +205,7 @@ public class Lobby {
 		
 		if(players.contains(player)) {
 			
-			player.sendMessage(Main.tagPlugin + "Вы уже в лобби");
+			player.sendMessage(Main.tagPlugin + Messages.plInLobby);
 			
 			return;
 			
@@ -206,7 +213,7 @@ public class Lobby {
 		
 		if(game != null && game.isStart()) {
 			
-			player.sendMessage(Main.tagPlugin + "Сейчас идет игра");
+			player.sendMessage(Main.tagPlugin + Messages.isGameStart);
 			
 			return;
 			
@@ -214,13 +221,13 @@ public class Lobby {
 		
 		if(game != null && game.getMap().getSpawns().size()-1 < players.size()) {
 			
-			player.sendMessage(Main.tagPlugin + "Максимум игроков");
+			player.sendMessage(Main.tagPlugin + Messages.maxPlayers);
 			
 			return;
 			
 		}
 		
-		player.sendMessage(Main.tagPlugin + "Вы вошли в лобби");
+		player.sendMessage(Main.tagPlugin + Messages.plJoinToLobby);
 		
 		player.setScoreboard(board);
 		
@@ -231,7 +238,7 @@ public class Lobby {
 		players.add(player);
 		
 		for(Player _player: players)
-			_player.sendMessage(Main.tagPlugin + "§eИгрок §o" + player.getDisplayName() + "§r§e присоединился к лобби (" + players.size() + ")");
+			_player.sendMessage(Main.tagPlugin + "В§e" + Messages.plJoinToLobbyMessPlayers.replace("@player@", player.getDisplayName()).replace("@countPlayers@", "" + players.size()));
 		
 	}
 	
@@ -239,7 +246,7 @@ public class Lobby {
 		
 		if(!disconnect && game != null && game.isStart()) {
 			
-			player.sendMessage(Main.tagPlugin + "Сейчас идет игра");
+			player.sendMessage(Main.tagPlugin + Messages.isGameStart);
 			
 			return;
 			
@@ -247,7 +254,7 @@ public class Lobby {
 		
 		time = 60;
 		
-		player.sendMessage(Main.tagPlugin + "Вы вышли из лобби");
+		player.sendMessage(Main.tagPlugin + Messages.plLeaveFromLobby);
 		
 		player.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
 		
@@ -258,7 +265,7 @@ public class Lobby {
 		players.remove(player);
 		
 		for(Player _player: players)
-			_player.sendMessage(Main.tagPlugin + "§eИгрок §o" + player.getDisplayName() + "§r§e покинул лобби (" + players.size() + ")");
+			_player.sendMessage(Main.tagPlugin + "В§e" + Messages.plLeaveFromLobbyMessPlayers.replace("@player@", player.getDisplayName()).replace("@countPlayers@", "" + players.size()));
 		
 	}
 	

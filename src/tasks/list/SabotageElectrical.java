@@ -16,6 +16,7 @@ import org.bukkit.potion.PotionEffectType;
 import amongUs.Cameras;
 import amongUs.Game;
 import amongUs.Main;
+import amongUs.Messages;
 import amongUs.PlayerGame;
 import tasks.Sabotage;
 
@@ -41,7 +42,7 @@ public class SabotageElectrical extends Sabotage {
 							player.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 99999, 0));
 					
 					for(PlayerGame player: game.getPlayers())
-						player.sendTitle("", "§cСаботаж электричества");
+						player.sendTitle("", "В§c" + Messages.electricalSabotage);
 					
 					Cameras camera = game.getMap().getCameras();
 					camera.setActive(false);

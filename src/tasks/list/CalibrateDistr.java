@@ -13,6 +13,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 
 import amongUs.Main;
+import amongUs.Messages;
 import tasks.Task;
 
 public class CalibrateDistr extends Task {
@@ -58,7 +59,7 @@ public class CalibrateDistr extends Task {
 				
 				if(!yes) {
 					
-					player.sendMessage("§b§oЗадание: промах");
+					player.sendMessage("В§bВ§o" + Messages.calibrateDistrTask);
 					complete(false);
 					
 				}

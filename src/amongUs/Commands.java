@@ -52,7 +52,7 @@ public class Commands implements CommandExecutor {
 		String str = "\n";
 		
 		for(Lobby lobby: Lobby.lobby)
-			str += " - §b" + lobby.getName() + "§r;\n";
+			str += " - Â§b" + lobby.getName() + "Â§r\n";
 		
 		sender.sendMessage(Main.tagPlugin + str + Main.tagPlugin);
 		
@@ -153,14 +153,6 @@ public class Commands implements CommandExecutor {
 			
 		}
 		
-		if(!sender.hasPermission("among.setting")) {
-			
-			sender.sendMessage(Main.tagPlugin + Messages.notPerm);
-			
-			return;
-			
-		}
-		
 		if(lobby.getGame() == null) {
 			
 			sender.sendMessage(Main.tagPlugin + Messages.notGame);
@@ -180,6 +172,22 @@ public class Commands implements CommandExecutor {
 		if(args.length == 1) {
 			
 			sender.sendMessage(Main.tagPlugin + Messages.lacksArgs);
+			
+			return;
+			
+		}
+		
+		if(args[1].equalsIgnoreCase("list")) {
+			
+			listSettings(sender, lobby);
+			
+			return;
+			
+		}
+		
+		if(!sender.hasPermission("among.setting")) {
+			
+			sender.sendMessage(Main.tagPlugin + Messages.notPerm);
 			
 			return;
 			
@@ -227,6 +235,26 @@ public class Commands implements CommandExecutor {
 		
 	}
 	
+	private void listSettings(CommandSender sender, Lobby lobby) {
+		
+		Game game = lobby.getGame();
+		
+		sender.sendMessage(Main.tagPlugin +
+						   "\nimposters: " + game.imposters +
+						   "\nconfirm_eject: " + game.confirm_eject +
+						   "\nemergency_metting: " + game.emergency_metting +
+						   "\ntimeout_metting: " + game.timeout_metting +
+						   "\ntime_voting: " + game.time_voting +
+						   "\nspeed_player: " + game.speed_player +
+						   "\ntimeout_kill: " + game.timeout_kill +
+						   "\ndistance_kill: " + game.distance_kill +
+						   "\ntasksNum: " + game.tasksNum +
+						   "\nvisual_task: " + game.visual_task +
+						   "\n" + Main.tagPlugin
+						  );
+		
+	}
+	
 	private void voteOpenInv(CommandSender sender) {
 		
 		if(!(sender instanceof Player)) {
@@ -257,7 +285,7 @@ public class Commands implements CommandExecutor {
 		
 		String answ = lobby.getGame().getVote().openInv(player);
 		if(!answ.equalsIgnoreCase("true"))
-			sender.sendMessage(Main.tagPlugin + "§b§o" + answ);
+			sender.sendMessage(Main.tagPlugin + "Â§bÂ§o" + answ);
 		
 	}
 	
@@ -395,9 +423,9 @@ public class Commands implements CommandExecutor {
 			
 			String answ = lobby.getGame().getVote().skip(player);
 			if(answ.equalsIgnoreCase("true"))
-				sender.sendMessage(Main.tagPlugin + "§b§o" + Messages.success);
+				sender.sendMessage(Main.tagPlugin + "Â§bÂ§o" + Messages.success);
 			else
-				sender.sendMessage(Main.tagPlugin + "§b§o" + answ);
+				sender.sendMessage(Main.tagPlugin + "Â§bÂ§o" + answ);
 			
 			return;
 			
@@ -405,9 +433,9 @@ public class Commands implements CommandExecutor {
 		
 		String answ = lobby.getGame().getVote().vote(player, args[1]);
 		if(answ.equalsIgnoreCase("true"))
-			sender.sendMessage(Main.tagPlugin + "§b§o" + Messages.success);
+			sender.sendMessage(Main.tagPlugin + "Â§bÂ§o" + Messages.success);
 		else
-			sender.sendMessage(Main.tagPlugin + "§b§o" + answ);
+			sender.sendMessage(Main.tagPlugin + "Â§bÂ§o" + answ);
 		
 	}
 	

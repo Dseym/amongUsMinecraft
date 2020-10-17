@@ -19,6 +19,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scoreboard.Scoreboard;
 
 import amongUs.Main;
+import amongUs.Messages;
 import amongUs.PlayerGame;
 
 public abstract class Sabotage {
@@ -57,23 +58,23 @@ public abstract class Sabotage {
 	
 	public static void createMenu() {
 		
-		inv = Bukkit.createInventory(null, 54, "Карта саботажа");
+		inv = Bukkit.createInventory(null, 54, Messages.mapSabotage);
 		
 		for(int i = 0; i < inv.getSize(); i++)
-			inv.setItem(i, genItem(Material.STAINED_GLASS_PANE, "§7"));
+			inv.setItem(i, genItem(Material.STAINED_GLASS_PANE, "В§7"));
 
-		inv.setItem(1, genItem(Material.IRON_DOOR, "Sabotage", "§eВерхний движок", "Закрыть двери в верхнем движке", "ID: doorUpDrive"));
-		inv.setItem(37, genItem(Material.IRON_DOOR, "Sabotage", "§eНижний движок", "Закрыть двери в нижнем движке", "ID: doorDownDrive"));
-		inv.setItem(20, genItem(Material.IRON_DOOR, "Sabotage", "§eОхрана", "Закрыть двери в охране", "ID: doorSecurity"));
-		inv.setItem(12, genItem(Material.IRON_DOOR, "Sabotage", "§eМедотсек", "Закрыть двери в медотсеке", "ID: doorMedbay"));
-		inv.setItem(29, genItem(Material.IRON_DOOR, "Sabotage", "§eЭлектричество", "Закрыть двери в электричестве", "ID: doorElectrical"));
-		inv.setItem(5, genItem(Material.IRON_DOOR, "Sabotage", "§eСтоловая", "Закрыть двери в столовой", "ID: doorCafeteria"));
-		inv.setItem(41, genItem(Material.IRON_DOOR, "Sabotage", "§eХранилище", "Закрыть двери в хранилище", "ID: doorStorage"));
+		inv.setItem(1, genItem(Material.IRON_DOOR, "Sabotage", "В§eUp Drive", Messages.sabType_doorUpDrive, "ID: doorUpDrive"));
+		inv.setItem(37, genItem(Material.IRON_DOOR, "Sabotage", "В§eDown Drive", Messages.sabType_doorDownDrive, "ID: doorDownDrive"));
+		inv.setItem(20, genItem(Material.IRON_DOOR, "Sabotage", "В§eSecurity", Messages.sabType_doorSecurity, "ID: doorSecurity"));
+		inv.setItem(12, genItem(Material.IRON_DOOR, "Sabotage", "В§eMedbay", Messages.sabType_doorMedbay, "ID: doorMedbay"));
+		inv.setItem(29, genItem(Material.IRON_DOOR, "Sabotage", "В§eElectrical", Messages.sabType_doorElectrical, "ID: doorElectrical"));
+		inv.setItem(5, genItem(Material.IRON_DOOR, "Sabotage", "В§eCafeteria", Messages.sabType_doorCafeteria, "ID: doorCafeteria"));
+		inv.setItem(41, genItem(Material.IRON_DOOR, "Sabotage", "В§eStorage", Messages.sabType_doorStorage, "ID: doorStorage"));
 		
-		inv.setItem(18, genItem(Material.SEA_LANTERN, "Sabotage", "§eРектор", "Дестабилизировать реактор", "ID: reactor"));
-		inv.setItem(51, genItem(Material.REDSTONE_ORE, "Sabotage", "§eКоммуникация", "Вывести из строя коммун-ый модуль", "ID: communicate"));
-		inv.setItem(15, genItem(Material.SAPLING, "Sabotage", "§eКислород", "Повредить кислород", "ID: oxygen"));
-		inv.setItem(30, genItem(Material.REDSTONE_COMPARATOR, "Sabotage", "§eЭлектричество", "Повредить проводку", "ID: electrical"));
+		inv.setItem(18, genItem(Material.SEA_LANTERN, "Sabotage", "В§eReactor", Messages.sabType_reactor, "ID: reactor"));
+		inv.setItem(51, genItem(Material.REDSTONE_ORE, "Sabotage", "В§eCommunication", Messages.sabType_communicate, "ID: communicate"));
+		inv.setItem(15, genItem(Material.SAPLING, "Sabotage", "В§eOxygen", Messages.sabType_oxygen, "ID: oxygen"));
+		inv.setItem(30, genItem(Material.REDSTONE_COMPARATOR, "Sabotage", "В§eElectrical", Messages.sabType_electrical, "ID: electrical"));
 		
 	}
 	

@@ -95,13 +95,17 @@ public class Event implements Listener {
 			if (player == null)
 				return;
 			
+			e.setCancelled(true);
+			
+			if(!lobby.getGame().getVote().isActive())
+				return;
+			
 			for (PlayerGame _player : lobby.getGame().getPlayers())
 				if (_player.isLive() == player.isLive())
-					_player.sendMessage((!player.isLive() ? "ง7" : "") + player.getPlayer().getDisplayName() + ": "
+					_player.sendMessage((!player.isLive() ? "ยง7" : "") + player.getPlayer().getDisplayName() + ": "
 							+ e.getMessage());
 				else if (player.isLive())
 					_player.sendMessage(player.getPlayer().getDisplayName() + ": " + e.getMessage());
-			e.setCancelled(true);
 			
 		} catch (Exception e2) {}
 		
@@ -332,7 +336,7 @@ public class Event implements Listener {
 				for(Sabotage sab: lobby.getGame().getSabotages())
 					if(sab.isActive()) {
 						
-						player.sendMessage("งbงo" + Messages.sabotageLimit);
+						player.sendMessage("ยงbยงo" + Messages.sabotageLimit);
 						return;
 						
 					}

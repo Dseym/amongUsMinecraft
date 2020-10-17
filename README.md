@@ -5,10 +5,14 @@
 ## Description
 New minecraft mini-game based on the canon of the game Among Us! Complete tasks, look for imposters, or kill if you are an imposter yourself!
 
-### Updates 1.2
-1. The messages.yml config has been partially added
-2. Added game autostart
-3. Bug fixes
+### Updates 1.2.1
+1. Fixed encoding to UTF-8
+2. The messages.yml config is fully added
+3. Added the playerOnCount parameter to the game config - the number of players for auto start (value -1 - disable)
+4. Added new command /among setting list
+5. Fixed many bugs
+
+[Version 1.12.1](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.2/amongUs.jar)
 
 ## Commands
 /among help - get all commands
@@ -21,25 +25,7 @@ New minecraft mini-game based on the canon of the game Among Us! Complete tasks,
 5. among.command - send commands while playing
 
 ## Messages
-In file AmongUs/messages.yml (will be replenished)
-```
-notPerm: "Нет прав"
-lacksArgs: "Не хватает аргументов"
-success: "Успешно"
-plNotInLobby: "Вы не в лобби"
-plInLobby: "Вы уже в лобби"
-lobbyNotFound: "Лобби не найдено"
-notGame: "Нет игры"
-isGameStart: "Идет игра"
-notFoundSett: "Не найдена настройка"
-incorrectValue: "Неверное значение"
-senderNotPl: "Вы не игрок"
-notFoundConfig: "Нет такого файла настроек"
-helpMenu: "\n------------Команды------------\n /among create gameConf - §eсоздать игру§r\n /among start - §eначать игру§r\n /among v (nickName/skip) - §eголосовать§r\n /among help - §eэто меню§r\n /among vopen - §eоткрыть планшет голосования§r\n /among setting sett val - §eизменить наст-ку игры§r\n /among join name - §eвойти в лобби§r\n /among leave - §eвыйти из лобби§r\n /among setlobby name - §eсоздать лобби§r\n /among list - §eсписок лобби§r\n ------------Команды------------"
-
-visibleBody: "Рядом обнаружено тело"
-sabotageLimit: "Нельзя устраивать несколько саботажей"
-```
+In file AmongUs/messages.yml. [Download](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.2/messages.yml)
 
 ## Game config
 In file AmongUs/gameConfig/example.yml (you can create your)
@@ -54,6 +40,7 @@ time_voting: 60
 speed_player: 2
 timeout_kill: 15
 distance_kill: 2
+playerOnCount: 3
 tasksNum: 16
 spawns:
 - 0.5, 98, 3.5
@@ -99,25 +86,7 @@ If you need to translate the plugin into English, then write to Issues.
 5. among.command - отправлять команды во время игры
 
 ## Сообщения
-В файле AmongUs/messages.yml (будет пополняться)
-```
-notPerm: "Нет прав"
-lacksArgs: "Не хватает аргументов"
-success: "Успешно"
-plNotInLobby: "Вы не в лобби"
-plInLobby: "Вы уже в лобби"
-lobbyNotFound: "Лобби не найдено"
-notGame: "Нет игры"
-isGameStart: "Идет игра"
-notFoundSett: "Не найдена настройка"
-incorrectValue: "Неверное значение"
-senderNotPl: "Вы не игрок"
-notFoundConfig: "Нет такого файла настроек"
-helpMenu: "\n------------Команды------------\n /among create gameConf - §eсоздать игру§r\n /among start - §eначать игру§r\n /among v (nickName/skip) - §eголосовать§r\n /among help - §eэто меню§r\n /among vopen - §eоткрыть планшет голосования§r\n /among setting sett val - §eизменить наст-ку игры§r\n /among join name - §eвойти в лобби§r\n /among leave - §eвыйти из лобби§r\n /among setlobby name - §eсоздать лобби§r\n /among list - §eсписок лобби§r\n ------------Команды------------"
-
-visibleBody: "Рядом обнаружено тело"
-sabotageLimit: "Нельзя устраивать несколько саботажей"
-```
+В файле AmongUs/messages.yml. [Скачать](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.2/messages.yml)
 
 ## Игровой конфиг(gameConfig)
 В файле AmongUs/gameConfig/example.yml (вы можете создать свой)
@@ -132,6 +101,7 @@ time_voting: 60
 speed_player: 2
 timeout_kill: 15
 distance_kill: 2
+playerOnCount: 3
 tasksNum: 16
 spawns:
 - 0.5, 98, 3.5
