@@ -18,7 +18,7 @@ New minecraft mini-game based on the canon of the game Among Us! Complete tasks,
 6. Added colored armor to players
 7. Fixed bug
 
-[Version 1.13](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.3/amongUs.jar)
+[Version 1.3](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.3/amongUs.jar)
 
 ## Commands
 /among help - get all commands
