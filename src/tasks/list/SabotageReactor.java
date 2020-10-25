@@ -13,10 +13,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-import amongUs.Game;
 import amongUs.Main;
 import amongUs.Messages;
-import amongUs.PlayerGame;
+import game.Game;
+import game.PlayerGame;
 import tasks.Sabotage;
 
 public class SabotageReactor extends Sabotage {

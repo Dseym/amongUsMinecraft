@@ -13,11 +13,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 
-import amongUs.Cameras;
-import amongUs.Game;
 import amongUs.Main;
 import amongUs.Messages;
-import amongUs.PlayerGame;
+import game.Cameras;
+import game.Game;
+import game.PlayerGame;
 import tasks.Sabotage;
 import tasks.Task;
 

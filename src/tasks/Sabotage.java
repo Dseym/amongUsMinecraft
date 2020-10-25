@@ -1,26 +1,20 @@
 package tasks;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Snowball;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scoreboard.Scoreboard;
 
 import amongUs.Main;
-import amongUs.Messages;
-import amongUs.PlayerGame;
+import game.PlayerGame;
 
 public abstract class Sabotage {
 
@@ -34,51 +28,6 @@ public abstract class Sabotage {
 	private Map<PlayerGame, Location> locPlayers = new HashMap<PlayerGame, Location>();
 	private float speed = 0.2f;
 	
-	private static Inventory inv;
-	
-	public static void openMenu(PlayerGame player) {
-		
-		player.getPlayer().openInventory(inv);
-		
-	}
-	
-	private static ItemStack genItem(Material mat, String name, String... lores) {
-		
-		ItemStack item = new ItemStack(mat);
-		ItemMeta meta = item.getItemMeta();
-		meta.setDisplayName(name);
-		if(lores != null)
-			meta.setLore(Arrays.asList(lores));
-		
-		item.setItemMeta(meta);
-		
-		return item;
-		
-	}
-	
-	public static void createMenu() {
-		
-		inv = Bukkit.createInventory(null, 54, Messages.mapSabotage);
-		
-		for(int i = 0; i < inv.getSize(); i++)
-			inv.setItem(i, genItem(Material.STAINED_GLASS_PANE, "§7"));
-
-		inv.setItem(1, genItem(Material.IRON_DOOR, "Sabotage", "§eUp Drive", Messages.sabType_doorUpDrive, "ID: doorUpDrive"));
-		inv.setItem(37, genItem(Material.IRON_DOOR, "Sabotage", "§eDown Drive", Messages.sabType_doorDownDrive, "ID: doorDownDrive"));
-		inv.setItem(20, genItem(Material.IRON_DOOR, "Sabotage", "§eSecurity", Messages.sabType_doorSecurity, "ID: doorSecurity"));
-		inv.setItem(12, genItem(Material.IRON_DOOR, "Sabotage", "§eMedbay", Messages.sabType_doorMedbay, "ID: doorMedbay"));
-		inv.setItem(29, genItem(Material.IRON_DOOR, "Sabotage", "§eElectrical", Messages.sabType_doorElectrical, "ID: doorElectrical"));
-		inv.setItem(5, genItem(Material.IRON_DOOR, "Sabotage", "§eCafeteria", Messages.sabType_doorCafeteria, "ID: doorCafeteria"));
-		inv.setItem(41, genItem(Material.IRON_DOOR, "Sabotage", "§eStorage", Messages.sabType_doorStorage, "ID: doorStorage"));
-		
-		inv.setItem(18, genItem(Material.SEA_LANTERN, "Sabotage", "§eReactor", Messages.sabType_reactor, "ID: reactor"));
-		inv.setItem(51, genItem(Material.REDSTONE_ORE, "Sabotage", "§eCommunication", Messages.sabType_communicate, "ID: communicate"));
-		inv.setItem(15, genItem(Material.SAPLING, "Sabotage", "§eOxygen", Messages.sabType_oxygen, "ID: oxygen"));
-		inv.setItem(30, genItem(Material.REDSTONE_COMPARATOR, "Sabotage", "§eElectrical", Messages.sabType_electrical, "ID: electrical"));
-		
-	}
-	
-
 	public Sabotage(List<Location> location, Location locTo) {
 		
 		this.location = location;
@@ -88,10 +37,12 @@ public abstract class Sabotage {
 		List<Entity> ents = new ArrayList<Entity>();
 		for(Location loc: location) {
 			
+			if(!loc.getChunk().isLoaded()) loc.getChunk().load();
+			
 			Snowball ent = (Snowball)loc.getWorld().spawnEntity(loc, EntityType.SNOWBALL);
 			ent.setGravity(false);
 			ent.setGlowing(true);
-			board.getTeam("amongSabotage").addEntry(ent.getUniqueId().toString());
+			board.getTeam("amSab" + loc.getWorld().getName()).addEntry(ent.getUniqueId().toString());
 			ents.add(ent);
 			
 		}
@@ -101,6 +52,9 @@ public abstract class Sabotage {
 			@Override
 			public void run() {
 				
+				for(Location loc: location)
+					if(!loc.getChunk().isLoaded()) loc.getChunk().load();
+				
 				for(int i = 0; i < ents.size(); i++) {
 					
 					Entity ent = ents.get(i);
@@ -109,10 +63,7 @@ public abstract class Sabotage {
 					if(ent.getLocation().distance(loc) > 1)
 						ent.teleport(loc);
 					
-					if(active)
-						ent.setGlowing(true);
-					else
-						ent.setGlowing(false);
+					ent.setGlowing(active);
 					
 					if(!active)
 						timeout--;

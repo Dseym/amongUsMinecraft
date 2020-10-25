@@ -1,16 +1,17 @@
 package amongUs;
 
-import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Field;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+
+import game.Game;
+import game.Lobby;
 
 public class Commands implements CommandExecutor {
 	
@@ -37,6 +38,8 @@ public class Commands implements CommandExecutor {
 			setLobby(sender, args);
 		else if(args[0].equalsIgnoreCase("list"))
 			list(sender);
+		else if(args[0].equalsIgnoreCase("joinNick"))
+			joinNick(sender, args);
 		else if(args[0].equalsIgnoreCase("help"))
 			help(sender);
 		else 
@@ -59,6 +62,13 @@ public class Commands implements CommandExecutor {
 	}
 	
 	private void setLobby(CommandSender sender, String[] args) {
+		
+		if(!(sender instanceof Player)) {
+			
+			sender.sendMessage(Main.tagPlugin + Messages.senderNotPl);
+			return;
+			
+		}
 		
 		if(!sender.hasPermission("among.lobby")) {
 			
@@ -84,18 +94,23 @@ public class Commands implements CommandExecutor {
 		else
 			lobby.setLoc(loc);
 		
-		File file = new File(Main.plugin.getDataFolder() + File.separator + "config.yml");
-		FileConfiguration config = (FileConfiguration) YamlConfiguration.loadConfiguration(file);
+		String key = args[1] + ".location";
+		String value = loc.getWorld().getName() + "," + loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ();
 		
-		config.set(args[1] + ".location", loc.getWorld().getName() + "," + loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ());
-		
-		try {config.save(file);} catch (IOException e) {}
+		Config.saveConfig("config", key, value);
 		
 		sender.sendMessage(Main.tagPlugin + Messages.success);
 		
 	}
 
 	private void leave(CommandSender sender) {
+		
+		if(!(sender instanceof Player)) {
+			
+			sender.sendMessage(Main.tagPlugin + Messages.senderNotPl);
+			return;
+			
+		}
 		
 		Lobby lobby = Lobby.getLobby((Player)sender);
 		if(lobby == null) {
@@ -111,6 +126,13 @@ public class Commands implements CommandExecutor {
 	}
 
 	private void join(CommandSender sender, String[] args) {
+		
+		if(!(sender instanceof Player)) {
+			
+			sender.sendMessage(Main.tagPlugin + Messages.senderNotPl);
+			return;
+			
+		}
 		
 		if(args.length == 1) {
 			
@@ -129,20 +151,18 @@ public class Commands implements CommandExecutor {
 			
 		}
 		
-		Lobby lobby2 = Lobby.getLobby((Player)sender);
-		if(lobby2 != null) {
-			
-			sender.sendMessage(Main.tagPlugin + Messages.plInLobby);
-			
-			return;
-			
-		}
-		
 		lobby.join((Player)sender);
 		
 	}
 
 	private void setSetting(CommandSender sender, String[] args) {
+		
+		if(!(sender instanceof Player)) {
+			
+			sender.sendMessage(Main.tagPlugin + Messages.senderNotPl);
+			return;
+			
+		}
 		
 		Lobby lobby = Lobby.getLobby((Player)sender);
 		if(lobby == null) {
@@ -185,7 +205,7 @@ public class Commands implements CommandExecutor {
 			
 		}
 		
-		if(!sender.hasPermission("among.setting")) {
+		if(!sender.hasPermission("among.setting") && !sender.hasPermission("among.setting")) {
 			
 			sender.sendMessage(Main.tagPlugin + Messages.notPerm);
 			
@@ -236,6 +256,13 @@ public class Commands implements CommandExecutor {
 	}
 	
 	private void listSettings(CommandSender sender, Lobby lobby) {
+		
+		if(!(sender instanceof Player)) {
+			
+			sender.sendMessage(Main.tagPlugin + Messages.senderNotPl);
+			return;
+			
+		}
 		
 		Game game = lobby.getGame();
 		
@@ -291,6 +318,13 @@ public class Commands implements CommandExecutor {
 	
 	private void start(CommandSender sender) {
 		
+		if(!(sender instanceof Player)) {
+			
+			sender.sendMessage(Main.tagPlugin + Messages.senderNotPl);
+			return;
+			
+		}
+		
 		Lobby lobby = Lobby.getLobby((Player)sender);
 		if(lobby == null) {
 			
@@ -300,7 +334,7 @@ public class Commands implements CommandExecutor {
 			
 		}
 		
-		if(!sender.hasPermission("among.start")) {
+		if(!sender.hasPermission("among.start") && !sender.hasPermission("among.setting")) {
 			
 			sender.sendMessage(Main.tagPlugin + Messages.notPerm);
 			
@@ -336,6 +370,13 @@ public class Commands implements CommandExecutor {
 	
 	private void create(CommandSender sender, String[] args) {
 		
+		if(!(sender instanceof Player)) {
+			
+			sender.sendMessage(Main.tagPlugin + Messages.senderNotPl);
+			return;
+			
+		}
+		
 		Lobby lobby = Lobby.getLobby((Player)sender);
 		if(lobby == null) {
 			
@@ -345,7 +386,7 @@ public class Commands implements CommandExecutor {
 			
 		}
 		
-		if(!sender.hasPermission("among.create")) {
+		if(!sender.hasPermission("among.create") && !sender.hasPermission("among.setting")) {
 			
 			sender.sendMessage(Main.tagPlugin + Messages.notPerm);
 			
@@ -369,19 +410,11 @@ public class Commands implements CommandExecutor {
 			
 		}
 		
-		try {
-			
-			File fileConfigGame = new File(Main.plugin.getDataFolder() + File.separator + "gameConfig" + File.separator + args[1] + ".yml");
-			FileConfiguration configGame = (FileConfiguration) YamlConfiguration.loadConfiguration(fileConfigGame);
-			
-			lobby.createGame(configGame);
-			
-		} catch (Exception e) {
-			
+		FileConfiguration configGame = Config.loadGameConfig(args[1]);
+		if(configGame == null)
 			sender.sendMessage(Main.tagPlugin + Messages.notFoundConfig);
-			e.printStackTrace();
-			
-		}
+		else
+			lobby.createGame(configGame);
 		
 	}
 	
@@ -436,6 +469,45 @@ public class Commands implements CommandExecutor {
 			sender.sendMessage(Main.tagPlugin + "§b§o" + Messages.success);
 		else
 			sender.sendMessage(Main.tagPlugin + "§b§o" + answ);
+		
+	}
+	
+	private void joinNick(CommandSender sender, String[] args) {
+		
+		if(!(sender instanceof Player)) {
+			
+			sender.sendMessage(Main.tagPlugin + Messages.senderNotPl);
+			return;
+			
+		}
+		
+		if(args.length == 1) {
+			
+			sender.sendMessage(Main.tagPlugin + Messages.lacksArgs);
+			
+			return;
+			
+		}
+		
+		Player p = Bukkit.getPlayer(args[1]);
+		if(p == null || Lobby.getLobby(p) == null) {
+			
+			sender.sendMessage(Main.tagPlugin + Messages.playerNotFound);
+			
+			return;
+			
+		}
+		
+		Lobby lobby = Lobby.getLobbyForOwner(p);
+		if(lobby == null) {
+			
+			sender.sendMessage(Main.tagPlugin + Messages.playerNotOwnerLobby);
+			
+			return;
+			
+		}
+		
+		Lobby.getLobbyForOwner(p).join((Player)sender);
 		
 	}
 	

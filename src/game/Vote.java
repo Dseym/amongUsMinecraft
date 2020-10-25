@@ -1,0 +1,278 @@
+package game;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+
+import amongUs.Inv;
+import amongUs.Main;
+import amongUs.Messages;
+
+public class Vote {
+	
+	private Game game;
+	private boolean active = false;
+	private BossBar bar;
+	public int timeVote = 60;
+	private Map<PlayerGame, PlayerGame> votes = new HashMap<PlayerGame, PlayerGame>();
+	private List<PlayerGame> skipping = new ArrayList<PlayerGame>();
+	private Inventory invVote;
+	
+	public Vote(Game game) {
+		
+		this.game = game;
+		
+		timeVote = game.time_voting;
+		
+		bar = Bukkit.createBossBar(Messages.vote, BarColor.GREEN, BarStyle.SOLID);
+		
+		Bukkit.getScheduler().runTaskTimer(Main.plugin, new Runnable() {@Override public void run() {tick();}}, 20, 20);
+		
+		Bukkit.getPluginManager().registerEvents(new Listener() {
+			
+			@EventHandler
+			void playerClickInv(InventoryClickEvent e) {
+				
+				ItemStack item = e.getCurrentItem();
+				
+				if(item == null || !e.getClickedInventory().equals(invVote))
+					return;
+				
+				if(!item.getItemMeta().getDisplayName().equalsIgnoreCase(Messages.skipVote))
+					Bukkit.dispatchCommand(e.getWhoClicked(), "among v " + item.getItemMeta().getDisplayName());
+				else
+					Bukkit.dispatchCommand(e.getWhoClicked(), "among v skip");
+				
+				e.getWhoClicked().closeInventory();
+				
+			}
+			
+		}, Main.plugin);
+		
+	}
+	
+	public void tick() {
+		
+		if(active)
+			timeVote--;
+		else
+			timeVote = game.time_voting;
+		
+		bar.setProgress(((double)timeVote)/game.time_voting);
+		
+		if(timeVote < 1)
+			result();
+		
+	}
+	
+	public String vote(Player player1, String player2) {
+		
+		if(!active)
+			return Messages.voteNotFound;
+		
+		PlayerGame whoVoting = game.getPlayer(player1);
+		if(whoVoting == null)
+			return Messages.plNotInGame;
+		
+		if(!whoVoting.isLive())
+			return Messages.youDied;
+		
+		if(votes.containsKey(whoVoting) || skipping.contains(whoVoting))
+			return Messages.youYetVoted;
+		
+		PlayerGame player = game.getPlayer(Bukkit.getPlayer(player2));
+		if(player == null)
+			return Messages.playerNotFound;
+		
+		if(!player.isLive())
+			return Messages.plDied;
+
+		
+		votes.put(whoVoting, player);
+		
+		if(votes.size() + skipping.size() + 1 > game.getLivePlayers().size())
+			result();
+		
+		return "true";
+		
+	}
+	
+	public void start() {
+		
+		if(active)
+			return;
+		
+		skipping.clear();
+		votes.clear();
+		active = true;
+		timeVote = game.time_voting;
+		
+		invVote = Bukkit.createInventory(null, 36, Messages.vote);
+		
+		for(PlayerGame player: game.getPlayers()) {
+			
+			Kits.vote(player.getPlayer());
+			Kits.colorArmor(player.getPlayer(), player.color);
+			
+			bar.addPlayer(player.getPlayer());
+			
+			invVote.addItem(Inv.genItem(Material.SKULL_ITEM, player.getPlayer().getName(), 3));
+			
+		}
+
+		invVote.setItem(35, Inv.genItem(Material.BARRIER, Messages.skipVote));
+		
+	}
+	
+	public String openInv(Player player) {
+		
+		if(!active)
+			return Messages.voteNotFound;
+		
+		PlayerGame whoVoting = game.getPlayer(player);
+		if(whoVoting == null)
+			return Messages.plNotInGame;
+		
+		if(!whoVoting.isLive())
+			return Messages.youDied;
+		
+		if(votes.containsKey(whoVoting) || skipping.contains(whoVoting))
+			return Messages.youYetVoted;
+		
+		player.openInventory(invVote);
+		
+		return "true";
+		
+	}
+	
+	public String skip(Player player) {
+		
+		if(!active)
+			return Messages.voteNotFound;
+		
+		PlayerGame whoVoting = game.getPlayer(player);
+		if(whoVoting == null)
+			return Messages.plNotInGame;
+		
+		if(!whoVoting.isLive())
+			return Messages.youDied;
+		
+		if(votes.containsKey(whoVoting) || skipping.contains(whoVoting))
+			return Messages.youYetVoted;
+		
+		skipping.add(whoVoting);
+		
+		if(votes.size() + skipping.size() + 1 > game.getLivePlayers().size())
+			result();
+		
+		return "true";
+		
+	}
+	
+	public boolean isActive() {
+		
+		return active;
+		
+	}
+	
+	public void result() {
+		
+		if(!active)
+			return;
+		
+		for(PlayerGame player: game.getPlayers()) {
+			
+			if(player.impostor) {
+				
+				Kits.imposter(player.getPlayer());
+				
+				if(player.isLive())
+					player.timeoutKill = game.timeout_kill;
+				
+			} else {
+				
+				Kits.crewmate(player.getPlayer());
+				
+			}
+			
+			Kits.colorArmor(player.getPlayer(), player.color);
+			
+			if(!(votes.containsKey(player) || skipping.contains(player)))
+				skip(player.getPlayer());
+			
+		}
+		
+		bar.removeAll();
+		
+		active = false;
+		game.timeoutMeeting = game.timeout_metting;
+		
+		if(skipping.size() > votes.size()) {
+			
+			for(PlayerGame player: game.getPlayers())
+				player.sendTitle(Messages.voteSkipped, "");
+			
+		} else if(skipping.size() == votes.size()) {
+			
+			for(PlayerGame player: game.getPlayers())
+				player.sendTitle(Messages.notSingleDesition, "");
+			
+		} else {
+			
+			Map<PlayerGame, List<PlayerGame>> votes = new HashMap<PlayerGame, List<PlayerGame>>();
+			PlayerGame player = null;
+			
+			for(PlayerGame _player: this.votes.keySet()) {
+				
+				List<PlayerGame> list;
+				
+				if(votes.containsKey(this.votes.get(_player)))
+					list = votes.get(this.votes.get(_player));
+				else
+					list = new ArrayList<PlayerGame>();
+				
+				list.add(_player);
+				
+				votes.put(this.votes.get(_player), list);
+				
+			}
+			
+			int lastVotes = 0;
+			for(PlayerGame _player: votes.keySet())
+				if(votes.get(_player).size() > lastVotes) {
+
+					player = _player;
+					lastVotes = votes.get(_player).size();
+					
+				}
+			
+			for(PlayerGame list: votes.keySet())
+				if(list != player && votes.get(list).size() == lastVotes) {
+					
+					player.sendTitle(Messages.notSingleDesition, "");
+					return;
+					
+				}
+			
+			game.killPlayer(player);
+			for(PlayerGame _player: game.getPlayers())
+				_player.sendTitle(player.getPlayer().getDisplayName() + (game.confirm_eject ? (player.impostor ? Messages.beImpostor : Messages.notBeImpostor) : Messages.beEject), "");
+			
+		}
+		
+	}
+	
+}

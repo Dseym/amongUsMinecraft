@@ -13,7 +13,7 @@ import org.bukkit.scoreboard.Scoreboard;
 
 import amongUs.Main;
 import amongUs.Messages;
-import amongUs.PlayerGame;
+import game.PlayerGame;
 
 public abstract class Task {
 
@@ -34,16 +34,20 @@ public abstract class Task {
 		location = loc;
 		this.locTo = locTo;
 		
+		if(!loc.getChunk().isLoaded()) loc.getChunk().load();
+		
 		Snowball ent = (Snowball)loc.getWorld().spawnEntity(loc, EntityType.SNOWBALL);
 		ent.setGravity(false);
 		ent.setGlowing(true);
 		Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
-		board.getTeam("amongTasks").addEntry(ent.getUniqueId().toString());
+		board.getTeam("amTas" + loc.getWorld().getName()).addEntry(ent.getUniqueId().toString());
 		
 		Bukkit.getScheduler().runTaskTimer(Main.plugin, new Runnable() {
 			
 			@Override
 			public void run() {
+				
+				if(!loc.getChunk().isLoaded()) loc.getChunk().load();
 				
 				if(ent.getLocation().distance(location) > 1)
 					ent.teleport(location);
@@ -198,7 +202,6 @@ public abstract class Task {
 		player.setAction(null);
 		timer.cancel();
 		timer = null;
-		isComplete = success;
 		if(success)
 			player.sendTitle(Messages.taskComplete, "");
 		
@@ -206,7 +209,22 @@ public abstract class Task {
 		player = null;
 		lastLocPlayer = null;
 		
-		inProgress = false;
+		if(success) {
+			
+			player.sendTitle(Messages.taskComplete, "");
+			
+			Bukkit.getScheduler().runTaskLater(Main.plugin, new Runnable() {
+				
+				@Override public void run() {isComplete = success; inProgress = false;}
+				
+			}, ((int)Math.floor(Math.random() * 4)+3)*20);
+			
+		} else {
+			
+			isComplete = success;
+			inProgress = false;
+			
+		}
 		
 	}
 	

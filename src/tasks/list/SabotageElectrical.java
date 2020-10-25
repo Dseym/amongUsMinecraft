@@ -13,11 +13,11 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import amongUs.Cameras;
-import amongUs.Game;
 import amongUs.Main;
 import amongUs.Messages;
-import amongUs.PlayerGame;
+import game.Cameras;
+import game.Game;
+import game.PlayerGame;
 import tasks.Sabotage;
 
 public class SabotageElectrical extends Sabotage {

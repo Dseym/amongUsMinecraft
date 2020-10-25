@@ -15,10 +15,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 
-import amongUs.Game;
 import amongUs.Main;
 import amongUs.Messages;
-import amongUs.PlayerGame;
+import game.Game;
+import game.PlayerGame;
 import tasks.Sabotage;
 
 public class SabotageOxygen extends Sabotage {

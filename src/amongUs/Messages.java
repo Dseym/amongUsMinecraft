@@ -35,6 +35,7 @@ public class Messages {
 		plNotInGame = "Вы не в игре",
 		playerNotFound = "Игрок не найден",
 		plDied = "Игрок мертв",
+		playerNotOwnerLobby = "Игрок не владелец лобби",
 		helpMenu = "\n------------Команды------------\n"
 				 + " /among create gameConf - §eсоздать игру§r\n"
 				 + " /among start - §eначать игру§r\n"
@@ -47,6 +48,7 @@ public class Messages {
 				 + " /among setlobby name - §eсоздать лобби§r\n"
 				 + " /among list - §eсписок лобби§r\n"
 				 + " /among setting list - §eпоказать настройки игры§r\n"
+				 + " /among joinNick nick - §eзайти в лобби с указанным основателем§r\n"
 				 + "------------Команды------------",
 		
 		visibleBody = "Рядом обнаружено тело",
@@ -143,7 +145,6 @@ public class Messages {
 			visibleBody = config.getString("visibleBody");
 		if(config.contains("sabotageLimit"))
 			sabotageLimit = config.getString("sabotageLimit");
-		
 		if(config.contains("fewPlayer"))
 			fewPlayer = config.getString("fewPlayer");
 		if(config.contains("fewCrewmate"))
@@ -276,6 +277,8 @@ public class Messages {
 			sabType_oxygen = config.getString("sabType_oxygen");
 		if(config.contains("sabType_electrical"))
 			sabType_electrical = config.getString("sabType_electrical");
+		if(config.contains("playerNotOwnerLobby"))
+			playerNotOwnerLobby = config.getString("playerNotOwnerLobby");
 		
 	}
 	

@@ -5,14 +5,20 @@
 ## Description
 New minecraft mini-game based on the canon of the game Among Us! Complete tasks, look for imposters, or kill if you are an imposter yourself!
 
-### Updates 1.2.1
-1. Fixed encoding to UTF-8
-2. The messages.yml config is fully added
-3. Added the playerOnCount parameter to the game config - the number of players for auto start (value -1 - disable)
-4. Added new command /among setting list
-5. Fixed many bugs
+### Updates 1.3
+1. Added the ability to enter the lobby using signs
+```
+ Line1: [AmongUs]
+ Line2: *nameLobby*
+```
+2. Added a line to messages.yml (playerNotOwnerLobby)
+3. Added automatic game creation in the lobby
+4. Added a lobby owner and joining the lobby by the owner's nickname (/among joinNick nick)
+5. (For API) Added events for the beginning, end of the game, etc
+6. Added colored armor to players
+7. Fixed bug
 
-[Version 1.12.1](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.2/amongUs.jar)
+[Version 1.13](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.3/amongUs.jar)
 
 ## Commands
 /among help - get all commands
@@ -25,7 +31,7 @@ New minecraft mini-game based on the canon of the game Among Us! Complete tasks,
 5. among.command - send commands while playing
 
 ## Messages
-In file AmongUs/messages.yml. [Download](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.2/messages.yml)
+In file AmongUs/messages.yml. [Download](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.3/messages.yml)
 
 ## Game config
 In file AmongUs/gameConfig/example.yml (you can create your)
@@ -64,9 +70,9 @@ Video about the plugin (in Russian) - https://youtu.be/lHh4xp_ziro.
 4. Now you have the code that you can edit!
 
 ## Install for Server
-1. Download the compiled [AmongUs](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.2/amongUs.jar) and upload it to your server.
+1. Download the compiled [AmongUs](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.3/amongUs.jar) and upload it to your server.
 2. Download [ProtocolLib](https://www.spigotmc.org/resources/protocollib.1997) and upload it to your server.
-3. Upload [world.tar](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.2/world.tar) on server and unzip.
+3. Upload [world.tar](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.3/world.tar) on server and unzip.
 4. Have fun!
 
 If you need to translate the plugin into English, then write to Issues.
@@ -86,7 +92,7 @@ If you need to translate the plugin into English, then write to Issues.
 5. among.command - отправлять команды во время игры
 
 ## Сообщения
-В файле AmongUs/messages.yml. [Скачать](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.2/messages.yml)
+В файле AmongUs/messages.yml. [Скачать](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.3/messages.yml)
 
 ## Игровой конфиг(gameConfig)
 В файле AmongUs/gameConfig/example.yml (вы можете создать свой)
@@ -125,9 +131,9 @@ spawns:
 4. Теперь у Вас есть код для редактирования!
 
 ## Установка на сервер
-1. Скачайте скомпилированный [AmongUs](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.2/amongUs.jar) и загрузите на сервер.
+1. Скачайте скомпилированный [AmongUs](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.3/amongUs.jar) и загрузите на сервер.
 2. Скачайте [ProtocolLib](https://www.spigotmc.org/resources/protocollib.1997) и загрузите на сервер.
-3. Загрузите [world.tar](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.2/world.tar) на сервер и распакуйте.
+3. Загрузите [world.tar](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.3/world.tar) на сервер и распакуйте.
 4. Веселись!
 
 Если нужен перевод на англиский, пишите в Issues.
