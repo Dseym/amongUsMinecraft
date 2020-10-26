@@ -84,7 +84,7 @@ public class Commands implements CommandExecutor {
 			
 		}
 		
-		if(checkPerm(sender, "among.lobby")) return;
+		if(!checkPerm(sender, "among.lobby")) return;
 		
 		if(args.length == 1) {
 			
@@ -186,7 +186,7 @@ public class Commands implements CommandExecutor {
 			
 		}
 		
-		if(!sender.getName().equalsIgnoreCase(lobby.getOwner().getName()) && checkPerm(sender, "among.setting")) return;
+		if(!sender.getName().equalsIgnoreCase(lobby.getOwner().getName()) && !checkPerm(sender, "among.setting")) return;
 		
 		if(lobby.getGame().isStart()) {
 			
@@ -341,7 +341,7 @@ public class Commands implements CommandExecutor {
 			
 		}
 		
-		if(!sender.getName().equalsIgnoreCase(lobby.getOwner().getName()) && checkPerm(sender, "among.start")) return;
+		if(!sender.getName().equalsIgnoreCase(lobby.getOwner().getName()) && !checkPerm(sender, "among.start")) return;
 		
 		if(lobby.getGame() == null) {
 			
@@ -387,7 +387,7 @@ public class Commands implements CommandExecutor {
 			
 		}
 		
-		if(!sender.getName().equalsIgnoreCase(lobby.getOwner().getName()) && checkPerm(sender, "among.create")) return;
+		if(!sender.getName().equalsIgnoreCase(lobby.getOwner().getName()) && !checkPerm(sender, "among.create")) return;
 		
 		if(lobby.getGame() != null && lobby.getGame().isStart()) {
 			
