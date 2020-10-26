@@ -13,7 +13,8 @@ New minecraft mini-game based on the canon of the game Among Us! Complete tasks,
   defaultConfig: example
 ```
 2. Added messages to messages.yml (owner and players)
-3. Fixed errors
+3. Added 100% chance to become an impostor (among.impostor)
+4. Fixed errors
 
 [Version 1.3.1](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.3.1/amongUs.jar)
 
