@@ -1,6 +1,7 @@
 package listeners;
 
 import org.bukkit.Location;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -29,6 +30,8 @@ public class CancelListener implements Listener {
 	
 	@EventHandler
 	void cancelEntityDamage(EntityDamageByEntityEvent e) {
+		
+		if(e.getDamager().getType() != EntityType.PLAYER || e.getEntityType() != EntityType.PLAYER) return;
 		
 		PlayerGame player = lobby.getGame().getPlayer((Player) e.getEntity());
 		PlayerGame player2 = lobby.getGame().getPlayer((Player) e.getDamager());

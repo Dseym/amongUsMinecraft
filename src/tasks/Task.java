@@ -206,7 +206,6 @@ public abstract class Task {
 			player.sendTitle(Messages.taskComplete, "");
 		
 		player.getPlayer().teleport(lastLocPlayer);
-		player = null;
 		lastLocPlayer = null;
 		
 		if(success) {
@@ -225,6 +224,8 @@ public abstract class Task {
 			inProgress = false;
 			
 		}
+		
+		player = null;
 		
 	}
 	

@@ -173,6 +173,15 @@ public class Game {
 		for(i = 0; i < imposters; i++) {
 			
 			PlayerGame player = this.players.get(i);
+			
+			for(PlayerGame pg: this.players)
+				if(!pg.impostor && pg.getPlayer().hasPermission("among.impostor")) {
+					
+					player = pg;
+					break;
+					
+				}
+			
 			player.impostor = true;
 			player.timeoutKill = timeout_kill;
 			player.timeoutBar = Bukkit.createBossBar(Messages.rollback, BarColor.YELLOW, BarStyle.SOLID);
@@ -286,9 +295,6 @@ public class Game {
 		
 		tpToSpawn();
 		
-		GameEndEvent gameEnd = new GameEndEvent(this, cause);
-		Bukkit.getPluginManager().callEvent(gameEnd);
-		
 		if(timerUpdate != null)
 			timerUpdate.cancel();
 		
@@ -326,6 +332,9 @@ public class Game {
 		killedBodies.clear();
 		
 		bar.removeAll();
+		
+		GameEndEvent gameEnd = new GameEndEvent(this, cause);
+		Bukkit.getPluginManager().callEvent(gameEnd);
 		
 	}
 	

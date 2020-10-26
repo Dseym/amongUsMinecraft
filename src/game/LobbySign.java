@@ -77,12 +77,7 @@ public class LobbySign {
 			
 		}
 		
-		try {
-			configSigns.save(fileSigns);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		try {configSigns.save(fileSigns);} catch (IOException e) {}
 		
 	}
 	

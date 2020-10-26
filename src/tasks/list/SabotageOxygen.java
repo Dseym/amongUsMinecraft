@@ -115,7 +115,7 @@ public class SabotageOxygen extends Sabotage {
 					
 				}
 				
-				if(enteredCode.length() < 6)
+				if(enteredCode.length() < 5)
 					enteredCode += num;
 				
 				update();

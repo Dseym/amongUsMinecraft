@@ -3,7 +3,6 @@ package listeners;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
-import amongUs.Config;
 import events.GameEndEvent;
 import game.Lobby;
 
@@ -24,7 +23,7 @@ public class GameEndListener implements Listener {
 		
 		lobby.gameStop(e.getCause());
 		
-		lobby.createGame(Config.getDefaultGameConfig());
+		lobby.createGame(lobby.getDefaultConfig());
 		
 	}
 	

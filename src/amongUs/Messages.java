@@ -36,6 +36,8 @@ public class Messages {
 		playerNotFound = "Игрок не найден",
 		plDied = "Игрок мертв",
 		playerNotOwnerLobby = "Игрок не владелец лобби",
+		owner = "Основатель",
+		players = "Игроки",
 		helpMenu = "\n------------Команды------------\n"
 				 + " /among create gameConf - §eсоздать игру§r\n"
 				 + " /among start - §eначать игру§r\n"
@@ -279,6 +281,10 @@ public class Messages {
 			sabType_electrical = config.getString("sabType_electrical");
 		if(config.contains("playerNotOwnerLobby"))
 			playerNotOwnerLobby = config.getString("playerNotOwnerLobby");
+		if(config.contains("owner"))
+			owner = config.getString("owner");
+		if(config.contains("players"))
+			players = config.getString("players");
 		
 	}
 	

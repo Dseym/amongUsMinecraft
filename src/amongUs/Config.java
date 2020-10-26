@@ -16,10 +16,15 @@ import game.LobbySign;
 public class Config {
 	
 	private static File folder;
+	private static File gameConfig;
 
 	public static void init() {
 		
 		folder = Main.plugin.getDataFolder();
+		folder.mkdirs();
+		
+		gameConfig = new File(folder + File.separator + "gameConfig");
+		gameConfig.mkdirs();
 		
 		loadConfigs();
 		loadLobby();
@@ -29,15 +34,12 @@ public class Config {
 	
 	private static void loadConfigs() {
 		
-		File gameConf = new File(folder + File.separator + "gameConfig");
-		gameConf.mkdirs();
-		
 		try {
 			
 			File config = new File(folder + File.separator + "config.yml");
 			File signs = new File(folder + File.separator + "signs.yml");
 			File messages = new File(folder + File.separator + "messages.yml");
-			File exampleConfig = new File(gameConf + File.separator + "example.yml");
+			File exampleConfig = new File(gameConfig + File.separator + "example.yml");
 			
 			if(!config.exists())
 				config.createNewFile();
@@ -46,7 +48,7 @@ public class Config {
 			if(!messages.exists())
 				messages.createNewFile();
 			
-			if(gameConf.list().length == 0 && !exampleConfig.exists())
+			if(gameConfig.list().length == 0 && !exampleConfig.exists())
 				exampleConfig.createNewFile();
 				
 			
@@ -63,7 +65,11 @@ public class Config {
 			for(String str: config.getKeys(false)) {
 				
 				String[] strLoc = config.getString(str + ".location").split(",");
-				Lobby lobby = new Lobby(new Location(Bukkit.getWorld(strLoc[0]), Integer.parseInt(strLoc[1]), Integer.parseInt(strLoc[2]), Integer.parseInt(strLoc[3])), str);
+				FileConfiguration defaultConfig;
+				if((defaultConfig = loadGameConfig(config.getString(str + ".defaultConfig"))) == null)
+					defaultConfig = getDefaultGameConfig();
+				
+				Lobby lobby = new Lobby(new Location(Bukkit.getWorld(strLoc[0]), Integer.parseInt(strLoc[1]), Integer.parseInt(strLoc[2]), Integer.parseInt(strLoc[3])), str, defaultConfig);
 				Lobby.lobby.add(lobby);
 				
 			}
@@ -102,7 +108,7 @@ public class Config {
 	
 	public static FileConfiguration loadGameConfig(String name) {
 		
-		File file = new File(folder + File.separator + "gameConfig" + File.separator + name + ".yml");
+		File file = new File(gameConfig + File.separator + name + ".yml");
 		if(!file.exists()) return null;
 		
 		return YamlConfiguration.loadConfiguration(file);
@@ -146,7 +152,7 @@ public class Config {
 	
 	public static void saveGameConfig(String name, String key, Object value) {
 		
-		File file = new File(folder + File.separator + "gameConfig" + File.separator + name + ".yml");
+		File file = new File(gameConfig + File.separator + name + ".yml");
 		if(!file.exists()) try {file.createNewFile();} catch (IOException e) {e.printStackTrace();}
 		
 		FileConfiguration config = (FileConfiguration) YamlConfiguration.loadConfiguration(file);

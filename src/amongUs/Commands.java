@@ -49,6 +49,20 @@ public class Commands implements CommandExecutor {
 		
 	}
 	
+	public boolean checkPerm(CommandSender sender, String perm) {
+		
+		if(!sender.hasPermission(perm)) {
+			
+			sender.sendMessage(Messages.notPerm);
+			
+			return false;
+			
+		}
+		
+		return true;
+		
+	}
+	
 	
 	private void list(CommandSender sender) {
 		
@@ -70,13 +84,7 @@ public class Commands implements CommandExecutor {
 			
 		}
 		
-		if(!sender.hasPermission("among.lobby")) {
-			
-			sender.sendMessage(Main.tagPlugin + Messages.notPerm);
-			
-			return;
-			
-		}
+		if(checkPerm(sender, "among.lobby")) return;
 		
 		if(args.length == 1) {
 			
@@ -90,12 +98,17 @@ public class Commands implements CommandExecutor {
 		
 		Lobby lobby = Lobby.getLobby(args[1]);
 		if(lobby == null)
-			Lobby.lobby.add(new Lobby(loc, args[1]));
+			Lobby.lobby.add(new Lobby(loc, args[1], Config.getDefaultGameConfig()));
 		else
 			lobby.setLoc(loc);
 		
 		String key = args[1] + ".location";
 		String value = loc.getWorld().getName() + "," + loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ();
+		
+		Config.saveConfig("config", key, value);
+		
+		key = args[1] + ".defaultConfig";
+		value = "example";
 		
 		Config.saveConfig("config", key, value);
 		
@@ -173,13 +186,7 @@ public class Commands implements CommandExecutor {
 			
 		}
 		
-		if(lobby.getGame() == null) {
-			
-			sender.sendMessage(Main.tagPlugin + Messages.notGame);
-			
-			return;
-			
-		}
+		if(!sender.getName().equalsIgnoreCase(lobby.getOwner().getName()) && checkPerm(sender, "among.setting")) return;
 		
 		if(lobby.getGame().isStart()) {
 			
@@ -334,13 +341,7 @@ public class Commands implements CommandExecutor {
 			
 		}
 		
-		if(!sender.hasPermission("among.start") && !sender.hasPermission("among.setting")) {
-			
-			sender.sendMessage(Main.tagPlugin + Messages.notPerm);
-			
-			return;
-			
-		}
+		if(!sender.getName().equalsIgnoreCase(lobby.getOwner().getName()) && checkPerm(sender, "among.start")) return;
 		
 		if(lobby.getGame() == null) {
 			
@@ -386,13 +387,7 @@ public class Commands implements CommandExecutor {
 			
 		}
 		
-		if(!sender.hasPermission("among.create") && !sender.hasPermission("among.setting")) {
-			
-			sender.sendMessage(Main.tagPlugin + Messages.notPerm);
-			
-			return;
-			
-		}
+		if(!sender.getName().equalsIgnoreCase(lobby.getOwner().getName()) && checkPerm(sender, "among.create")) return;
 		
 		if(lobby.getGame() != null && lobby.getGame().isStart()) {
 			

@@ -14,7 +14,6 @@ import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
-import amongUs.Config;
 import amongUs.Main;
 import amongUs.Messages;
 import events.LobbyPlayerJoinEvent;
@@ -71,11 +70,13 @@ public class Lobby {
 	private String name;
 	private int time = 60;
 	private Player owner;
+	private FileConfiguration defaultConfig;
 	
-	public Lobby(Location loc, String name) {
+	public Lobby(Location loc, String name, FileConfiguration defaultConfig) {
 		
 		this.loc = loc;
 		this.name = name;
+		this.defaultConfig = defaultConfig;
 		
 		board = Bukkit.getScoreboardManager().getNewScoreboard();
 		Objective obj = board.registerNewObjective("game", "dummy");
@@ -86,7 +87,7 @@ public class Lobby {
 		Bukkit.getScheduler().runTaskLater(Main.plugin, new Runnable() {
 			
 			@Override
-			public void run() {createGame(Config.getDefaultGameConfig());}
+			public void run() {createGame(defaultConfig);}
 			
 		}, 10);
 		
@@ -138,6 +139,12 @@ public class Lobby {
 	public String getName() {
 		
 		return name;
+		
+	}
+	
+	public FileConfiguration getDefaultConfig() {
+		
+		return defaultConfig;
 		
 	}
 	
@@ -232,8 +239,8 @@ public class Lobby {
 		Objective obj = board.getObjective("game");
 
 		obj.getScore(Messages.countToGame.replace("@time@", "" + time)).setScore(7);
-		obj.getScore("Owner: " + (owner != null ? owner.getName() : "")).setScore(6);
-		obj.getScore("Players: " + players.size() + "/" + game.getMap().getSpawns().size()).setScore(5);
+		obj.getScore(Messages.owner + ": " + (owner != null ? owner.getName() : "")).setScore(6);
+		obj.getScore(Messages.players + ": " + players.size() + "/" + game.getMap().getSpawns().size()).setScore(5);
 		obj.getScore(" ").setScore(4);
 		obj.getScore("Number Imposters: " + game.imposters).setScore(3);
 		obj.getScore("Confirm Eject: " + game.confirm_eject).setScore(2);

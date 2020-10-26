@@ -40,11 +40,11 @@ public class ImpostorListener implements Listener {
 		
 		e.setCancelled(true);
 		
-		if(lobby.getGame().getVote().isActive() || !player.impostor)
+		if(lobby.getGame().getVote().isActive() || !player.impostor || e.getCurrentItem() == null)
 			return;
 	
 		ItemMeta meta = e.getCurrentItem().getItemMeta();
-		if (meta.getDisplayName().equalsIgnoreCase("Sabotage")) {
+		if (meta.getDisplayName() != null && meta.getDisplayName().equalsIgnoreCase("Sabotage")) {
 			
 			String sabotage = meta.getLore().get(2).split("ID: ")[1];
 			
