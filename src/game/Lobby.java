@@ -10,6 +10,8 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
@@ -53,9 +55,8 @@ public class Lobby {
 	public static Lobby getLobby(Player player) {
 		
 		for(Lobby lobby: lobby)
-			for(Player _player: lobby.getPlayers())
-				if(_player == player)
-					return lobby;
+			if(lobby.getPlayers().contains(player))
+				return lobby;
 		
 		return null;
 		
@@ -199,7 +200,7 @@ public class Lobby {
 	
 	public void createGame(FileConfiguration config) {
 		
-		if(game != null)
+		if(game != null && game.isStart())
 			game.end("New game");
 		
 		game = new Game(config, loc);
@@ -286,14 +287,6 @@ public class Lobby {
 	
 	public void join(Player player) {
 		
-		if(players.contains(player)) {
-			
-			player.sendMessage(Main.tagPlugin + Messages.plInLobby);
-			
-			return;
-			
-		}
-		
 		if(game != null && game.isStart()) {
 			
 			player.sendMessage(Main.tagPlugin + Messages.isGameStart);
@@ -317,8 +310,11 @@ public class Lobby {
 		player.sendMessage(Main.tagPlugin + Messages.plJoinToLobby);
 		player.setScoreboard(board);
 		locPlayers.put(player, player.getLocation());
-		player.getPlayer().teleport(loc.clone());
+		player.teleport(loc.clone());
 		player.setGameMode(GameMode.ADVENTURE);
+		player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 99999, 0));
+		Kits.lobby(player);
+		player.getInventory().setHeldItemSlot(0);
 		
 		if(players.size() == 0)
 			owner = player;
@@ -353,6 +349,9 @@ public class Lobby {
 		
 		player.teleport(locPlayers.get(player));
 		player.setGameMode(GameMode.SURVIVAL);
+		player.removePotionEffect(PotionEffectType.NIGHT_VISION);
+		player.getInventory().clear();
+		player.getInventory().setHeldItemSlot(0);
 		
 		locPlayers.remove(player);
 		players.remove(player);

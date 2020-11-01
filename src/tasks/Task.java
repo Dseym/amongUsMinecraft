@@ -13,6 +13,7 @@ import org.bukkit.scoreboard.Scoreboard;
 
 import amongUs.Main;
 import amongUs.Messages;
+import game.PlaySound;
 import game.PlayerGame;
 
 public abstract class Task {
@@ -216,7 +217,9 @@ public abstract class Task {
 				
 				@Override public void run() {isComplete = success; inProgress = false;}
 				
-			}, ((int)Math.floor(Math.random() * 4)+3)*20);
+			}, ((int)Math.floor(Math.random() * 4)+5)*20);
+			
+			PlaySound.TASK_COMPLETE.play(player.getPlayer());
 			
 		} else {
 			

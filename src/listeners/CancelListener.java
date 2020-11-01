@@ -1,8 +1,7 @@
 package listeners;
 
+import org.bukkit.GameMode;
 import org.bukkit.Location;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -31,13 +30,6 @@ public class CancelListener implements Listener {
 	@EventHandler
 	void cancelEntityDamage(EntityDamageByEntityEvent e) {
 		
-		if(e.getDamager().getType() != EntityType.PLAYER || e.getEntityType() != EntityType.PLAYER) return;
-		
-		PlayerGame player = lobby.getGame().getPlayer((Player) e.getEntity());
-		PlayerGame player2 = lobby.getGame().getPlayer((Player) e.getDamager());
-		if (player == null && player2 == null)
-			return;
-		
 		e.setCancelled(true);
 		
 	}
@@ -45,20 +37,13 @@ public class CancelListener implements Listener {
 	@EventHandler
 	void cancelDrop(PlayerDropItemEvent e) {
 		
-		PlayerGame player = lobby.getGame().getPlayer((Player) e.getPlayer());
-		if (player == null)
-			return;
 		e.setCancelled(true);
 		
 	}
 	
 	@EventHandler
 	void cancelHunger(FoodLevelChangeEvent e) {
-		
-		PlayerGame player = lobby.getGame().getPlayer((Player)e.getEntity());
-		if (player == null)
-			return;
-		
+
 		e.setCancelled(true);
 		
 	}
@@ -123,11 +108,7 @@ public class CancelListener implements Listener {
 	@EventHandler
 	void cancelClick(PlayerInteractEvent e) {
 		
-		PlayerGame player = lobby.getGame().getPlayer(e.getPlayer());
-		if(player == null)
-			return;
-		
-		e.setCancelled(true);
+		if(e.getPlayer().getGameMode() != GameMode.CREATIVE) e.setCancelled(true);
 		
 	}
 	

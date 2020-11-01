@@ -38,10 +38,15 @@ public class Messages {
 		playerNotOwnerLobby = "Игрок не владелец лобби",
 		owner = "Основатель",
 		players = "Игроки",
+		exit = "Выход",
+		lobby = "Лобби",
+		clickToJoin = "§4§oНажмите",
+		manhole = "Люк",
+		start = "Старт",
 		helpMenu = "\n------------Команды------------\n"
 				 + " /among create gameConf - §eсоздать игру§r\n"
 				 + " /among start - §eначать игру§r\n"
-				 + " /among v (nickName/skip) - §eголосовать§r\n"
+				 + " /among v nick/skip - §eголосовать§r\n"
 				 + " /among help - §eэто меню§r\n"
 				 + " /among vopen - §eоткрыть планшет голосования§r\n"
 				 + " /among setting sett val - §eизменить наст-ку игры§r\n"
@@ -51,6 +56,7 @@ public class Messages {
 				 + " /among list - §eсписок лобби§r\n"
 				 + " /among setting list - §eпоказать настройки игры§r\n"
 				 + " /among joinNick nick - §eзайти в лобби с указанным основателем§r\n"
+				 + " /among impostor off/on nick - §eвыкл/вкл игроку 100% шанс самозванца§r\n"
 				 + "------------Команды------------",
 		
 		visibleBody = "Рядом обнаружено тело",
@@ -285,6 +291,16 @@ public class Messages {
 			owner = config.getString("owner");
 		if(config.contains("players"))
 			players = config.getString("players");
+		if(config.contains("exit"))
+			exit = config.getString("exit");
+		if(config.contains("lobby"))
+			lobby = config.getString("lobby");
+		if(config.contains("clickToJoin"))
+			clickToJoin = config.getString("clickToJoin");
+		if(config.contains("manhole"))
+			manhole = config.getString("manhole");
+		if(config.contains("start"))
+			start = config.getString("start");
 		
 	}
 	

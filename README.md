@@ -5,29 +5,34 @@
 ## Description
 New minecraft mini-game based on the canon of the game Among Us! Complete tasks, look for imposters, or kill if you are an imposter yourself!
 
-### Updates 1.3.1
-1. Added choice of default lobby to config
+### Updates 1.4
+1. Some added to the lobby
+2. Recode manholes
+3. Added new messages for messages.yml
 ```
- lobby:
-  location: ...
-  defaultConfig: example
+ exit: "Выход"
+ lobby: "Лобби"
+ clickToJoin: "§4§oНажмите"
+ manhole: "Люк"
+ start: "Старт"
 ```
-2. Added messages to messages.yml (owner and players)
-3. Added 100% chance to become an impostor (among.impostor)
-4. Fixed errors
+4. Added new command (/among impostor off/on nick - 100% chance to give the player an impostor)
+5. Added some sounds
+6. Fixed many bugs
 
-[Version 1.3.1](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.3.1/amongUs.jar)
+[Version 1.4](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.4/amongUs.jar)
 
 ## Commands
 /among help - get all commands
 
 ## Permission
-1. among.start - start game
-2. among.create - create game
-3. among.setting - set settings game
-4. among.setlobby - set lobby
+1. among.start - /among start (for owner lobby)
+2. among.create - /among create (for owner lobby)
+3. among.setting - /among setting (for owner lobby)
+4. among.setlobby - /among setlobby
 5. among.command - send commands while playing
-6. among.impostor - 100% chance to become an impostor
+6. among.impostor - /among impostor
+7. among.signs - creating signs
 
 ## Signs
 Signs for entering the lobby. Example:
@@ -36,11 +41,15 @@ Signs for entering the lobby. Example:
  Line2: *nameLobby*
 ```
 
+## ATTENTION!!!
+1. The lobby and the map must be in the same world!
+2. Don't create multiple lobbies in the same world!
+
 ## Change map settings(locations of tasks, sabotages, etc.)
-The tutorial is still being finalized - [Tutorial](https://github.com/Dseym/amongUsMinecraft/wiki)
+The tutorial is still being finalized - [Tutorial](https://github.com/Dseym/amongUsMinecraft/wiki) (There will be no tutorial! I'm making a config for maps!)
 
 ## Messages
-In file AmongUs/messages.yml. [Download](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.3.1/messages.yml)
+In file AmongUs/messages.yml. [Download](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.4/messages.yml)
 
 ## Game config
 In file AmongUs/gameConfig/example.yml (you can create your)
@@ -79,12 +88,10 @@ Video about the plugin (in Russian) - https://youtu.be/lHh4xp_ziro.
 4. Now you have the code that you can edit!
 
 ## Install for Server
-1. Download the compiled [AmongUs](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.3.1/amongUs.jar) and upload it to your server.
+1. Download the compiled [AmongUs](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.4/amongUs.jar) and upload it to your server.
 2. Download [ProtocolLib](https://www.spigotmc.org/resources/protocollib.1997) and upload it to your server.
-3. Upload [world.tar](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.3.1/world.tar) on server and unzip.
+3. Upload [world.tar](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.4/world.tar) on server and unzip.
 4. Have fun!
-
-If you need to translate the plugin into English, then write to Issues.
 
 # RUS
 ## Описание
@@ -94,12 +101,13 @@ If you need to translate the plugin into English, then write to Issues.
 /among help - получить все команды
 
 ## Права
-1. among.start - начать игру
-2. among.create - создать игру
-3. among.setting - установить настройку игры
-4. among.setlobby - установить лобби
+1. among.start - /among start (для основателя лобби)
+2. among.create - /among create (для основателя лобби)
+3. among.setting - /among setting (для основателя лобби)
+4. among.setlobby - /among setlobby
 5. among.command - отправлять команды во время игры
-6. among.impostor - 100% шанс стать самозванцем
+6. among.impostor - /among impostor
+7. among.signs - создание табличек
 
 ## Signs
 Таблички для входа в лобби. Пример:
@@ -108,11 +116,15 @@ If you need to translate the plugin into English, then write to Issues.
  Line2: *название_лобби*
 ```
 
+## ATTENTION!!!
+1. Лобби и карта должны быть в одном мире!
+2. Не создавайте в одном мире несколько лобби!
+
 ## Change map settings(locations of tasks, sabotages, etc.)
-Туториал еще дорабатывается - [Туториал](https://github.com/Dseym/amongUsMinecraft/wiki)
+Туториал еще дорабатывается - [Туториал](https://github.com/Dseym/amongUsMinecraft/wiki) (Туториала не будет! Я делаю конфиг для карт!)
 
 ## Сообщения
-В файле AmongUs/messages.yml. [Скачать](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.3.1/messages.yml)
+В файле AmongUs/messages.yml. [Скачать](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.4/messages.yml)
 
 ## Игровой конфиг(gameConfig)
 В файле AmongUs/gameConfig/example.yml (вы можете создать свой)
@@ -151,9 +163,7 @@ spawns:
 4. Теперь у Вас есть код для редактирования!
 
 ## Установка на сервер
-1. Скачайте скомпилированный [AmongUs](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.3.1/amongUs.jar) и загрузите на сервер.
+1. Скачайте скомпилированный [AmongUs](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.4/amongUs.jar) и загрузите на сервер.
 2. Скачайте [ProtocolLib](https://www.spigotmc.org/resources/protocollib.1997) и загрузите на сервер.
-3. Загрузите [world.tar](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.3.1/world.tar) на сервер и распакуйте.
+3. Загрузите [world.tar](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.4/world.tar) на сервер и распакуйте.
 4. Веселись!
-
-Если нужен перевод на англиский, пишите в Issues.

@@ -1,5 +1,6 @@
 package game;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -29,23 +30,25 @@ public class Manhole {
 		
 	}
 	
-	public void tp(PlayerGame player) {
+	@SuppressWarnings("deprecation")
+	public void tp(PlayerGame pg) {
 		
-		Player _player = player.getPlayer();
+		Player p = pg.getPlayer();
 		
-		_player.removePotionEffect(PotionEffectType.SPEED);
-		_player.removePotionEffect(PotionEffectType.INVISIBILITY);
+		p.removePotionEffect(PotionEffectType.SPEED);
 		
-		if(_player.getLocation().distance(location) < 1.5) {
+		if(p.getLocation().distance(location) < 1.5) {
 			
-			_player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 99999, 4));
-			_player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 99999, 0));
-			_player.teleport(locFrom);
+			p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 99999, 4));
+			p.teleport(locFrom);
+			for(Player _p: Bukkit.getOnlinePlayers())
+				_p.hidePlayer(p);
 			
 		} else {
 			
-			_player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 2*20, 0));
-			_player.teleport(location);
+			p.teleport(location);
+			for(Player _p: Bukkit.getOnlinePlayers())
+				_p.showPlayer(p);
 			
 		}
 		

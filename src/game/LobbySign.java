@@ -20,6 +20,7 @@ import org.bukkit.inventory.EquipmentSlot;
 
 import amongUs.Config;
 import amongUs.Main;
+import amongUs.Messages;
 
 public class LobbySign {
 	
@@ -112,12 +113,14 @@ public class LobbySign {
 				LobbySign lobbyS = getLobbySign((Sign)block.getState());
 				if(lobbyS == null) return;
 				
-				lobbyS.getLobby().join(e.getPlayer());
+				Bukkit.dispatchCommand(e.getPlayer(), "among join " + lobbyS.getLobby().getName());
 				
 			}
 			
 			@EventHandler
 			void playerPlaceSign(SignChangeEvent e) {
+				
+				if(!e.getPlayer().hasPermission("among.signs")) return;
 				
 				String[] lines = e.getLines();
 				
@@ -131,12 +134,14 @@ public class LobbySign {
 					Sign sign = (Sign)e.getBlock().getState();
 
 					e.setLine(0, "[§3AmongUs§r]");
-					e.setLine(1, "Lobby: " + lobby.getName());
+					e.setLine(1, Messages.lobby + ": " + lobby.getName());
 					e.setLine(2, "Waiting...");
 					
 					LobbySign.signs.add(new LobbySign(lobby, sign));
 					
 					sign.update();
+					
+					save();
 					
 				}
 				
@@ -156,16 +161,16 @@ public class LobbySign {
 					
 					String status = "";
 					if(lobby.getGame() == null)
-						status = "Not game";
+						status = Messages.notGame;
 					else if(lobby.getGame().isStart())
-						status = "Game started";
+						status = Messages.isGameStart;
 					else
-						status = "Players: " + lobby.getPlayers().size() + "/" + lobby.getGame().getMap().getSpawns().size();
+						status = Messages.players + ": " + lobby.getPlayers().size() + "/" + lobby.getGame().getMap().getSpawns().size();
 					
 					sign.setLine(0, "[§3AmongUs§r]");
-					sign.setLine(1, "Lobby: " + lobby.getName());
+					sign.setLine(1, Messages.lobby + ": " + lobby.getName());
 					sign.setLine(2, status);
-					sign.setLine(3, status.equalsIgnoreCase("Game started") ? "" : "§4§oClick to join");
+					sign.setLine(3, status.equalsIgnoreCase(Messages.isGameStart) ? "" : Messages.clickToJoin);
 					
 					sign.update();
 					

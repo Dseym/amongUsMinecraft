@@ -19,6 +19,7 @@ public class Kits {
 		
 		inv.setItem(1, Inv.genItem(Material.IRON_SWORD, Messages.knife));
 		inv.setItem(4, Inv.genItem(Material.REDSTONE_BLOCK, Messages.mapSabotage));
+		inv.setItem(5, Inv.genItem(Material.IRON_TRAPDOOR, Messages.manhole));
 		inv.setItem(7, Inv.genItem(Material.CLAY_BRICK, Messages.report));
 		
 	}
@@ -43,6 +44,17 @@ public class Kits {
 			inv.setItem(i, Inv.genItem(Material.BARRIER, "§c"));
 		
 		inv.setItem(4, Inv.genItem(Material.BOOK, Messages.vote));
+		
+	}
+	
+	public static void lobby(Player p) {
+		
+		PlayerInventory inv = p.getInventory();
+		
+		inv.clear();
+		
+		inv.setItem(1, Inv.genItem(Material.WOOD_BUTTON, Messages.start));
+		inv.setItem(4, Inv.genItem(Material.IRON_DOOR, Messages.exit));
 		
 	}
 	

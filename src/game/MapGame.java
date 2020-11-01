@@ -6,7 +6,7 @@ import java.util.Map;
 import org.bukkit.Location;
 import org.bukkit.World;
 
-import tasks.Sabotage;
+import sabotages.Sabotage;
 import tasks.Task;
 
 public class MapGame {

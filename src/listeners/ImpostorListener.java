@@ -7,7 +7,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -16,8 +15,9 @@ import amongUs.Messages;
 import game.Cameras;
 import game.Lobby;
 import game.Manhole;
+import game.PlaySound;
 import game.PlayerGame;
-import tasks.Sabotage;
+import sabotages.Sabotage;
 import tasks.Task;
 
 public class ImpostorListener implements Listener {
@@ -74,21 +74,20 @@ public class ImpostorListener implements Listener {
 	}
 	
 	@EventHandler
-	void toManhole(PlayerMoveEvent e) {
+	void manhole(PlayerInteractEvent e) {
 		
 		PlayerGame player = lobby.getGame().getPlayer(e.getPlayer());
-		if(player == null || !player.impostor || !player.isLive())
+		if(player == null || !player.impostor || e.getItem() == null || e.getHand() != EquipmentSlot.HAND || e.getItem().getType() != Material.IRON_TRAPDOOR)
 			return;
 		
-		Location from = e.getFrom();
-		Location to = e.getTo();
-		if (from.getBlock().equals(to.getBlock())) return;
-		
-		Location loc = player.getPlayer().getLocation();
-		Manhole manhole = lobby.getGame().getMap().getManhole(loc);
-		
-		if(player.getPlayer().isSneaking() && player.getPlayer().getVelocity().getY() > 0 && manhole != null)
+		Manhole manhole = lobby.getGame().getMap().getManhole(e.getPlayer().getLocation());
+		if(manhole != null) {
+			
 			manhole.tp(player);
+			PlaySound.MANHOLE.play(player.getPlayer());
+			player.getPlayer().getInventory().setHeldItemSlot(0);
+			
+		}
 		
 	}
 	
@@ -149,6 +148,8 @@ public class ImpostorListener implements Listener {
 					.subtract(player.getPlayer().getLocation().toVector()));
 			lobby.getGame().imposterKillPlayer(playerHitted);
 			player.timeoutKill = lobby.getGame().timeout_kill;
+			PlaySound.DEATH.play(player.getPlayer());
+			player.getPlayer().getInventory().setHeldItemSlot(0);
 
 		}
 		

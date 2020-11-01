@@ -8,7 +8,7 @@ import org.bukkit.inventory.EquipmentSlot;
 
 import game.Lobby;
 import game.PlayerGame;
-import tasks.Sabotage;
+import sabotages.Sabotage;
 import tasks.Task;
 
 public class ClickTaskListener implements Listener {

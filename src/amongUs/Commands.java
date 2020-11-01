@@ -40,6 +40,8 @@ public class Commands implements CommandExecutor {
 			list(sender);
 		else if(args[0].equalsIgnoreCase("joinNick"))
 			joinNick(sender, args);
+		else if(args[0].equalsIgnoreCase("impostor"))
+			imposter(sender, args);
 		else if(args[0].equalsIgnoreCase("help"))
 			help(sender);
 		else 
@@ -48,7 +50,7 @@ public class Commands implements CommandExecutor {
 		return true;
 		
 	}
-	
+
 	public boolean checkPerm(CommandSender sender, String perm) {
 		
 		if(!sender.hasPermission(perm)) {
@@ -63,6 +65,77 @@ public class Commands implements CommandExecutor {
 		
 	}
 	
+	
+	private void imposter(CommandSender sender, String[] args) {
+		
+		if(!(sender instanceof Player)) {
+			
+			sender.sendMessage(Main.tagPlugin + Messages.senderNotPl);
+			return;
+			
+		}
+		
+		Lobby lobby = Lobby.getLobby((Player)sender);
+		if(lobby == null) {
+			
+			sender.sendMessage(Main.tagPlugin + Messages.plNotInLobby);
+			
+			return;
+			
+		}
+		
+		if(!checkPerm(sender, "among.impostor")) return;
+		
+		Game game = lobby.getGame();
+		if(game.isStart()) {
+			
+			sender.sendMessage(Main.tagPlugin + Messages.isGameStart);
+			
+			return;
+			
+		}
+		
+		if(args.length < 3) {
+			
+			sender.sendMessage(Main.tagPlugin + Messages.lacksArgs);
+			
+			return;
+			
+		}
+		
+		if(args[1].equalsIgnoreCase("on")) {
+			
+			if(!game.chanceImposter.contains(args[2])) {
+				
+				game.chanceImposter.add(args[2]);
+				
+				sender.sendMessage(Main.tagPlugin + Messages.success);
+				
+				return;
+				
+			}
+			
+		} else if(args[1].equalsIgnoreCase("off")) {
+			
+			if(game.chanceImposter.contains(args[2])) {
+				
+				game.chanceImposter.remove(args[2]);
+				
+				sender.sendMessage(Main.tagPlugin + Messages.success);
+				
+				return;
+				
+			} else {
+				
+				sender.sendMessage(Main.tagPlugin + Messages.playerNotFound);
+				
+				return;
+				
+			}
+			
+		}
+		
+	}
 	
 	private void list(CommandSender sender) {
 		
@@ -155,6 +228,15 @@ public class Commands implements CommandExecutor {
 			
 		}
 		
+		Lobby lobbyP = Lobby.getLobby((Player)sender);
+		if(lobbyP != null) {
+			
+			sender.sendMessage(Main.tagPlugin + Messages.plInLobby);
+			
+			return;
+			
+		}
+		
 		Lobby lobby = Lobby.getLobby(args[1]);
 		if(lobby == null) {
 			
@@ -207,14 +289,6 @@ public class Commands implements CommandExecutor {
 		if(args[1].equalsIgnoreCase("list")) {
 			
 			listSettings(sender, lobby);
-			
-			return;
-			
-		}
-		
-		if(!sender.hasPermission("among.setting") && !sender.hasPermission("among.setting")) {
-			
-			sender.sendMessage(Main.tagPlugin + Messages.notPerm);
 			
 			return;
 			

@@ -11,14 +11,13 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
+import amongUs.Inv;
 import amongUs.Main;
+import amongUs.Messages;
 
 public class Cameras {
 	
@@ -43,26 +42,18 @@ public class Cameras {
 				if(player == null || e.getHand() != EquipmentSlot.HAND)
 					return;
 				
-				Cameras camera = null;
-				if(e.getClickedBlock() != null)
-					camera = game.getMap().getCamera(e.getClickedBlock().getLocation());
-				
-				if(camera != null) {
+				if(players.containsKey(player)) {
 					
-					camera.join(player);
-					return;
+					if(e.getItem() != null && e.getItem().getType() == Material.STONE_BUTTON)
+						exit(player);
+					else
+						next(player);
+					
+				} else if(e.getClickedBlock() != null) {
+					
+					if(e.getClickedBlock().getLocation().distance(location) < 1) join(player);
 					
 				}
-				
-				if(!players.containsKey(player))
-					return;
-				
-				if(e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.LEFT_CLICK_BLOCK)
-					next(player);
-				else if(e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK)
-					exit(player);
-				
-				e.setCancelled(true);
 				
 			}
 			
@@ -120,12 +111,8 @@ public class Cameras {
 		player.getPlayer().setFlying(true);
 		player.setAction(this);
 		
-		ItemStack item = new ItemStack(Material.STONE_BUTTON);
-		ItemMeta meta = item.getItemMeta();
-		meta.setDisplayName("Выйти");
-		item.setItemMeta(meta);
-		
-		player.getPlayer().getInventory().setItem(0, item);
+		player.getPlayer().getInventory().setItem(8, Inv.genItem(Material.STONE_BUTTON, Messages.exit));
+		player.getPlayer().getInventory().setHeldItemSlot(0);
 		
 		next(player);
 		
@@ -146,7 +133,8 @@ public class Cameras {
 		player.getPlayer().setFlying(false);
 		player.getPlayer().setGameMode(GameMode.SURVIVAL);
 		player.setAction(null);
-		player.getPlayer().getInventory().setItem(0, null);
+		player.getPlayer().getInventory().setItem(8, null);
+		player.getPlayer().getInventory().setHeldItemSlot(0);
 		
 		players.remove(player);
 		locPlayers.remove(player);
@@ -154,6 +142,8 @@ public class Cameras {
 	}
 	
 	public void next(PlayerGame player) {
+		
+		if(!players.containsKey(player)) return;
 		
 		if(players.get(player)+2 > cameras.size())
 			players.replace(player, -1);

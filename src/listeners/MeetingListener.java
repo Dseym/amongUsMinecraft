@@ -36,7 +36,7 @@ public class MeetingListener implements Listener {
 	void doingMeeting(PlayerInteractEvent e) {
 		
 		PlayerGame player = lobby.getGame().getPlayer(e.getPlayer());
-		if (player == null || e.getHand() != EquipmentSlot.HAND || lobby.getGame().getVote().isActive() || e.getClickedBlock() == null)
+		if (player == null || lobby.getGame().getVote().isActive() || e.getClickedBlock() == null)
 			return;
 		
 		Location loc = e.getClickedBlock().getLocation();

@@ -26,6 +26,7 @@ import org.bukkit.scoreboard.Team;
 import org.bukkit.scoreboard.Team.Option;
 import org.bukkit.scoreboard.Team.OptionStatus;
 
+import amongUs.Config;
 import amongUs.Main;
 import amongUs.Messages;
 import amongUs.Protocol;
@@ -33,12 +34,12 @@ import events.GameEndEvent;
 import events.GameStartEvent;
 import net.md_5.bungee.api.ChatMessageType;
 import net.minecraft.server.v1_12_R1.Packet;
-import tasks.Sabotage;
+import sabotages.Sabotage;
+import sabotages.SabotageCommunicate;
+import sabotages.SabotageElectrical;
+import sabotages.SabotageOxygen;
+import sabotages.SabotageReactor;
 import tasks.Task;
-import tasks.list.SabotageCommunicate;
-import tasks.list.SabotageElectrical;
-import tasks.list.SabotageOxygen;
-import tasks.list.SabotageReactor;
 
 public class Game {
 	
@@ -53,6 +54,7 @@ public class Game {
 	public boolean visual_task = true;
 	public int imposters = 1;
 	public int playerOnCount = 5;
+	public List<String> chanceImposter = new ArrayList<String>();
 	
 	private int emergencyMettingNum = 0;
 	private List<PlayerGame> players = new ArrayList<PlayerGame>();
@@ -175,7 +177,7 @@ public class Game {
 			PlayerGame player = this.players.get(i);
 			
 			for(PlayerGame pg: this.players)
-				if(!pg.impostor && pg.getPlayer().hasPermission("among.impostor")) {
+				if(!pg.impostor && chanceImposter.contains(pg.getPlayer().getName())) {
 					
 					player = pg;
 					break;
@@ -488,6 +490,8 @@ public class Game {
 		
 		for(PlayerGame _player: players) {
 			
+			PlaySound.VOTE.play(_player.getPlayer());
+			
 			if(_player.isLive()) {
 				
 				if(_player.impostor)
@@ -594,6 +598,8 @@ public class Game {
 			Main.plugin.getLogger().warning(Messages.mapNotFound);
 			for(PlayerGame player: this.players)
 				player.sendMessage(Messages.mapNotFound);
+			
+			config = Config.getDefaultGameConfig();
 			
 		}
 		
