@@ -46,7 +46,7 @@ Signs for entering the lobby. Example:
 2. Don't create multiple lobbies in the same world!
 
 ## Change map settings(locations of tasks, sabotages, etc.)
-The tutorial is still being finalized - [Tutorial](https://github.com/Dseym/amongUsMinecraft/wiki) (There will be no tutorial! I'm making a config for maps!)
+~~The tutorial is still being finalized~~ - [Tutorial](https://github.com/Dseym/amongUsMinecraft/wiki) (There will be no tutorial! I'm making a config for maps!)
 
 ## Messages
 In file AmongUs/messages.yml. [Download](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.4/messages.yml)
@@ -121,7 +121,7 @@ Video about the plugin (in Russian) - https://youtu.be/lHh4xp_ziro.
 2. Не создавайте в одном мире несколько лобби!
 
 ## Change map settings(locations of tasks, sabotages, etc.)
-Туториал еще дорабатывается - [Туториал](https://github.com/Dseym/amongUsMinecraft/wiki) (Туториала не будет! Я делаю конфиг для карт!)
+~~Туториал еще дорабатывается~~ - [Туториал](https://github.com/Dseym/amongUsMinecraft/wiki) (Туториала не будет! Я делаю конфиг для карт!)
 
 ## Сообщения
 В файле AmongUs/messages.yml. [Скачать](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.4/messages.yml)
