@@ -85,12 +85,7 @@ public class Lobby {
 		obj.setDisplayName(Messages.configMess);
 		obj.getScore(Messages.notGame).setScore(0);
 		
-		Bukkit.getScheduler().runTaskLater(Main.plugin, new Runnable() {
-			
-			@Override
-			public void run() {createGame(defaultConfig);}
-			
-		}, 10);
+		createGame(defaultConfig);
 		
 		Bukkit.getScheduler().runTaskTimer(Main.plugin, new Runnable() {
 			

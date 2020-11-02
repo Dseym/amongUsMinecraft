@@ -9,6 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import game.Lobby;
 import game.LobbySign;
@@ -27,7 +28,12 @@ public class Config {
 		gameConfig.mkdirs();
 		
 		loadConfigs();
-		loadLobby();
+		new BukkitRunnable() {
+			
+			@Override
+			public void run() {loadLobby();}
+			
+		}.runTaskLater(Main.plugin, 10);
 		
 	}
 	
