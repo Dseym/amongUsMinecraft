@@ -25,7 +25,7 @@ New minecraft mini-game based on the canon of the game Among Us! Complete tasks,
 6. Fixed bugs
 7. Minor changes
 
-[Version 1.5](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.4/amongUs.jar)
+[Version 1.5](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.5/amongUs.jar)
 
 ## Commands
 /among help - get all commands
@@ -50,10 +50,10 @@ Signs for entering the lobby. Example:
 1. The lobby and the map must be in the same world!
 
 ## Change map settings(locations of tasks, sabotages, etc.)
-In file AmongUs/mapConfig/example.yml (you can create your) [Download](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.4/messages.yml)
+In file AmongUs/mapConfig/example.yml (you can create your) [Download](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.5/mapConfig.yml)
 
 ## Messages
-In file AmongUs/messages.yml [Download](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.4/messages.yml)
+In file AmongUs/messages.yml [Download](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.5/messages.yml)
 
 ## Game config
 In file AmongUs/gameConfig/example.yml (you can create your)
@@ -81,9 +81,9 @@ Video about the plugin (in Russian) - https://youtu.be/lHh4xp_ziro.
 4. Now you have the code that you can edit!
 
 ## Install for Server
-1. Download the compiled [AmongUs](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.4/amongUs.jar) and upload it to your server.
+1. Download the compiled [AmongUs](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.5/amongUs.jar) and upload it to your server.
 2. Download [ProtocolLib](https://www.spigotmc.org/resources/protocollib.1997) and upload it to your server.
-3. Upload [world.tar](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.4/world.tar) on server and unzip.
+3. Upload [world.tar](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.5/world.tar) on server and unzip.
 4. Have fun!
 
 # RUS
@@ -113,10 +113,10 @@ Video about the plugin (in Russian) - https://youtu.be/lHh4xp_ziro.
 1. Лобби и карта должны быть в одном мире!
 
 ## Change map settings(locations of tasks, sabotages, etc.)
-В файле AmongUs/mapConfig/example.yml (вы можете создать свой) [Скачать](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.4/messages.yml)
+В файле AmongUs/mapConfig/example.yml (вы можете создать свой) [Скачать](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.5/mapConfig.yml)
 
 ## Сообщения
-В файле AmongUs/messages.yml. [Скачать](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.4/messages.yml)
+В файле AmongUs/messages.yml. [Скачать](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.5/messages.yml)
 
 ## Игровой конфиг(gameConfig)
 В файле AmongUs/gameConfig/example.yml (вы можете создать свой)
@@ -144,7 +144,7 @@ tasksNum: 16
 4. Теперь у Вас есть код для редактирования!
 
 ## Установка на сервер
-1. Скачайте скомпилированный [AmongUs](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.4/amongUs.jar) и загрузите на сервер.
+1. Скачайте скомпилированный [AmongUs](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.5/amongUs.jar) и загрузите на сервер.
 2. Скачайте [ProtocolLib](https://www.spigotmc.org/resources/protocollib.1997) и загрузите на сервер.
-3. Загрузите [world.tar](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.4/world.tar) на сервер и распакуйте.
+3. Загрузите [world.tar](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.5/world.tar) на сервер и распакуйте.
 4. Веселись!
