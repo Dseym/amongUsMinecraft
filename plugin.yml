@@ -1,5 +1,5 @@
 name: AmongUs
-version: 1.4
+version: 1.5
 main: amongUs.Main
 commands:
   among:

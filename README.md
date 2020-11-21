@@ -5,22 +5,27 @@
 ## Description
 New minecraft mini-game based on the canon of the game Among Us! Complete tasks, look for imposters, or kill if you are an imposter yourself!
 
-### Updates 1.4
-1. Some added to the lobby
-2. Recode manholes
-3. Added new messages for messages.yml
+### Updates 1.5
+1. Added new values ​​to config.yml
+2. Added map editing to mapConfig
+3. Added scoreboard in game
+4. Added textures
+5. Added new messages in messages.yml
 ```
- exit: "Выход"
- lobby: "Лобби"
- clickToJoin: "§4§oНажмите"
- manhole: "Люк"
- start: "Старт"
+ error: "Произошла ошибка"
+ imposters: "Самозванцев: "
+ confirmEject: "Подтверждение: "
+ visualTasks: "Визуальное: "
+ time: "Время: "
+ map: "Карта: "
+ you: "Ты: "
+ live: "Жив"
+ kills: "Убийств: "
 ```
-4. Added new command (/among impostor off/on nick - 100% chance to give the player an impostor)
-5. Added some sounds
-6. Fixed many bugs
+6. Fixed bugs
+7. Minor changes
 
-[Version 1.4](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.4/amongUs.jar)
+[Version 1.5](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.4/amongUs.jar)
 
 ## Commands
 /among help - get all commands
@@ -43,18 +48,17 @@ Signs for entering the lobby. Example:
 
 ## ATTENTION!!!
 1. The lobby and the map must be in the same world!
-2. Don't create multiple lobbies in the same world!
 
 ## Change map settings(locations of tasks, sabotages, etc.)
-~~The tutorial is still being finalized~~ - [Tutorial](https://github.com/Dseym/amongUsMinecraft/wiki) (There will be no tutorial! I'm making a config for maps!)
+In file AmongUs/mapConfig/example.yml (you can create your) [Download](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.4/messages.yml)
 
 ## Messages
-In file AmongUs/messages.yml. [Download](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.4/messages.yml)
+In file AmongUs/messages.yml [Download](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.4/messages.yml)
 
 ## Game config
 In file AmongUs/gameConfig/example.yml (you can create your)
 ```
-map: The Skeld
+map: mapConfig
 visual_task: true
 confirm_eject: true
 imposters: 1
@@ -66,17 +70,6 @@ timeout_kill: 15
 distance_kill: 2
 playerOnCount: 3
 tasksNum: 16
-spawns:
-- 0.5, 98, 3.5
-- 2.5, 98, 2.5
-- 3.5, 98, 1.5
-- 3.5, 98, -0.5
-- 2.5, 98, -1.5
-- 0.5, 98, -2.5
-- -1.5, 98, -1.5
-- -2.5, 98, -0.5
-- -2.5, 98, 1.5
-- -1.5, 98, 2.5
 ```
 
 Video about the plugin (in Russian) - https://youtu.be/lHh4xp_ziro.
@@ -118,10 +111,9 @@ Video about the plugin (in Russian) - https://youtu.be/lHh4xp_ziro.
 
 ## ATTENTION!!!
 1. Лобби и карта должны быть в одном мире!
-2. Не создавайте в одном мире несколько лобби!
 
 ## Change map settings(locations of tasks, sabotages, etc.)
-~~Туториал еще дорабатывается~~ - [Туториал](https://github.com/Dseym/amongUsMinecraft/wiki) (Туториала не будет! Я делаю конфиг для карт!)
+В файле AmongUs/mapConfig/example.yml (вы можете создать свой) [Скачать](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.4/messages.yml)
 
 ## Сообщения
 В файле AmongUs/messages.yml. [Скачать](https://github.com/Dseym/amongUsMinecraft/releases/download/AmongUs1.4/messages.yml)
@@ -129,7 +121,7 @@ Video about the plugin (in Russian) - https://youtu.be/lHh4xp_ziro.
 ## Игровой конфиг(gameConfig)
 В файле AmongUs/gameConfig/example.yml (вы можете создать свой)
 ```
-map: The Skeld
+map: mapConfig
 visual_task: true
 confirm_eject: true
 imposters: 1
@@ -141,17 +133,6 @@ timeout_kill: 15
 distance_kill: 2
 playerOnCount: 3
 tasksNum: 16
-spawns:
-- 0.5, 98, 3.5
-- 2.5, 98, 2.5
-- 3.5, 98, 1.5
-- 3.5, 98, -0.5
-- 2.5, 98, -1.5
-- 0.5, 98, -2.5
-- -1.5, 98, -1.5
-- -2.5, 98, -0.5
-- -2.5, 98, 1.5
-- -1.5, 98, 2.5
 ```
 
 Видео о плагине (на русском) - https://youtu.be/lHh4xp_ziro.

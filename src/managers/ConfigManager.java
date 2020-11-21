@@ -55,8 +55,8 @@ public class ConfigManager {
 			File config = new File(folder + File.separator + "config.yml");
 			File signs = new File(folder + File.separator + "signs.yml");
 			File messages = new File(folder + File.separator + "messages.yml");
-			File exampleGameConfig = new File(gameConfig + File.separator + "example.yml");
-			File exampleMapConfig = new File(mapConfig + File.separator + "example.yml");
+			File exampleGameConfig = new File(gameConfig + File.separator + "gameConfig.yml");
+			File exampleMapConfig = new File(mapConfig + File.separator + "mapConfig.yml");
 			
 			if(!config.exists())
 				config.createNewFile();

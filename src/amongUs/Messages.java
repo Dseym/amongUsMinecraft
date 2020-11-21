@@ -310,7 +310,6 @@ public class Messages {
 			manhole = config.getString("manhole");
 		if(config.contains("start"))
 			start = config.getString("start");
-		
 		if(config.contains("error"))
 			error = config.getString("error");
 		if(config.contains("imposters"))
@@ -319,6 +318,16 @@ public class Messages {
 			confirmEject = config.getString("confirmEject");
 		if(config.contains("visualTasks"))
 			visualTasks = config.getString("visualTasks");
+		if(config.contains("map"))
+			map = config.getString("map");
+		if(config.contains("time"))
+			time = config.getString("time");
+		if(config.contains("you"))
+			you = config.getString("you");
+		if(config.contains("live"))
+			live = config.getString("live");
+		if(config.contains("kills"))
+			kills = config.getString("kills");
 		
 	}
 	

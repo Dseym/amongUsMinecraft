@@ -182,7 +182,7 @@ public class Commands implements CommandExecutor {
 		ConfigManager.saveConfig("config", key, value);
 		
 		key = args[1] + ".defaultConfig";
-		value = "example";
+		value = "mapConfig";
 		
 		ConfigManager.saveConfig("config", key, value);
 		
