@@ -7,11 +7,15 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import game.Lobby;
 import game.LobbySign;
+import managers.ConfigManager;
+import managers.InvManager;
+import managers.ProtocolLibManager;
 
 public class Main extends JavaPlugin {
 
 	public static String tagPlugin;
 	public static Main plugin;
+	public static String textures = "https://getfile.dokpub.com/yandex/get/https://yadi.sk/d/3ENP1fxAx9cJkA";
 	
 	public void onEnable() {
 		
@@ -19,13 +23,13 @@ public class Main extends JavaPlugin {
 		plugin = this;
 		
 		Messages.init();
-		Config.init();
-		Inv.init();
+		ConfigManager.init();
+		InvManager.init();
 		
 		Runnable runnable = new Runnable() {
 			
 			@Override
-			public void run() {Protocol.init();}
+			public void run() {ProtocolLibManager.init();}
 			
 		};
 		

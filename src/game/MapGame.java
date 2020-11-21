@@ -20,8 +20,9 @@ public class MapGame {
 	private Map<String, String> sabotageTypes;
 	private Cameras camera;
 	private World world;
+	private String name;
 	
-	public MapGame(Location emergencyMetting, List<Location> spawns, List<Task> tasks, List<Manhole> manholes, List<Door> doors, Map<String, String> sabotageTypes, List<Sabotage> sabotages, Cameras camera) {
+	public MapGame(String name, Location emergencyMetting, List<Location> spawns, List<Task> tasks, List<Manhole> manholes, List<Door> doors, Map<String, String> sabotageTypes, List<Sabotage> sabotages, Cameras camera) {
 		
 		world = emergencyMetting.getWorld();
 		this.emergencyMetting = emergencyMetting;
@@ -32,6 +33,13 @@ public class MapGame {
 		this.sabotageTypes = sabotageTypes;
 		this.sabotages = sabotages;
 		this.camera = camera;
+		this.name = name;
+		
+	}
+	
+	public String getName() {
+		
+		return name;
 		
 	}
 	

@@ -203,8 +203,12 @@ public abstract class Task {
 		player.setAction(null);
 		timer.cancel();
 		timer = null;
-		if(success)
+		if(success) {
+			
 			player.sendTitle(Messages.taskComplete, "");
+			player.countAction++;
+			
+		}
 		
 		player.getPlayer().teleport(lastLocPlayer);
 		lastLocPlayer = null;

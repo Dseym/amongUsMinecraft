@@ -17,9 +17,9 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import amongUs.Inv;
 import amongUs.Main;
 import amongUs.Messages;
+import managers.InvManager;
 
 public class Vote {
 	
@@ -129,11 +129,11 @@ public class Vote {
 			
 			bar.addPlayer(player.getPlayer());
 			
-			invVote.addItem(Inv.genItem(Material.SKULL_ITEM, player.getPlayer().getName(), 3));
+			invVote.addItem(InvManager.genItem(Material.SKULL_ITEM, player.getPlayer().getName(), 3));
 			
 		}
 
-		invVote.setItem(35, Inv.genItem(Material.BARRIER, Messages.skipVote));
+		invVote.setItem(35, InvManager.genItem(Material.BARRIER, Messages.skipVote));
 		
 	}
 	

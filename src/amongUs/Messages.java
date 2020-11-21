@@ -43,6 +43,10 @@ public class Messages {
 		clickToJoin = "§4§oНажмите",
 		manhole = "Люк",
 		start = "Старт",
+		error = "Произошла ошибка",
+		imposters = "Самозванцев: ",
+		confirmEject = "Подтверждение: ",
+		visualTasks = "Визуальное: ",
 		helpMenu = "\n------------Команды------------\n"
 				 + " /among create gameConf - §eсоздать игру§r\n"
 				 + " /among start - §eначать игру§r\n"
@@ -87,10 +91,15 @@ public class Messages {
 		beImpostor = " был предателем",
 		notBeImpostor = " не был предателем",
 		beEject = " был изгнан",
+		time = "Время: ",
+		map = "Карта: ",
+		you = "Ты: ",
+		live = "Жив",
+		kills = "Убийств: ",
+		
 		stepComplete = "Задание: §oэтап пройден",
 		taskComplete = "Задание выполнено",
 		taskTimeout = "Задание: §oтайм-аут",
-		
 		calibrateDistrTask = "Задание: §oпромах",
 		cardSlowTask = "Задание: §oслишком медленно",
 		cardFastTask = "Задание: §oслишком быстро",
@@ -301,6 +310,15 @@ public class Messages {
 			manhole = config.getString("manhole");
 		if(config.contains("start"))
 			start = config.getString("start");
+		
+		if(config.contains("error"))
+			error = config.getString("error");
+		if(config.contains("imposters"))
+			imposters = config.getString("imposters");
+		if(config.contains("confirmEject"))
+			confirmEject = config.getString("confirmEject");
+		if(config.contains("visualTasks"))
+			visualTasks = config.getString("visualTasks");
 		
 	}
 	

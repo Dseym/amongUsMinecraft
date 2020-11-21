@@ -1,4 +1,4 @@
-package amongUs;
+package managers;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -16,18 +16,19 @@ import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.EnumWrappers.ItemSlot;
 
+import amongUs.Main;
 import game.Lobby;
 import game.PlayerGame;
 import net.minecraft.server.v1_12_R1.PacketPlayOutEntityDestroy;
 import net.minecraft.server.v1_12_R1.PacketPlayOutNamedEntitySpawn;
 
-public class Protocol {
+public class ProtocolLibManager {
 	
 	public static ProtocolManager protocollib;
 	
 	public static void init() {
 		
-		Protocol.protocollib = ProtocolLibrary.getProtocolManager();
+		ProtocolLibManager.protocollib = ProtocolLibrary.getProtocolManager();
 		
 		cancelThenPlayerDoingAction();
 		hiddenItemInHand();

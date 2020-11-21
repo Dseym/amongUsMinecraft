@@ -234,14 +234,15 @@ public class Lobby {
 		
 		Objective obj = board.getObjective("game");
 
-		obj.getScore(Messages.countToGame.replace("@time@", "" + time)).setScore(7);
-		obj.getScore(Messages.owner + ": " + (owner != null ? owner.getName() : "")).setScore(6);
-		obj.getScore(Messages.players + ": " + players.size() + "/" + game.getMap().getSpawns().size()).setScore(5);
-		obj.getScore(" ").setScore(4);
-		obj.getScore("Number Imposters: " + game.imposters).setScore(3);
-		obj.getScore("Confirm Eject: " + game.confirm_eject).setScore(2);
-		obj.getScore("Number Tasks: " + game.tasksNum).setScore(1);
-		obj.getScore("Visual Tasks: " + game.visual_task).setScore(0);
+		obj.getScore(Messages.countToGame.replace("@time@", "" + time)).setScore(8);
+		obj.getScore(Messages.owner + ": " + (owner != null ? owner.getName() : "")).setScore(7);
+		obj.getScore(Messages.players + ": " + players.size() + "/" + game.getMap().getSpawns().size()).setScore(6);
+		obj.getScore(" ").setScore(5);
+		obj.getScore(Messages.map + game.getMap().getName()).setScore(4);
+		obj.getScore(Messages.imposters + game.imposters).setScore(3);
+		obj.getScore(Messages.confirmEject + game.confirm_eject).setScore(2);
+		obj.getScore(Messages.tasks + ": " + game.tasksNum).setScore(1);
+		obj.getScore(Messages.visualTasks + game.visual_task).setScore(0);
 		
 	}
 	
@@ -315,6 +316,7 @@ public class Lobby {
 			owner = player;
 		
 		players.add(player);
+		player.setResourcePack(Main.textures);
 		
 		reloadSb();
 		

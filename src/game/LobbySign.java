@@ -18,9 +18,9 @@ import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 
-import amongUs.Config;
 import amongUs.Main;
 import amongUs.Messages;
+import managers.ConfigManager;
 
 public class LobbySign {
 	
@@ -84,7 +84,7 @@ public class LobbySign {
 	
 	public static void load() {
 		
-		FileConfiguration config = Config.loadConfig("signs");
+		FileConfiguration config = ConfigManager.loadConfig("signs");
 		for(String str: config.getKeys(false)) {
 			
 			String[] strLoc = str.split(",");

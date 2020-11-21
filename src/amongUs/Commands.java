@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 
 import game.Game;
 import game.Lobby;
+import managers.ConfigManager;
 
 public class Commands implements CommandExecutor {
 	
@@ -171,19 +172,19 @@ public class Commands implements CommandExecutor {
 		
 		Lobby lobby = Lobby.getLobby(args[1]);
 		if(lobby == null)
-			Lobby.lobby.add(new Lobby(loc, args[1], Config.getDefaultGameConfig()));
+			Lobby.lobby.add(new Lobby(loc, args[1], ConfigManager.getDefaultGameConfig()));
 		else
 			lobby.setLoc(loc);
 		
 		String key = args[1] + ".location";
 		String value = loc.getWorld().getName() + "," + loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ();
 		
-		Config.saveConfig("config", key, value);
+		ConfigManager.saveConfig("config", key, value);
 		
 		key = args[1] + ".defaultConfig";
 		value = "example";
 		
-		Config.saveConfig("config", key, value);
+		ConfigManager.saveConfig("config", key, value);
 		
 		sender.sendMessage(Main.tagPlugin + Messages.success);
 		
@@ -479,7 +480,7 @@ public class Commands implements CommandExecutor {
 			
 		}
 		
-		FileConfiguration configGame = Config.loadGameConfig(args[1]);
+		FileConfiguration configGame = ConfigManager.loadGameConfig(args[1]);
 		if(configGame == null)
 			sender.sendMessage(Main.tagPlugin + Messages.notFoundConfig);
 		else

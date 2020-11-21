@@ -1,4 +1,4 @@
-package amongUs;
+package managers;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,13 +11,15 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import amongUs.Main;
 import game.Lobby;
 import game.LobbySign;
 
-public class Config {
+public class ConfigManager {
 	
 	private static File folder;
 	private static File gameConfig;
+	private static File mapConfig;
 
 	public static void init() {
 		
@@ -27,7 +29,15 @@ public class Config {
 		gameConfig = new File(folder + File.separator + "gameConfig");
 		gameConfig.mkdirs();
 		
+		mapConfig = new File(folder + File.separator + "mapConfig");
+		mapConfig.mkdirs();
+		
 		loadConfigs();
+		
+		FileConfiguration config = loadConfig("config");
+		if(config.contains("tagPlugin")) Main.tagPlugin = config.getString("tagPlugin");
+		if(config.contains("texture")) Main.textures = config.getString("texture");
+		
 		new BukkitRunnable() {
 			
 			@Override
@@ -45,7 +55,8 @@ public class Config {
 			File config = new File(folder + File.separator + "config.yml");
 			File signs = new File(folder + File.separator + "signs.yml");
 			File messages = new File(folder + File.separator + "messages.yml");
-			File exampleConfig = new File(gameConfig + File.separator + "example.yml");
+			File exampleGameConfig = new File(gameConfig + File.separator + "example.yml");
+			File exampleMapConfig = new File(mapConfig + File.separator + "example.yml");
 			
 			if(!config.exists())
 				config.createNewFile();
@@ -54,10 +65,11 @@ public class Config {
 			if(!messages.exists())
 				messages.createNewFile();
 			
-			if(gameConfig.list().length == 0 && !exampleConfig.exists())
-				exampleConfig.createNewFile();
+			if(gameConfig.list().length == 0)
+				exampleGameConfig.createNewFile();
+			if(mapConfig.list().length == 0)
+				exampleMapConfig.createNewFile();
 				
-			
 		} catch (Exception e) {}
 		
 	}
@@ -70,6 +82,7 @@ public class Config {
 			FileConfiguration config = (FileConfiguration) YamlConfiguration.loadConfiguration(file);
 			for(String str: config.getKeys(false)) {
 				
+				if(str.indexOf("tagPlugin") > -1 || str.indexOf("texture") > -1) continue;
 				String[] strLoc = config.getString(str + ".location").split(",");
 				FileConfiguration defaultConfig;
 				if((defaultConfig = loadGameConfig(config.getString(str + ".defaultConfig"))) == null)
@@ -121,11 +134,20 @@ public class Config {
 		
 	}
 	
+	public static FileConfiguration loadMapConfig(String name) {
+		
+		File file = new File(mapConfig + File.separator + name + ".yml");
+		if(!file.exists()) return null;
+		
+		return YamlConfiguration.loadConfiguration(file);
+		
+	}
+	
 	public static FileConfiguration getDefaultGameConfig() {
 		
 		FileConfiguration config = new YamlConfiguration();
 		
-		config.set("map", "The Skeld");
+		config.set("map", "the_skeld");
 		config.set("imposters", 2);
 		config.set("confirm_eject", true);
 		config.set("emergency_metting", 1);

@@ -10,13 +10,13 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import amongUs.Inv;
 import amongUs.Messages;
 import game.Cameras;
 import game.Lobby;
 import game.Manhole;
 import game.PlaySound;
 import game.PlayerGame;
+import managers.InvManager;
 import sabotages.Sabotage;
 import tasks.Task;
 
@@ -66,10 +66,10 @@ public class ImpostorListener implements Listener {
 	void openSabotageMenu(PlayerInteractEvent e) {
 		
 		PlayerGame player = lobby.getGame().getPlayer(e.getPlayer());
-		if(player == null || !player.impostor || e.getItem() == null || e.getItem().getType() != Material.REDSTONE_BLOCK)
+		if(player == null || !player.impostor || e.getItem() == null || e.getItem().getType() != Material.DIAMOND_SWORD)
 			return;
 		
-		Inv.showSabotageMap(player.getPlayer());
+		InvManager.showSabotageMap(player.getPlayer());
 		
 	}
 	
@@ -77,7 +77,7 @@ public class ImpostorListener implements Listener {
 	void manhole(PlayerInteractEvent e) {
 		
 		PlayerGame player = lobby.getGame().getPlayer(e.getPlayer());
-		if(player == null || !player.impostor || e.getItem() == null || e.getHand() != EquipmentSlot.HAND || e.getItem().getType() != Material.IRON_TRAPDOOR)
+		if(player == null || !player.impostor || e.getItem() == null || e.getHand() != EquipmentSlot.HAND || e.getItem().getType() != Material.DIAMOND)
 			return;
 		
 		Manhole manhole = lobby.getGame().getMap().getManhole(e.getPlayer().getLocation());
@@ -150,6 +150,7 @@ public class ImpostorListener implements Listener {
 			player.timeoutKill = lobby.getGame().timeout_kill;
 			PlaySound.DEATH.play(player.getPlayer());
 			player.getPlayer().getInventory().setHeldItemSlot(0);
+			player.countAction++;
 
 		}
 		

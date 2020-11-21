@@ -32,7 +32,6 @@ public class SabotageOxygen extends Sabotage {
 	public SabotageOxygen(List<Location> loc, Location locTo, Game game, Location signEnterCode, Location signCode) {
 		
 		super(loc, locTo);
-		
 		this.signEnterCode = signEnterCode;
 		this.signCode = signCode;
 		
@@ -100,6 +99,7 @@ public class SabotageOxygen extends Sabotage {
 					return;
 					
 				}
+				if(enteredCode.length() > 5) return;
 				
 				if(block.getType() != Material.SIGN && block.getType() != Material.WALL_SIGN)
 					return;
@@ -114,8 +114,7 @@ public class SabotageOxygen extends Sabotage {
 					
 				}
 				
-				if(enteredCode.length() < 5)
-					enteredCode += num;
+				enteredCode += num;
 				
 				update();
 				

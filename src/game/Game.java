@@ -21,17 +21,17 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitTask;
+import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
-import org.bukkit.scoreboard.Team.Option;
-import org.bukkit.scoreboard.Team.OptionStatus;
 
-import amongUs.Config;
 import amongUs.Main;
 import amongUs.Messages;
-import amongUs.Protocol;
 import events.GameEndEvent;
 import events.GameStartEvent;
+import managers.MapManager;
+import managers.ProtocolLibManager;
 import net.md_5.bungee.api.ChatMessageType;
 import net.minecraft.server.v1_12_R1.Packet;
 import sabotages.Sabotage;
@@ -64,8 +64,8 @@ public class Game {
 	private BossBar bar;
 	private Vote vote;
 	public int timeoutMeeting = 15;
-	private Team teamPlayers;
 	private BukkitTask timerUpdate;
+	private int timeGame = 0;
 	
 	private String impostersStr = " ";
 
@@ -83,44 +83,44 @@ public class Game {
 	
 	public String checkParametrs(List<Player> players) {
 		
-		if(players == null || players.size() < 3)
-			return Messages.fewPlayer;
-	
-		if(emergency_metting < 1)
-			return "emergency_metting - " + Messages.incorrectValue;
-		
-		if(time_voting < 1)
-			return "time_voting - " + Messages.incorrectValue;
-		
-		if(speed_player < 1)
-			return "speed_player - " + Messages.incorrectValue;
-		
-		if(timeout_kill < 1)
-			return "timeout_kill - " + Messages.incorrectValue;
-		
-		if(distance_kill < 1)
-			return "distance_kill - " + Messages.incorrectValue;
-		
-		if(tasksNum < 1)
-			return "tasksNum - " + Messages.incorrectValue;
-		
-		if(timeout_metting < 1)
-			return "timeout_metting - " + Messages.incorrectValue;
-	
-		if(imposters < 1)
-			return "imposters - " + Messages.incorrectValue;
-		
-		if(getTasks().size() < tasksNum)
-			return "tasksNum - " + Messages.incorrectValue;
-		
-		if(speed_player > 9)
-			return "speed_player - " + Messages.incorrectValue;
-	
-		if(imposters > players.size()-imposters-1)
-			return Messages.fewCrewmate;
-		
-		if(map.getSpawns().size() < players.size())
-			return Messages.fewSpawnsOnMap;
+//		if(players == null || players.size() < 3)
+//			return Messages.fewPlayer;
+//	
+//		if(emergency_metting < 1)
+//			return "emergency_metting - " + Messages.incorrectValue;
+//		
+//		if(time_voting < 1)
+//			return "time_voting - " + Messages.incorrectValue;
+//		
+//		if(speed_player < 1)
+//			return "speed_player - " + Messages.incorrectValue;
+//		
+//		if(timeout_kill < 1)
+//			return "timeout_kill - " + Messages.incorrectValue;
+//		
+//		if(distance_kill < 1)
+//			return "distance_kill - " + Messages.incorrectValue;
+//		
+//		if(tasksNum < 1)
+//			return "tasksNum - " + Messages.incorrectValue;
+//		
+//		if(timeout_metting < 1)
+//			return "timeout_metting - " + Messages.incorrectValue;
+//	
+//		if(imposters < 1)
+//			return "imposters - " + Messages.incorrectValue;
+//		
+//		if(getTasks().size() < tasksNum)
+//			return "tasksNum - " + Messages.incorrectValue;
+//		
+//		if(speed_player > 9)
+//			return "speed_player - " + Messages.incorrectValue;
+//	
+//		if(imposters > players.size()-imposters-1)
+//			return Messages.fewCrewmate;
+//		
+//		if(map.getSpawns().size() < players.size())
+//			return Messages.fewSpawnsOnMap;
 		
 		return Messages.success;
 		
@@ -204,8 +204,6 @@ public class Game {
 			player.getPlayer().setWalkSpeed(((float)(speed_player+1))/10);
 			
 			bar.addPlayer(player.getPlayer());
-			
-			teamPlayers.addPlayer(player.getPlayer());
 			
 			for(PotionEffect effect: player.getPlayer().getActivePotionEffects())
 				player.getPlayer().removePotionEffect(effect.getType());
@@ -329,7 +327,7 @@ public class Game {
 		}
 		
 		for(int id: killedBodies.keySet())
-			sendPackets(Protocol.packetEntityDestroy(id));
+			sendPackets(ProtocolLibManager.packetEntityDestroy(id));
 		
 		killedBodies.clear();
 		
@@ -348,14 +346,15 @@ public class Game {
 			if(task.isComplete() && task.isEnable())
 				completeTask++;
 		
+		timeGame++;
 		bar.setProgress(completeTask/((double)tasksNum));
-		
-		if(completeTask+1 > getTasks().size())
-			membersWin();
 		
 		int impostersNum = 0;
 		int membersNum = 0;
-		for(PlayerGame player: players)
+		for(PlayerGame player: players) {
+			
+			updateSb(player);
+			
 			if(player.isLive() && player.impostor) {
 				
 				try {player.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR, net.md_5.bungee.api.chat.TextComponent.fromLegacyText(impostersStr));} catch(Exception e) {}
@@ -379,6 +378,8 @@ public class Game {
 				}
 				
 			}
+			
+		}
 		
 		for(PlayerGame player: players)
 			if(player.isLive() && !player.impostor)
@@ -389,10 +390,51 @@ public class Game {
 		if(impostersNum == 0)
 			membersWin();
 		
+		List<Task> allTasks = new ArrayList<Task>();
+		for(Task task: getTasks())
+			if(task.isEnable())
+				allTasks.add(task);
+		if(completeTask+1 > allTasks.size())
+			membersWin();
+		
 		if(timeoutMeeting > 0)
 			timeoutMeeting--;
 		
 		map.getWorld().setTime(16000);
+		
+	}
+	
+	Map<Player, Scoreboard> boards = new HashMap<Player, Scoreboard>();
+	private void updateSb(PlayerGame pg) {
+		
+		Scoreboard board;
+		Objective obj;
+		if(boards.containsKey(pg.getPlayer())) {
+			
+			board = boards.get(pg.getPlayer());
+			
+		} else {
+			
+			board = Bukkit.getScoreboardManager().getNewScoreboard();
+			obj = board.registerNewObjective("game", "dummy");
+			obj.setDisplaySlot(DisplaySlot.SIDEBAR);
+			obj.setDisplayName(Messages.configMess);
+		
+		}
+		for(String str: board.getEntries())
+			board.resetScores(str);
+		obj = board.getObjective("game");
+
+		obj.getScore(Messages.time + timeGame).setScore(6);
+		obj.getScore(Messages.map + map.getName()).setScore(5);
+		obj.getScore(" ").setScore(4);
+		obj.getScore(Messages.you).setScore(3);
+		obj.getScore("  " + (pg.isLive() ? Messages.live : Messages.youDied)).setScore(2);
+		obj.getScore("  " + (pg.impostor ? Messages.impostor : Messages.crewmate)).setScore(1);
+		obj.getScore("  " + (pg.impostor ? Messages.kills : Messages.tasks + ": ") + pg.countAction).setScore(0);
+		
+		pg.getPlayer().setScoreboard(board);
+		boards.put(pg.getPlayer(), board);
 		
 	}
 	
@@ -480,7 +522,7 @@ public class Game {
 		tpToSpawn();
 		
 		for(int id: killedBodies.keySet())
-			sendPackets(Protocol.packetEntityDestroy(id));
+			sendPackets(ProtocolLibManager.packetEntityDestroy(id));
 		
 		killedBodies.clear();
 		
@@ -544,7 +586,7 @@ public class Game {
 		player.sendTitle("§c§l" + Messages.playerDied, "");
 		
 		int id = (int)Math.floor(Math.random() * Integer.MAX_VALUE);
-		sendPackets(Protocol.packetNamedSpawnEntitySpawn(player.getPlayer(), id));
+		sendPackets(ProtocolLibManager.packetNamedSpawnEntitySpawn(player.getPlayer(), id));
 		
 		killedBodies.put(id, player.getPlayer().getLocation());
 		
@@ -592,17 +634,6 @@ public class Game {
 	
 	public void create(FileConfiguration config, Location loc) {
 		
-		String mapName = config.getString("map");
-		if(!MapManager.checkMap(mapName)) {
-			
-			Main.plugin.getLogger().warning(Messages.mapNotFound);
-			for(PlayerGame player: this.players)
-				player.sendMessage(Messages.mapNotFound);
-			
-			config = Config.getDefaultGameConfig();
-			
-		}
-		
 		for(Entity ent: loc.getWorld().getEntities())
 			if(ent.getType() == EntityType.SNOWBALL)
 				ent.remove();
@@ -616,17 +647,27 @@ public class Game {
 		
 		Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
 		for(Team team: scoreboard.getTeams())
-			if(team.getName().equalsIgnoreCase("amPl" + loc.getWorld().getName()) || team.getName().equalsIgnoreCase("amImp" + loc.getWorld().getName()) || team.getName().equalsIgnoreCase("amTas" + loc.getWorld().getName()) || team.getName().equalsIgnoreCase("amSab" + loc.getWorld().getName()))
+			if(team.getName().equalsIgnoreCase("amTas" + loc.getWorld().getName()))
 				team.unregister();
 		
-		teamPlayers = scoreboard.registerNewTeam("amPl" + loc.getWorld().getName());
-		teamPlayers.setOption(Option.NAME_TAG_VISIBILITY, OptionStatus.NEVER);
-		teamPlayers.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.NEVER);
-		scoreboard.registerNewTeam("amSab" + loc.getWorld().getName());
 		scoreboard.registerNewTeam("amTas" + loc.getWorld().getName());
-		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "scoreboard teams option amSab" + loc.getWorld().getName() + " color red");
 		
-		map = MapManager.init(mapName, this, config, loc.getWorld());
+		try{map = MapManager.load(this, config);} catch (Exception e) {
+			
+			Main.plugin.getLogger().warning(Messages.error);
+			for(PlayerGame player: this.players)
+				player.sendMessage(Messages.error);
+			
+			return;
+			
+		}
+		if(map == null) {
+			
+			Main.plugin.getLogger().warning(Messages.error);
+			for(PlayerGame player: this.players)
+				player.sendMessage(Messages.error);
+			
+		}
 		
 		imposters = config.getInt("imposters");
 		confirm_eject = config.getBoolean("confirm_eject");

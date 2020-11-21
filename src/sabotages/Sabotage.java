@@ -7,11 +7,10 @@ import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Egg;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Snowball;
-import org.bukkit.scoreboard.Scoreboard;
 
 import amongUs.Main;
 import game.PlayerGame;
@@ -32,17 +31,14 @@ public abstract class Sabotage {
 		
 		this.location = location;
 		this.locTo = locTo;
-		
-		Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
 		List<Entity> ents = new ArrayList<Entity>();
 		for(Location loc: location) {
 			
 			if(!loc.getChunk().isLoaded()) loc.getChunk().load();
 			
-			Snowball ent = (Snowball)loc.getWorld().spawnEntity(loc, EntityType.SNOWBALL);
+			Egg ent = (Egg)loc.getWorld().spawnEntity(loc, EntityType.EGG);
 			ent.setGravity(false);
 			ent.setGlowing(true);
-			board.getTeam("amSab" + loc.getWorld().getName()).addEntry(ent.getUniqueId().toString());
 			ents.add(ent);
 			
 		}

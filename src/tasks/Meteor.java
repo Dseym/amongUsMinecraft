@@ -18,7 +18,7 @@ public class Meteor extends Task {
 	private List<Block> blocks;
 	private int progress = 0;
 
-	public Meteor(Location loc, Location locTo, Location startPole, Location endPole, Location particlesLoc, boolean visual) {
+	public Meteor(Location loc, Location locTo, Location startPole, Location endPole, boolean visual) {
 		
 		super(loc, locTo);
 		
@@ -38,7 +38,7 @@ public class Meteor extends Task {
 				startTimeout();
 				
 				if(visual)
-					lastLocPlayer.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, particlesLoc, 1);
+					lastLocPlayer.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, loc, 1);
 				
 				if(progress < 20)
 					newMeteor();

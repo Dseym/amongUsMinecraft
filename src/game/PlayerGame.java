@@ -13,6 +13,7 @@ public class PlayerGame {
 	public int timeoutKill = 15;
 	public BossBar timeoutBar;
 	public Color color;
+	public int countAction = 0;
 	
 	private Object currentAction;
 	

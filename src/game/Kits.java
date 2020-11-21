@@ -6,8 +6,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
-import amongUs.Inv;
 import amongUs.Messages;
+import managers.InvManager;
 
 public class Kits {
 
@@ -17,10 +17,10 @@ public class Kits {
 		
 		inv.clear();
 		
-		inv.setItem(1, Inv.genItem(Material.IRON_SWORD, Messages.knife));
-		inv.setItem(4, Inv.genItem(Material.REDSTONE_BLOCK, Messages.mapSabotage));
-		inv.setItem(5, Inv.genItem(Material.IRON_TRAPDOOR, Messages.manhole));
-		inv.setItem(7, Inv.genItem(Material.CLAY_BRICK, Messages.report));
+		inv.setItem(1, InvManager.genItem(Material.IRON_SWORD, Messages.knife));
+		inv.setItem(4, InvManager.genItem(Material.DIAMOND_SWORD, Messages.mapSabotage));
+		inv.setItem(5, InvManager.genItem(Material.DIAMOND, Messages.manhole));
+		inv.setItem(7, InvManager.genItem(Material.CLAY_BRICK, Messages.report));
 		
 	}
 	
@@ -30,7 +30,7 @@ public class Kits {
 		
 		inv.clear();
 		
-		inv.setItem(4, Inv.genItem(Material.CLAY_BRICK, Messages.report));
+		inv.setItem(4, InvManager.genItem(Material.CLAY_BRICK, Messages.report));
 		
 	}
 	
@@ -41,9 +41,9 @@ public class Kits {
 		inv.clear();
 		
 		for(int i = 0; i < 9; i++)
-			inv.setItem(i, Inv.genItem(Material.BARRIER, "§c"));
+			inv.setItem(i, InvManager.genItem(Material.BARRIER, "§c"));
 		
-		inv.setItem(4, Inv.genItem(Material.BOOK, Messages.vote));
+		inv.setItem(4, InvManager.genItem(Material.BOOK, Messages.vote));
 		
 	}
 	
@@ -53,8 +53,8 @@ public class Kits {
 		
 		inv.clear();
 		
-		inv.setItem(1, Inv.genItem(Material.WOOD_BUTTON, Messages.start));
-		inv.setItem(4, Inv.genItem(Material.IRON_DOOR, Messages.exit));
+		inv.setItem(1, InvManager.genItem(Material.WOOD_BUTTON, Messages.start));
+		inv.setItem(4, InvManager.genItem(Material.IRON_DOOR, Messages.exit));
 		
 	}
 	

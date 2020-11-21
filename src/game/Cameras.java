@@ -15,9 +15,9 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.EquipmentSlot;
 
-import amongUs.Inv;
 import amongUs.Main;
 import amongUs.Messages;
+import managers.InvManager;
 
 public class Cameras {
 	
@@ -111,7 +111,7 @@ public class Cameras {
 		player.getPlayer().setFlying(true);
 		player.setAction(this);
 		
-		player.getPlayer().getInventory().setItem(8, Inv.genItem(Material.STONE_BUTTON, Messages.exit));
+		player.getPlayer().getInventory().setItem(8, InvManager.genItem(Material.STONE_BUTTON, Messages.exit));
 		player.getPlayer().getInventory().setHeldItemSlot(0);
 		
 		next(player);
